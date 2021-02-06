@@ -74,5 +74,4 @@ module.exports = {
   */
   appURL: "http://localhost:8081",
 
-  
 };
