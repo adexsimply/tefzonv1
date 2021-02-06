@@ -51,21 +51,16 @@ class ApiAuthController {
         "last_name",
         "phone_number",
         "password",
+        "gender_id", 
+        "date_of_birth",
+        "country_id",
       ]);
 
-      const { password_confirmation } = request.all();
 
       const confirmation_token = randomString.generate({
         length: 15,
       });
 
-      if (payload.password !== password_confirmation) {
-        return response.status(400).send({
-          status: "invalid",
-          message: "Password must match confirmation password",
-          status_code: 400,
-        });
-      }
       const user = await User.create(payload);
       const token = await auth
         .withRefreshToken()

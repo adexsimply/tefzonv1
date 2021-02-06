@@ -36,4 +36,4 @@ Route.group(() => {
     .middleware("auth")
     .validator("InAppResetPassword");
   Route.get(`/logout`, "ApiAuthController.logout");
-}).prefix("/v1");
+})

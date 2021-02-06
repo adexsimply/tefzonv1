@@ -2,7 +2,7 @@
 
 
 require('./apiAuthRoutes.js');
-require("./authRoutes");
+// require("./authRoutes.js");
 /*
 |--------------------------------------------------------------------------
 | Routes
