@@ -22,3 +22,7 @@ const Route = use('Route')
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
+
+//metadata routes
+Route.get("/getMetadata", "Metadata/MetadatumController.getMetadata");
+
