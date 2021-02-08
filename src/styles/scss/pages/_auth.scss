@@ -1,0 +1,12 @@
+.signin-container {
+	background: #f3f3f3;
+	height: 100vh;
+	margin-top: 110px;
+	.signin-content-container {
+		.loginForm {
+			.ant-form-item-label {
+				font-weight: 500;
+			}
+		}
+	}
+}
