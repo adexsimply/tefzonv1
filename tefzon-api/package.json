@@ -27,7 +27,9 @@
     "@adonisjs/mail": "^3.0.10",
     "@adonisjs/validator": "^5.0.6",
     "adonis-auth-builder": "^1.0.3",
-    "mysql": "^2.18.1"
+    "axios": "^0.21.1",
+    "mysql": "^2.18.1",
+    "safe-await": "^1.0.0"
   },
   "devDependencies": {},
   "autoload": {

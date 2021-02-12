@@ -17,6 +17,7 @@ class AccountCreation {
       gender_id: "required",
       date_of_birth:"required",
       country_id:"required",
+      team_id:"required",
       phone_number: "string|required|min:10",
     };
   }
@@ -33,6 +34,7 @@ class AccountCreation {
       "date_of_birth.required": "Date of birth  is required",
       "country_id.required": "Country is required",
       "phone_number.required":"phone_number is required",
+      "team_id.required":"Team id is required",
       "phone_number.min":"Phone number is too short.Expected a minimum of 10 characters",
       "password.min": "Password too short. Expected a minimum of 6 characters",
     };

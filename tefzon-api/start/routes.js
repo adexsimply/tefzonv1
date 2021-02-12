@@ -20,9 +20,10 @@ require('./apiAuthRoutes.js');
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return { greeting: 'Hello world in JSON'}
 })
 
 //metadata routes
 Route.get("/getMetadata", "Metadata/MetadatumController.getMetadata");
+Route.get("/signupTeamList","Metadata/MetadatumController.getSignUpTeamList")
 

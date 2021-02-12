@@ -54,8 +54,8 @@ class ApiAuthController {
         "gender_id", 
         "date_of_birth",
         "country_id",
+        "team_id"
       ]);
-
 
       const confirmation_token = randomString.generate({
         length: 15,

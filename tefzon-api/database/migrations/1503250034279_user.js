@@ -15,6 +15,7 @@ class UserSchema extends Schema {
       table.string('password', 60).notNullable()
       table.integer('country_id').notNullable()
       table.integer('gender_id').notNullable()
+      table.integer('team_id').notNullable()
       table.dateTime("is_activated_at");
       //table.string('username', 80).notNullable().unique()
       table.timestamps()
