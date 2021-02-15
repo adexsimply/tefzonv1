@@ -1,31 +1,64 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Form, Input, Button } from "antd";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { Form, Input, Button, Spin } from "antd";
+import { loginUser } from "../helpers/api";
+import { saveState } from "../store/localStorage";
+import { openNotification } from "../helpers/notification";
 
 const LoginForm = (props) => {
+	const [loading, setLoading] = useState(false);
+
+	const history = useHistory();
+
+	const handleLoginUser = async (values) => {
+		setLoading(true);
+		try {
+			const login = await loginUser(values);
+			if (login) {
+				openNotification({
+					type: "success",
+					title: "Login User",
+					message: login.message,
+				});
+				saveState(login.result.token);
+				history.replace("/");
+			}
+		} catch (error) {
+			if (error) {
+				openNotification({
+					type: "error",
+					title: "Login User",
+					message: error,
+				});
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
 	return (
-		<Form layout="vertical" hideRequiredMark>
+		<Form layout="vertical" onFinish={handleLoginUser} hideRequiredMark>
 			<Form.Item
 				name="email"
 				label="Your Email"
 				rules={[{ required: true, message: "please enter your email" }]}
 			>
-				<Input className="h-11" />
+				<Input type="email" className="h-11" />
 			</Form.Item>
 			<Form.Item
 				name="password"
 				label="Your password"
 				rules={[{ required: true, message: "please enter your password" }]}
 			>
-				<Input className="h-11" />
+				<Input type="password" className="h-11" />
 			</Form.Item>
 			<p className="text-center font-medium">Forgot password?</p>
 			<div>
 				<Button
+					htmlType="submit"
 					className="h-12 bg-primary-brand text-white border-0 mt-6"
 					block
 				>
-					Login
+					{loading ? <Spin /> : "Login"}
 				</Button>
 			</div>
 			<p className="font-semibold text-center mt-4">

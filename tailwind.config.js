@@ -12,11 +12,13 @@ module.exports = {
 				"primary-brand-gray": "#D3D3D3",
 				"input-gray": "#131516",
 				"secondary-dark-light": " rgba(34, 34, 34, 0.8)",
+				"secondary-dark-lighter": "rgba(34, 34, 34, 0.25)",
 				"fb-blue": "#385C8E",
 				"tw-blue": "#03A9F4",
 			},
 			width: {
 				"37p": "37%",
+				"85p": "85%",
 			},
 		},
 	},

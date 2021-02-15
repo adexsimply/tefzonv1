@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/img/logo.svg";
 import { FaBars } from "react-icons/fa";
+import Avatar from "./Avatar";
 
 const Header = () => {
 	const [toggleNav, setToggleNav] = useState(false);
@@ -56,7 +57,7 @@ const Header = () => {
 	};
 	console.log(toggleNav);
 	return (
-		<header className="flex flex-col md:flex-row py-3 px-3 md:px-12 md:py-6 fixed top-0 w-full bg-white">
+		<header className="flex flex-col md:flex-row py-3 px-3 md:px-12 md:py-6  w-full bg-white">
 			<div className="logo flex flex-1 justify-between">
 				<img src={Logo} alt="" />
 				<button
@@ -70,6 +71,9 @@ const Header = () => {
 				<div className="navbar-collapse flex w-full md:w-auto mt-4 md:mt-0">
 					<ul className="flex flex-col md:flex-row items-center w-full">
 						{displayNavItems()}
+						<li>
+							<Avatar />
+						</li>
 					</ul>
 				</div>
 			)}
