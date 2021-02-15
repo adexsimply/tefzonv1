@@ -40,9 +40,7 @@ class MetadatumController {
         //  Germany
         //    league_id: 87
         //  Spain
-        //  league_id: 8
-
-        
+        //  league_id: 8 
        try {
         const baseUrl = Config.get("rapidApi.getTeamsByLeagueIdEndpoint")
         
@@ -54,9 +52,11 @@ class MetadatumController {
         const teamEndpoints = [ `${baseUrl}/2`, `${baseUrl}/94`, `${baseUrl}/87`,`${baseUrl}/8` ];        
           let promises = [];
           for (let i = 0; i < teamEndpoints.length; i++) {
-
             const responseFromApi = await new makeExternalRequestFeature({endpoint:teamEndpoints[i]}).makeGetRequest()
-            promises.push(responseFromApi.results.api.teams )
+            let responseTeamObject = responseFromApi.results.api.teams
+            for(let j = 0 ;j < responseTeamObject.length; j++ ){
+              promises.push(responseTeamObject[j])
+            }
           }
 
           Promise.all(promises)
