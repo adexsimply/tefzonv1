@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Button, message, Spin } from "antd";
+import { Row, Col, Button, message, Spin, Divider } from "antd";
 import { getTeams } from "../../helpers/api";
 import { AiFillWarning } from "react-icons/ai";
 import { FiRefreshCw } from "react-icons/fi";
@@ -116,8 +116,20 @@ const StepTwo = (props) => {
 				<Row>
 					{displayTeams()}
 					{showMore && (
-						<Col md={24} justify="center" className="mt-6">
-							<Button onClick={handleLoadMore}>Load More</Button>
+						<Col md={24} className="mt-8">
+							<Row justify="center ">
+								<Col md={12}>
+									<Button
+										onClick={handleLoadMore}
+										className="bg-primary-gray border border-primary-gray hover:text-primary-dark h-12 font-semibold  w-full "
+									>
+										Load More Clubs
+									</Button>
+								</Col>
+								<Col md={18} className="mt-4">
+									<Divider />
+								</Col>
+							</Row>
 						</Col>
 					)}
 

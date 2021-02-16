@@ -1,7 +1,8 @@
 const STATE = "TEFZON";
 
 export const saveState = (value) => {
-	localStorage.setItem(STATE, value);
+	const serialisedState = JSON.stringify(value);
+	localStorage.setItem(STATE, serialisedState);
 };
 
 export const loadState = () => {

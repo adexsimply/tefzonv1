@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Header from "../../components/common/Header";
 import { useHistory } from "react-router-dom";
-import { Steps, message } from "antd";
+import { Steps } from "antd";
+import { saveState } from "../../store/localStorage";
 import { registerUser } from "../../helpers/api";
 import { ReactComponent as UserPlusIcon } from "../../assets/img/icons/user-plus.svg";
 import { ReactComponent as MailCheck } from "../../assets/img/icons/mail-approve.svg";
 import { ReactComponent as CheckIcon } from "../../assets/img/icons/check-white.svg";
 import { AiFillHeart } from "react-icons/ai";
+import { openNotification } from "../../helpers/notification";
 import StepOne from "../../components/Signup/Step1";
 import StepTwo from "../../components/Signup/Step2";
 import StepThree from "../../components/Signup/Step3";
@@ -48,6 +50,27 @@ const Register = () => {
 			if (results) {
 				console.log(results);
 				setLoading(false);
+				if (results.status === "Success") {
+					const userDetails = {
+						user: results.user,
+						token: results.token,
+					};
+					saveState(userDetails);
+					openNotification({
+						type: "success",
+						title: "User Registration",
+						msg: results.message,
+					});
+					history.replace("/");
+					setLoading(false);
+				} else {
+					openNotification({
+						type: "error",
+						title: "User Registration",
+						msg: results.message,
+					});
+					setLoading(false);
+				}
 			}
 		} catch (error) {
 			console.log(error);

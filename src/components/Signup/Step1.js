@@ -116,7 +116,11 @@ const StepOne = (props) => {
 									},
 								]}
 							>
-								<DatePicker onChange={onChange} format={dateFormat} />
+								<DatePicker
+									className="brand-datepicker"
+									onChange={onChange}
+									format={dateFormat}
+								/>
 							</Form.Item>
 						</Col>
 						<Col xs={24} md={12}>
