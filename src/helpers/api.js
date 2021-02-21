@@ -1,7 +1,9 @@
 import axios from "axios";
 import { loadState } from "../store/localStorage";
 
-export const baseURL = "http://127.0.0.1:3333";
+// export const baseURL = "http://127.0.0.1:3333";
+export const baseURL = "http://157.230.179.121:3333";
+
 export const getToken = () => {
 	return loadState();
 };
