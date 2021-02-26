@@ -7,6 +7,7 @@ const PasswordReset = use("App/Models/PasswordReset");
 const moment = require("moment");
 const randomString = require("randomstring");
 const Event = use("Event");
+const Envdetails = use("Env")
 
 class ApiAuthController {
   async login({ request, auth, response }) {
@@ -60,6 +61,9 @@ class ApiAuthController {
       const confirmation_token = randomString.generate({
         length: 15,
       });
+
+
+    console.log("env", Envdetails);
 
       const user = await User.create(payload);
       const token = await auth
