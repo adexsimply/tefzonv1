@@ -1,11 +1,94 @@
 .signin-container {
 	background: #f3f3f3;
 	height: 100vh;
-	margin-top: 110px;
+	// margin-top: 110px;
 	.signin-content-container {
 		.loginForm {
 			.ant-form-item-label {
 				font-weight: 500;
+			}
+		}
+	}
+}
+.signup {
+	background: #f3f3f3;
+	padding-bottom: 2rem;
+	.ant-select.brand-select {
+		.ant-select-selector {
+			height: 2.5rem;
+			border: 1px solid rgba(34, 34, 34, 0.25);
+			border-radius: 0;
+		}
+	}
+	.ant-steps-item {
+		padding-left: 0 !important;
+	}
+	.ant-steps-item-finish
+		> .ant-steps-item-container
+		> .ant-steps-item-content
+		> .ant-steps-item-title {
+		&::after {
+			background-color: rgba(34, 34, 34, 0.7);
+		}
+	}
+	.ant-steps-item
+		> .ant-steps-item-container
+		> .ant-steps-item-content
+		> .ant-steps-item-title {
+		padding-right: 0;
+		&::after {
+			background-color: rgba(34, 34, 34, 0.7);
+			height: 2px;
+			top: 30px;
+		}
+	}
+	.ant-steps-item-icon {
+		margin: 0;
+	}
+	.ant-steps-item > .ant-steps-item-container > .ant-steps-item-icon {
+		width: 60px;
+		height: 60px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: #d3d3d3;
+	}
+	.ant-steps-item.ant-steps-item-active
+		> .ant-steps-item-container
+		> .ant-steps-item-icon {
+		background: #8139e6 !important;
+		svg {
+			fill: #fff;
+		}
+	}
+	.ant-steps-item.ant-steps-item-done
+		> .ant-steps-item-container
+		> .ant-steps-item-icon {
+		background: #8139e6;
+	}
+}
+
+.register-terms {
+	.ant-checkbox-wrapper.terms-checkbox
+		> .ant-checkbox
+		> input.ant-checkbox-input {
+		width: 42px !important;
+		height: 42px !important;
+	}
+	.ant-checkbox-wrapper.terms-checkbox > .ant-checkbox > .ant-checkbox-inner {
+		width: 42px !important;
+		height: 42px !important;
+		border: 1px solid rgba(34, 34, 34, 0.25);
+		margin-right: 10px;
+	}
+	.ant-checkbox-wrapper.terms-checkbox > .ant-checkbox.ant-checkbox-checked {
+		.ant-checkbox-inner {
+			background: #8139e6;
+			border: 1px solid #8139e6;
+			&::after {
+				height: 14px;
+				left: 37%;
+				top: 46%;
 			}
 		}
 	}

@@ -1,9 +1,9 @@
 .landing-page-container {
 	@media screen and (min-width: 1022px) {
-		min-height: calc(100vh - 200px) !important;
+		min-height: 100% !important;
 	}
 	.landing-bg {
-		height: 74vh;
+		height: 71vh;
 		@media screen and (max-width: 1050px) {
 			height: 51vh;
 		}

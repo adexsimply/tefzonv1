@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import AppContextProvider from "./store/AppContext";
 import "../node_modules/antd/dist/antd.css";
 import "./tailwind.css";
 import "./index.scss";
@@ -9,7 +10,9 @@ import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<AppContextProvider>
+			<App />
+		</AppContextProvider>
 	</React.StrictMode>,
 	document.getElementById("root")
 );
