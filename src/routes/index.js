@@ -4,6 +4,8 @@ import Homepage from "../pages/Homepage";
 import RegisterPage from "../pages/Auth/Register";
 import SigninPage from "../pages/Auth/Signin";
 import ConfirmPage from "../pages/Auth/Confirm";
+import DashboardPage from "../pages/Dashboard";
+import TeamsPage from "../pages/Teams";
 
 const Routes = () => {
 	const history = useHistory();
@@ -19,6 +21,13 @@ const Routes = () => {
 					key="confirm"
 					component={ConfirmPage}
 				/>
+				<Route
+					path="/dashboard"
+					exact
+					key="dashboard"
+					component={DashboardPage}
+				/>
+				<Route path="/teams" exact key="teams" component={TeamsPage} />
 			</Switch>
 		</BrowserRouter>
 	);

@@ -9,3 +9,15 @@
 .f-nunito {
 	font-family: "Nunito", sans-serif;
 }
+.green-outline-btn {
+	border: 1px solid rgba(103, 242, 75, 0.4);
+	color: rgba(103, 242, 75, 0.6);
+	&:hover {
+		border-color: #67f24b;
+		color: #67f24b;
+	}
+}
+.brand-outline-btn {
+	border: 1px solid #8139e6;
+	color: #8139e6;
+}
