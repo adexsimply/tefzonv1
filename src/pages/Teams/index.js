@@ -31,7 +31,26 @@ const Teams = () => {
 	const [pitchView, setPitchView] = useState("list");
 	const [selectedPlayer, setSelectedPlayer] = useState(null);
 	const [currentSelection, setCurrentSelection] = useState(null);
-	const [selectedGoalKeepers, setSelectedGoalKeepers] = useState([]);
+	const [selectedGoalKeepers, setSelectedGoalKeepers] = useState([
+		{
+			playerName: "gk 1",
+		},
+	]);
+	const [selectedMid, setSelectedMid] = useState([
+		{
+			playerName: "mid 1",
+		},
+	]);
+	const [selectedDef, setSelectedDef] = useState([
+		{
+			playerName: "def 1",
+		},
+	]);
+	const [selectedFwd, setSelectedFwd] = useState([
+		{
+			playerName: "fwd 1",
+		},
+	]);
 
 	const playerData = [
 		{
@@ -314,6 +333,9 @@ const Teams = () => {
 												<ListView
 													setSelection={getSelectionParams}
 													goalKeepers={selectedGoalKeepers}
+													mid={selectedMid}
+													def={selectedDef}
+													fwd={selectedFwd}
 												/>
 											) : (
 												<PitchView />

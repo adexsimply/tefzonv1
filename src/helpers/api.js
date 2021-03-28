@@ -68,6 +68,34 @@ export const registerUser = (userData) => {
 		}
 	});
 };
+export const forgotUserPassword = (data) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const forgotPwd = await makeApiCall({
+				url: "/forgot-password",
+				method: "post",
+				data: data,
+			});
+			return resolve(forgotPwd);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+export const resetUserPassword = (data) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const forgotPwd = await makeApiCall({
+				url: "/forgot-password",
+				method: "post",
+				data: data,
+			});
+			return resolve(forgotPwd);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
 
 export const getCountries = () => {
 	return new Promise(async (resolve, reject) => {

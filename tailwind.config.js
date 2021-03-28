@@ -31,6 +31,7 @@ module.exports = {
 				"gray-2": "#c4c4c4",
 				"gray-3": "#6B6B6B",
 				"gray-4": "#BBBABA",
+				"gray-5": "#f3f3f3",
 			},
 			width: {
 				"37p": "37%",

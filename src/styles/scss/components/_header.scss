@@ -21,3 +21,11 @@
 	border: 1px solid #8139e6;
 	color: #8139e6;
 }
+.ant-input-affix-wrapper.tef-password-input {
+	height: 44px;
+	border-radius: 0;
+	border-color: #8139e6;
+}
+.ant-input-affix-wrapper-focused.tef-password-input {
+	box-shadow: 0 0 0 2px rgba(129, 57, 230, 0.5);
+}

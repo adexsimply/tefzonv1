@@ -21,7 +21,7 @@ const LoginForm = (props) => {
 					message: login.message,
 				});
 				saveState(login.result.token);
-				history.replace("/");
+				history.replace("/teams");
 			}
 		} catch (error) {
 			if (error) {
@@ -51,7 +51,11 @@ const LoginForm = (props) => {
 			>
 				<Input type="password" className="h-11" />
 			</Form.Item>
-			<p className="text-center font-medium">Forgot password?</p>
+			<p className="text-center font-medium">
+				<Link to="/forgot-password" className="hover:text-primary-brand">
+					Forgot password?
+				</Link>
+			</p>
 			<div>
 				<Button
 					htmlType="submit"

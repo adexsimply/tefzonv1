@@ -2,57 +2,18 @@ import React, { useState } from "react";
 import { Row, Col, Button } from "antd";
 
 const ListView = (props) => {
+	console.log(props.goalKeepers, "===");
 	const displayGkPlayers = () => {
-		console.log(props.goalKeepers, "=== my keepers");
-		if (props.goalKeepers.length == 2) {
-			return props.goalKeepers.map((players) => {
-				return (
-					<Row className="py-2 px-6 player-row" key={players.name}>
-						<Col lg={10}>
-							<div>
-								<p>{players.name}</p>
-								<p>
-									<span>{players.position}</span>
-								</p>
-							</div>
-						</Col>
-						<Col lg={3}></Col>
-						<Col lg={3}></Col>
-						<Col lg={3}></Col>
-						<Col lg={3}></Col>
-					</Row>
-				);
-			});
-		} else {
-			if (props.goalKeepers.length === 1) {
-				return props.goalKeepers.map((players) => {
-					return (
-						<Row className="py-2 px-6 player-row" key={players.name}>
-							<Col lg={10}>
-								<div>
-									<p>{players.name}</p>
-									<p>
-										<span>{players.position}</span>
-									</p>
-								</div>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-					);
-				});
-			}
+		return props.goalKeepers.map((players) => {
 			return (
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
-						<Button
+						<p
 							className="border-0 text-black rounded-none p-0 font-medium"
 							onClick={() => props.setSelection("gk")}
 						>
-							Select Goal Keeper
-						</Button>
+							{players.playerName}
+						</p>
 					</Col>
 					<Col lg={3}></Col>
 					<Col lg={3}></Col>
@@ -60,8 +21,96 @@ const ListView = (props) => {
 					<Col lg={3}></Col>
 				</Row>
 			);
+		});
+	};
+	const displayEmptyState = (position) => {
+		switch (position) {
+			case "gk":
+				for (let i = props.goalKeepers.length; i <= 2; i++) {
+					return (
+						<Row className="py-2 px-6 player-row">
+							<Col lg={10}>
+								<Button
+									className="border-0 text-black rounded-none p-0 font-medium"
+									onClick={() => props.setSelection("gk")}
+								>
+									Select Goal Keeper
+								</Button>
+							</Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+						</Row>
+					);
+				}
+				break;
+			case "mid":
+				for (let i = props.mid.length; i <= 5; i++) {
+					return (
+						<Row className="py-2 px-6 player-row">
+							<Col lg={10}>
+								<Button
+									className="border-0 text-black rounded-none p-0 font-medium"
+									onClick={() => props.setSelection("gk")}
+								>
+									Select Mid fielder
+								</Button>
+							</Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+						</Row>
+					);
+				}
+				break;
+			case "def":
+				for (let i = props.def.length; i <= 5; i++) {
+					console.log(props.def);
+					return (
+						<Row className="py-2 px-6 player-row">
+							<Col lg={10}>
+								<Button
+									className="border-0 text-black rounded-none p-0 font-medium"
+									onClick={() => props.setSelection("gk")}
+								>
+									Select Defender
+								</Button>
+							</Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+						</Row>
+					);
+				}
+				break;
+			case "fwd":
+				for (let i = props.fwd.length; i <= 3; i++) {
+					return (
+						<Row className="py-2 px-6 player-row">
+							<Col lg={10}>
+								<Button
+									className="border-0 text-black rounded-none p-0 font-medium"
+									onClick={() => props.setSelection("gk")}
+								>
+									Select forward
+								</Button>
+							</Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+							<Col lg={3}></Col>
+						</Row>
+					);
+				}
+				break;
+			default:
+				break;
 		}
 	};
+
 	return (
 		<div className="teams-list-container px-3 h-5/6">
 			<div className="bg-white h-full">
@@ -87,40 +136,8 @@ const ListView = (props) => {
 						</Row>
 					</div>
 					<div className="players text-regular">
-						{props.goalKeepers.length === 0 ? (
-							<>
-								<Row className="py-2 px-6 player-row">
-									<Col lg={10}>
-										<Button
-											className="border-0 text-black rounded-none p-0 font-medium"
-											onClick={() => props.setSelection("gk")}
-										>
-											Select Goal Keeper
-										</Button>
-									</Col>
-									<Col lg={3}></Col>
-									<Col lg={3}></Col>
-									<Col lg={3}></Col>
-									<Col lg={3}></Col>
-								</Row>
-								<Row className="py-2 px-6 player-row">
-									<Col lg={10}>
-										<Button
-											className="border-0 text-black rounded-none p-0 font-medium"
-											onClick={() => props.setSelection("gk")}
-										>
-											Select Goal Keeper
-										</Button>
-									</Col>
-									<Col lg={3}></Col>
-									<Col lg={3}></Col>
-									<Col lg={3}></Col>
-									<Col lg={3}></Col>
-								</Row>{" "}
-							</>
-						) : (
-							displayGkPlayers()
-						)}
+						{displayEmptyState("gk")}
+						{displayGkPlayers()}
 					</div>
 				</div>
 				{/* DEFENDERS */}
@@ -144,78 +161,7 @@ const ListView = (props) => {
 							</Col>
 						</Row>
 					</div>
-					<div className="players text-regular">
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("def")}
-								>
-									Select Defender
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("def")}
-								>
-									Select Defender
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("def")}
-								>
-									Select Defender
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("def")}
-								>
-									Select Defender
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("def")}
-								>
-									Select Defender
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-					</div>
+					<div className="players text-regular">{displayEmptyState("def")}</div>
 				</div>
 				{/* MID FIELDERS */}
 				<div className="mid">
@@ -238,75 +184,7 @@ const ListView = (props) => {
 							</Col>
 						</Row>
 					</div>
-					<div className="players text-regular">
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("mid")}
-								>
-									Select Midfielder
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("mid")}
-								>
-									Select Midfielder
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button className="border-0 text-black rounded-none p-0 font-medium">
-									Select Midfielder
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("mid")}
-								>
-									Select Midfielder
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("mid")}
-								>
-									Select Midfielder
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-					</div>
+					<div className="players text-regular">{displayEmptyState("mid")}</div>
 				</div>
 				{/* FORWARDS */}
 
@@ -330,50 +208,7 @@ const ListView = (props) => {
 							</Col>
 						</Row>
 					</div>
-					<div className="players text-regular">
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("forward")}
-								>
-									Select Forward
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("forward")}
-								>
-									Select Forward
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-						<Row className="py-2 px-6 player-row">
-							<Col lg={10}>
-								<Button
-									className="border-0 text-black rounded-none p-0 font-medium"
-									onClick={() => props.setSelection("forward")}
-								>
-									Select Forward
-								</Button>
-							</Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-							<Col lg={3}></Col>
-						</Row>
-					</div>
+					<div className="players text-regular">{displayEmptyState("fwd")}</div>
 				</div>
 			</div>
 		</div>
