@@ -10,7 +10,7 @@ const Signin = () => {
 		<div className="signin-container">
 			<Header />
 			<div className="signin-content-container flex justify-center">
-				<div className="w-1/3 mt-24">
+				<div className="w-1/3 pt-4">
 					<div className="heading text-center">
 						<h2 className="f-oswald text-3xl font-semibold">Login</h2>
 						<p className="mt-3 px-6 text-sm font-medium">
