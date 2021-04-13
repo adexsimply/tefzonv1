@@ -15,15 +15,6 @@ const ForgotPassword = () => {
 		setSubmitting(true);
 		try {
 			const results = await forgotUserPassword(values);
-			// openNotification({
-			// 	type: "success",
-			// 	title: "Forgot Password",
-			// 	message: "Reset instructions have been sent to your email",
-			// });
-			// setSubmitting(false);
-			// setTimeout(() => {
-			// 	history.replace("/reset-password");
-			// }, 3000);
 
 			if (results) {
 				console.log(results, "===");

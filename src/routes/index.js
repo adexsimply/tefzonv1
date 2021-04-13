@@ -9,6 +9,8 @@ import ResetPasswordPage from "../pages/Auth/ResetPassword";
 import ConfirmPage from "../pages/Auth/Confirm";
 import DashboardPage from "../pages/Dashboard";
 import TeamsPage from "../pages/Teams";
+import ComingSoonPage from "../pages/Error/ComingSoon";
+import NotFoundPage from "../pages/Error/NotFound";
 
 const Routes = () => {
 	let history = useHistory();
@@ -43,6 +45,12 @@ const Routes = () => {
 					component={DashboardPage}
 				/>
 				<Route path="/teams" exact key="teams" component={TeamsPage} />
+				<Route path="/prizes" component={ComingSoonPage} />
+				<Route path="/scout" component={ComingSoonPage} />
+				<Route path="/statistics" component={ComingSoonPage} />
+				<Route path="/help" component={ComingSoonPage} />
+				<Route path="/contact" component={ComingSoonPage} />
+				<Route path="*" component={NotFoundPage} />
 			</Switch>
 		</BrowserRouter>
 	);
