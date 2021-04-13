@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DashboardLayout from "../../components/common/DashboardLayout";
-import { Button, Row, Col, Input, Select, Radio } from "antd";
+import { Button, Row, Col, Input, Select } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
 
 import InfoCircleIcon from "../../assets/img/icons/info-circle-green.svg";
@@ -29,7 +29,7 @@ const { Option } = Select;
 
 const Teams = () => {
 	const [pitchView, setPitchView] = useState("list");
-	const [selectedPlayer, setSelectedPlayer] = useState(null);
+	// const [selectedPlayer, setSelectedPlayer] = useState(null);
 	const [currentSelection, setCurrentSelection] = useState(null);
 	const [selectedGoalKeepers, setSelectedGoalKeepers] = useState([
 		{
@@ -145,13 +145,21 @@ const Teams = () => {
 		},
 	];
 	const handlePlayerSelection = (player) => {
-		console.log(player, "selected player");
 		switch (currentSelection) {
 			case "gk":
 				setSelectedGoalKeepers([...selectedGoalKeepers, player]);
 				break;
-
+			case "md":
+				setSelectedMid([...selectedMid, player]);
+				break;
+			case "def":
+				setSelectedDef();
+				break;
+			case "fwd":
+				setSelectedFwd();
+				break;
 			default:
+				// setSelectedPlayer();
 				break;
 		}
 	};
@@ -183,6 +191,7 @@ const Teams = () => {
 						>
 							<div className="pl-2">
 								<a
+									href="/#/"
 									className="text-white font-bold text-regular hover:text-tw-green-light"
 									disabled={currentSelection === null}
 									onClick={(e) => {
@@ -240,6 +249,7 @@ const Teams = () => {
 							>
 								<div className="pl-2">
 									<a
+										href="/#/"
 										className="text-white font-bold text-regular hover:text-tw-green-light"
 										disabled={currentSelection === null}
 										onClick={(e) => {

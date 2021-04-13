@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useState } from "react";
-import { loadState } from "./localStorage";
+import React, { createContext, useState } from "react";
+// import { loadState } from "./localStorage";
 export const AppContext = createContext();
 
 const userInitialState = {
@@ -8,16 +8,13 @@ const userInitialState = {
 };
 
 const AppContextProvider = ({ children }) => {
-	const [user, setUser] = useState(userInitialState);
+	const [user] = useState(userInitialState);
 
-	useEffect(() => {
-		getUserData();
-	}, []);
-	const getToken = loadState();
+	// const getToken = loadState();
 
-	const getUserData = () => {
-		setUser({ loggedIn: true, token: getToken });
-	};
+	// const getUserData = () => {
+	// 	setUser({ loggedIn: true, token: getToken });
+	// };
 	return <AppContext.Provider value={{ user }}>{children}</AppContext.Provider>;
 };
 

@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import Header from "../../components/common/Header";
 import Input from "../../components/common/Input";
 import { Form, Button, Spin } from "antd";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { forgotUserPassword } from "../../helpers/api";
 import { openNotification } from "../../helpers/notification";
 import { CgArrowLongLeft } from "react-icons/cg";
 
 const ForgotPassword = () => {
 	const [submitting, setSubmitting] = useState(false);
-	let history = useHistory();
 
 	const handleForgotPassword = async (values) => {
 		setSubmitting(true);

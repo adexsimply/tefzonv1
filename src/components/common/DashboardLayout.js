@@ -173,7 +173,7 @@ const DashboardLayout = (props) => {
 									<ul className="flex list-none mt-4">
 										<li>
 											<a
-												href=""
+												href="/#/"
 												className="bg-primary-brand w-8 h-8 rounded-full inline-flex items-center justify-center mr-4"
 											>
 												<GrFacebookOption className="text-white" />
@@ -181,7 +181,7 @@ const DashboardLayout = (props) => {
 										</li>
 										<li>
 											<a
-												href=""
+												href="/#/"
 												className="bg-primary-brand w-8 h-8 rounded-full inline-flex items-center justify-center mr-4"
 											>
 												<GrInstagram className="text-white" />
@@ -189,7 +189,7 @@ const DashboardLayout = (props) => {
 										</li>
 										<li>
 											<a
-												href=""
+												href="/#/"
 												className="bg-primary-brand w-8 h-8 rounded-full inline-flex items-center justify-center"
 											>
 												<GrTwitter className="text-white" />

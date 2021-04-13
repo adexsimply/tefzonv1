@@ -3,7 +3,7 @@ import { loadState } from "../store/localStorage";
 
 // export const baseURL = "http://127.0.0.1:3333";
 export const baseURLOLD = "http://157.230.179.121:3333";
-export const baseURL = "https://api.tefzon.com";
+export const baseURL = process.env.API_DEV_URL;
 
 export const getToken = () => {
 	return loadState();
@@ -86,12 +86,12 @@ export const forgotUserPassword = (data) => {
 export const resetUserPassword = (data) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const forgotPwd = await makeApiCall({
-				url: "/forgot-password",
+			const reset = await makeApiCall({
+				url: "/reset-password",
 				method: "post",
 				data: data,
 			});
-			return resolve(forgotPwd);
+			return resolve(reset);
 		} catch (error) {
 			return reject(error);
 		}
