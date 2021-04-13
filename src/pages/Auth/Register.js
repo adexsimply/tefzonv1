@@ -61,7 +61,7 @@ const Register = () => {
 						title: "User Registration",
 						msg: results.message,
 					});
-					history.replace("/");
+					history.replace("/dashboard");
 					setLoading(false);
 				} else {
 					openNotification({

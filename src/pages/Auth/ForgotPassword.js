@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../../components/common/Header";
 import Input from "../../components/common/Input";
 import { Form, Button, Spin } from "antd";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { forgotUserPassword } from "../../helpers/api";
 import { openNotification } from "../../helpers/notification";
 import { CgArrowLongLeft } from "react-icons/cg";
@@ -14,27 +14,29 @@ const ForgotPassword = () => {
 	const handleForgotPassword = async (values) => {
 		setSubmitting(true);
 		try {
-			// const results = await forgotUserPassword(values);
-			openNotification({
-				type: "success",
-				title: "Forgot Password",
-				message: "Reset instructions have been sent to your email",
-			});
-			setSubmitting(false);
-			setTimeout(() => {
-				history.replace("/reset-password");
-			}, 3000);
+			const results = await forgotUserPassword(values);
+			// openNotification({
+			// 	type: "success",
+			// 	title: "Forgot Password",
+			// 	message: "Reset instructions have been sent to your email",
+			// });
+			// setSubmitting(false);
+			// setTimeout(() => {
+			// 	history.replace("/reset-password");
+			// }, 3000);
 
-			// if (results) {
-			// 	openNotification({
-			// 		type: "success",
-			// 		title: "Forgot Password",
-			// 		message: "Reset instructions have been sent to your email",
-			// 	});
+			if (results) {
+				console.log(results, "===");
+				openNotification({
+					type: "success",
+					title: "Forgot Password",
+					message: "Reset instructions have been sent to your email",
+				});
 
-			// 	setSubmitting(false);
-			// }
+				setSubmitting(false);
+			}
 		} catch (error) {
+			console.log(error, "ppp");
 			openNotification({
 				type: "error",
 				title: "Forgot Password",
@@ -69,8 +71,10 @@ const ForgotPassword = () => {
 						>
 							{submitting ? <Spin /> : "Submit"}
 						</Button>
-						<p className="flex items-center mt-4">
-							<CgArrowLongLeft className="mr-4 text-2xl" /> Back to Login
+						<p className=" mt-4">
+							<Link to="/login" className="flex items-center">
+								<CgArrowLongLeft className="mr-4 text-2xl" /> Back to Login
+							</Link>
 						</p>
 					</Form>
 				</div>
