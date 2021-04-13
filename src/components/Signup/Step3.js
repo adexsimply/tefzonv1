@@ -92,7 +92,7 @@ const StepThree = (props) => {
 						>
 							<span className="font-medium text-primary-dark">
 								I have agreed to the{" "}
-								<a href="" className="text-primary-brand">
+								<a href="/#/" className="text-primary-brand">
 									Terms & Conditions
 								</a>{" "}
 							</span>
@@ -117,7 +117,6 @@ const StepThree = (props) => {
 							<Row justify="center">
 								<Col md={8} className="mt-4">
 									<Button
-										onClick={props.prev}
 										onClick={props.onPrevious}
 										className="border-none flex items-center justify-center w-full shadow-none"
 									>

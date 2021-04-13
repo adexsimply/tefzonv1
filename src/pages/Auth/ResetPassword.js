@@ -5,36 +5,27 @@ import { Form, Button, Spin, Modal, Input } from "antd";
 import { resetUserPassword } from "../../helpers/api";
 import { openNotification } from "../../helpers/notification";
 import { AiFillCheckCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-const ResetPassword = () => {
+const ResetPassword = ({ match }) => {
 	const [submitting, setSubmitting] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const resetToken = useLocation().search.split("?token=")[1];
+	console.log(resetToken);
 
 	const handleResetPwd = async (values) => {
 		setSubmitting(true);
 		try {
-			// const results = await resetUserPassword(values);
-			openNotification({
-				type: "success",
-				title: "Reset Password",
-				message: "Reset successful!",
-			});
-
-			setTimeout(() => {
+			const results = await resetUserPassword({ ...values, token: resetToken });
+			if (results) {
+				openNotification({
+					type: "success",
+					title: "Reset Password",
+					message: "Reset successful!",
+				});
 				setSubmitting(false);
 				setShowConfirmModal(true);
-			}, 3000);
-
-			// if (results) {
-			// 	openNotification({
-			// 		type: "success",
-			// 		title: "Forgot Password",
-			// 		message: "Reset instructions have been sent to your email",
-			// 	});
-
-			// 	setSubmitting(false);
-			// }
+			}
 		} catch (error) {
 			openNotification({
 				type: "error",
@@ -97,7 +88,7 @@ const ResetPassword = () => {
 						</Form.Item>
 						<Form.Item
 							label="Confirm Password"
-							name="confirm-password"
+							name="confirm_password"
 							rules={[{ required: true, message: "Please enter password" }]}
 						>
 							<Input.Password className="tef-password-input" />

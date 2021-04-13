@@ -149,7 +149,6 @@ const StepTwo = (props) => {
 						<Row justify="center">
 							<Col md={8} className="mt-4">
 								<Button
-									onClick={props.prev}
 									onClick={props.onPrevious}
 									className="border-none flex items-center justify-center w-full shadow-none"
 								>
