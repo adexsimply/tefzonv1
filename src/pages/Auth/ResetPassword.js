@@ -16,16 +16,23 @@ const ResetPassword = ({ match }) => {
 	const handleResetPwd = async (values) => {
 		setSubmitting(true);
 		try {
-			const results = await resetUserPassword({ ...values, token: resetToken });
-			if (results) {
-				openNotification({
-					type: "success",
-					title: "Reset Password",
-					message: "Reset successful!",
-				});
-				setSubmitting(false);
-				setShowConfirmModal(true);
-			}
+			await resetUserPassword({ ...values, token: resetToken });
+			// openNotification({
+			// 	type: "success",
+			// 	title: "Reset Password",
+			// 	message: "Reset successful!",
+			// });
+			setSubmitting(false);
+			setShowConfirmModal(true);
+			// if (results) {
+			// 	openNotification({
+			// 		type: "success",
+			// 		title: "Reset Password",
+			// 		message: "Reset successful!",
+			// 	});
+			// 	setSubmitting(false);
+			// 	setShowConfirmModal(true);
+			// }
 		} catch (error) {
 			openNotification({
 				type: "error",
