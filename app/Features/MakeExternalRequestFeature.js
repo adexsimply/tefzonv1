@@ -32,11 +32,12 @@ class MakeExternalRequestFeature {
         },
         url:endpoint
       };
-     
+
 
     const [getRequestDataError, getRequestData] = await safeAwait(
         axios(options) 
     );
+
     if (getRequestDataError) {
       return {
         results: getRequestDataError,
@@ -73,7 +74,6 @@ class MakeExternalRequestFeature {
         },
         url:endpoint
       };
-     
     const [postRequestDataError, postRequestData] = await safeAwait(
         axios(options) 
     );

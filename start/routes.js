@@ -23,7 +23,17 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON'}
 })
 
-//metadata routes
+// metadata routes
 Route.get("/getMetadata", "Metadata/MetadatumController.getMetadata");
 Route.get("/signupTeamList","Metadata/MetadatumController.getSignUpTeamList")
+
+// team selection routes , select team members , remove team members , add team member(s) , view User team  , 
+Route.post("/createTeam", "TeamCreation/TeamManagementController.createTeam").middleware(['auth'])
+Route.put("/editTeam", "TeamCreation/TeamManagementController.editTeam").middleware(['auth'])
+Route.get("/viewUserTeam","TeamCreation/TeamManagementController.viewUserTeam")
+Route.get("/viewUserProfile","TeamCreation/TeamManagementController.viewUserProfile")
+
+
+
+
 
