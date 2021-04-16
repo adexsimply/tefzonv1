@@ -28,9 +28,10 @@ Route.group(() => {
   Route.post(`/forgot-password`, "ApiAuthController.forgotPassword").validator(
     "SendLink"
   );
-  Route.post(`/reset-password`, "ApiAuthController.resetPassword").validator(
-    "ResetPassword"
-  );
+  Route.post(`/reset-password`, "ApiAuthController.resetPassword")
+  // .validator(
+  //   "ResetPassword"
+  // );
   Route.post(`/generate-token`, "ApiAuthController.generateToken");
   Route.post(`/reset-password-in-app`, "ApiAuthController.resetPasswordInApp")
     .middleware("auth")

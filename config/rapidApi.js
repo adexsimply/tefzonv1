@@ -11,6 +11,7 @@ module.exports = {
   */
   getTeamsByLeagueIdEndpoint:
   "https://api-football-v1.p.rapidapi.com/v2/teams/league",
-  
+  getPlayerbyId:
+  "https://api-football-v1.p.rapidapi.com/v3/players"
 }
 

@@ -8,7 +8,7 @@ class PointRankingSchema extends Schema {
     this.create('point_rankings', (table) => {
       table.increments()
       table.timestamps()
-    })
+    })      
   }
 
   down () {
