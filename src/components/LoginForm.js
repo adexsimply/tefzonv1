@@ -49,7 +49,7 @@ const LoginForm = (props) => {
 				label="Your password"
 				rules={[{ required: true, message: "please enter your password" }]}
 			>
-				<Input type="password" className="h-11" />
+				<Input.Password type="password" className="h-11" />
 			</Form.Item>
 			<p className="text-center font-medium">
 				<Link to="/forgot-password" className="hover:text-primary-brand">

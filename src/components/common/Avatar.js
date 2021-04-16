@@ -1,7 +1,8 @@
 import React from "react";
 import { Menu, Dropdown } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { BiUser } from "react-icons/bi";
+import { clearState } from "../../store/localStorage";
 // import { AppContext } from "../../store/AppContext";
 
 const Avatar = () => {
@@ -9,6 +10,7 @@ const Avatar = () => {
 	// console.log(user);
 	// get logged in user email and display in dropdown
 	// save user email on login
+	let history = useHistory();
 	const menu = (
 		<Menu>
 			<Menu.Item>
@@ -20,7 +22,15 @@ const Avatar = () => {
 			</Menu.Item>
 			<Menu.Divider />
 			<Menu.Item>
-				<p>Log Out</p>
+				<p
+					onClick={() => {
+						clearState();
+						history.replace("/login");
+					}}
+					className="cursor-pointer"
+				>
+					Log Out
+				</p>
 			</Menu.Item>
 		</Menu>
 	);
