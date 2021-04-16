@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import Header from "../../components/common/Header";
 import Input from "../../components/common/Input";
+
 import { Form, Button, Spin } from "antd";
 import { Link } from "react-router-dom";
 import { forgotUserPassword } from "../../helpers/api";
-import { openNotification } from "../../helpers/notification";
+
 import { CgArrowLongLeft } from "react-icons/cg";
+
+import Alert from "../../components/common/Alert";
 
 const ForgotPassword = () => {
 	const [submitting, setSubmitting] = useState(false);
+	const [status, setStatus] = useState({ type: "", msg: "" });
 
 	const handleForgotPassword = async (values) => {
 		setSubmitting(true);
@@ -16,28 +20,49 @@ const ForgotPassword = () => {
 			const results = await forgotUserPassword(values);
 
 			if (results) {
-				console.log(results, "===");
-				openNotification({
-					type: "success",
-					title: "Forgot Password",
-					message: "Reset instructions have been sent to your email",
-				});
-
 				setSubmitting(false);
+				setStatus({
+					type: "success",
+					msg: "Reset link has been sent to your email",
+				});
+				setTimeout(() => {
+					resetStatus();
+				}, 3000);
 			}
 		} catch (error) {
 			console.log(error, "ppp");
-			openNotification({
+			setStatus({
 				type: "error",
-				title: "Forgot Password",
-				message: error,
+				msg: error,
 			});
+
 			setSubmitting(false);
 		}
 	};
+	const resetStatus = () => setStatus({ type: "", msg: "" });
+
 	return (
 		<div className="bg-gray-5">
 			<Header />
+			<div className="w-4/6 mx-auto mt-4">
+				{status.type === "error" && (
+					<Alert
+						className="w-full bg-tw-red"
+						textClassName="text-white f-oswald"
+						msg={status.msg || "Something went wrong!"}
+						closeAlert={resetStatus}
+					/>
+				)}
+				{status.type === "success" && (
+					<Alert
+						className="w-full bg-primary-brand"
+						textClassName="text-white f-oswald"
+						msg={status.msg || "Successful!"}
+						closeAlert={resetStatus}
+					/>
+				)}
+			</div>
+
 			<div className="w-4/5 md:w-1/3 mx-auto py-6  forgot-pw-content">
 				<h3 className="f-oswald text-3xl text-center">Forgot Password</h3>
 				<div className="flex justify-center align-center h-full flex-col">

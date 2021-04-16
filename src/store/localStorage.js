@@ -13,3 +13,6 @@ export const loadState = () => {
 		return null;
 	}
 };
+export const clearState = () => {
+	localStorage.removeItem(STATE);
+};

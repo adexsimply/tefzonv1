@@ -1,47 +1,39 @@
 import React, { useState } from "react";
 import Header from "../../components/common/Header";
-
+import Alert from "../../components/common/Alert";
 import { Form, Button, Spin, Modal, Input } from "antd";
 import { resetUserPassword } from "../../helpers/api";
-import { openNotification } from "../../helpers/notification";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { Link, useLocation } from "react-router-dom";
 
 const ResetPassword = ({ match }) => {
 	const [submitting, setSubmitting] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const [status, setStatus] = useState({ type: "", msg: "" });
 	const resetToken = useLocation().search.split("?token=")[1];
 	console.log(resetToken);
 
 	const handleResetPwd = async (values) => {
 		setSubmitting(true);
 		try {
-			await resetUserPassword({ ...values, token: resetToken });
-			// openNotification({
-			// 	type: "success",
-			// 	title: "Reset Password",
-			// 	message: "Reset successful!",
-			// });
-			setSubmitting(false);
-			setShowConfirmModal(true);
-			// if (results) {
-			// 	openNotification({
-			// 		type: "success",
-			// 		title: "Reset Password",
-			// 		message: "Reset successful!",
-			// 	});
-			// 	setSubmitting(false);
-			// 	setShowConfirmModal(true);
-			// }
+			const results = await resetUserPassword({ ...values, token: resetToken });
+			console.log(results);
+
+			if (results) {
+				setSubmitting(false);
+				setShowConfirmModal(true);
+			}
 		} catch (error) {
-			openNotification({
+			console.log(error, "ppp");
+			setStatus({
 				type: "error",
-				title: "Reset Password",
-				message: error,
+				msg: error,
 			});
+
 			setSubmitting(false);
 		}
 	};
+	const resetStatus = () => setStatus({ type: "", msg: "" });
 	const closeConfirmModal = () => setShowConfirmModal(false);
 	return (
 		<div className="bg-gray-5">
@@ -77,9 +69,19 @@ const ResetPassword = ({ match }) => {
 					</div>
 				</Modal>
 			)}
+
 			<div className="w-1/3 mx-auto py-6  forgot-pw-content">
 				<h3 className="f-oswald text-3xl text-center">Reset Password</h3>
 				<div className="flex justify-center align-center h-full flex-col">
+					{status.type === "error" && (
+						<Alert
+							className="w-full bg-tw-red"
+							textClassName="text-white f-oswald"
+							msg={status.msg || "Something went wrong!"}
+							closeAlert={resetStatus}
+						/>
+					)}
+
 					<Form
 						layout="vertical"
 						hideRequiredMark
@@ -88,7 +90,7 @@ const ResetPassword = ({ match }) => {
 					>
 						<Form.Item
 							label="Password"
-							name="password"
+							name="Password"
 							rules={[{ required: true, message: "Please enter password" }]}
 						>
 							<Input.Password className="tef-password-input" />
