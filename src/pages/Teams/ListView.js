@@ -169,7 +169,49 @@ const ListView = (props) => {
 			);
 		});
 	};
-	const displaySubs = () => {};
+	const displaySubs = () => {
+		return props.subs.map((players) => {
+			console.log(players);
+
+			return (
+				<Row className="py-2 px-6 player-row justify-between">
+					<Col lg={10}>
+						<div className="flex mr-6">
+							<Popover content={() => showPopUp(players)} title={players.name}>
+								<img src={InfoCircleIcon} alt="info icon" />
+							</Popover>
+
+							<img src={Jersey} className="ml-6" alt="jersey icon" />
+							<div
+								className="border-0 text-black rounded-none p-0 font-medium ml-4"
+								onClick={() => {
+									players.position("gk") && props.setSubSelection("gk");
+								}}
+							>
+								<p className="font-light">{players.name}</p>
+								<p>
+									<span className="font-semibold inline-block">JUV</span>
+									<span className="font-light uppercase inline-block ml-4">
+										{players.position}
+									</span>
+								</p>
+							</div>
+						</div>
+					</Col>
+					<Col lg={12}>
+						<Row>
+							<Col
+								lg={8}
+								className="border-l border-secondary-gray-2-border"
+							></Col>
+							<Col lg={8}></Col>
+							<Col lg={8}></Col>
+						</Row>
+					</Col>
+				</Row>
+			);
+		});
+	};
 
 	const gkEmptyState = () => {
 		let gkContent = [];
@@ -268,7 +310,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("subGk")}
+							onClick={() => props.setSubSelection("gk")}
 						>
 							Select GK
 						</Button>
@@ -282,7 +324,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("subDef")}
+							onClick={() => props.setSubSelection("def")}
 						>
 							Select Defender
 						</Button>
@@ -296,7 +338,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("subMid")}
+							onClick={() => props.setSubSelection("mid")}
 						>
 							Select Midfielder
 						</Button>
@@ -310,7 +352,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("subFwd")}
+							onClick={() => props.setSubSelection("fwd")}
 						>
 							Select Forward
 						</Button>
