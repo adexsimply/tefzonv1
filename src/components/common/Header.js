@@ -55,7 +55,7 @@ const Header = () => {
 			);
 		});
 	};
-	console.log(toggleNav);
+
 	return (
 		<header className="flex flex-col md:flex-row py-3 px-3 md:px-12 md:py-3  w-full bg-white">
 			<div className="logo flex flex-1 justify-between">

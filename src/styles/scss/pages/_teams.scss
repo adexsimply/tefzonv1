@@ -1,0 +1,57 @@
+.ant-select.sort-select .ant-select-selector {
+	height: 44px;
+}
+.player-row {
+	border-bottom: 1px solid rgba(187, 186, 186, 0.5);
+}
+.pitch-bg {
+	min-height: 736px;
+	height: 700px;
+}
+.ant-checkbox-wrapper.player-selector-checkbox {
+	.ant-checkbox:hover {
+		.ant-checkbox-inner {
+			outline: none;
+			border-color: transparent;
+		}
+	}
+	.ant-checkbox-checked .ant-checkbox-inner {
+		background-color: transparent;
+		border-color: #67f24b;
+		&::after {
+			border-color: #67f24b;
+		}
+	}
+	.ant-checkbox-inner {
+		width: 2rem;
+		height: 2rem;
+		border-radius: 0;
+		&::after {
+			width: 7px;
+			height: 14px;
+			top: 41%;
+			left: 36%;
+		}
+	}
+}
+.teams-list-container,
+.player-list-container {
+	&::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	/* Track */
+	&::-webkit-scrollbar-track {
+		background: #e1e1e1;
+	}
+
+	/* Handle */
+	&::-webkit-scrollbar-thumb {
+		background: rgba(129, 57, 230, 0.8);
+	}
+
+	/* Handle on hover */
+	&::-webkit-scrollbar-thumb:hover {
+		background: #8139e6;
+	}
+}
