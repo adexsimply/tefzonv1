@@ -177,18 +177,7 @@ const Teams = () => {
 		if (selectedSub.length === 0) {
 			setSelectedSub([...selectedSub, player]);
 		} else {
-			return selectedSub.map((players) => {
-				if (players.position === "gk") {
-					message.warning("You have a subtitute Goal keeper");
-				} else {
-					setSelectedSub([...selectedSub, player]);
-				}
-				if (players.position === "mid") {
-					message.warning("You have a subtitute midfielder");
-				} else {
-					setSelectedSub([...selectedSub, player]);
-				}
-			});
+			setSelectedSub([...selectedSub, player]);
 		}
 	};
 	const handlePlayerCheck = (player, ev) => {
