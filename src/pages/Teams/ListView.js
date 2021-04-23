@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import { Row, Col, Button, Popover } from "antd";
 import { TeamContext } from "../../store/TeamContext";
 import Jersey from "../../assets/img/jersey.svg";
@@ -15,16 +15,18 @@ const ListView = (props) => {
 	} = useContext(TeamContext);
 
 	useEffect(() => {
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		window.addEventListener("scroll", handleListScroll);
 		return () => {
 			window.removeEventListener("scroll");
 		};
+		// eslint-disable-next-line
 	}, []);
-	const handleListScroll = () => {
+	const handleListScroll = useCallback(() => {
 		var scroller = window.scrollY;
 		props.handleScroll(scroller);
-	};
+		// eslint-disable-next-line
+	}, []);
+
 	const showPopUp = (playerDetail) => {
 		return (
 			<div>
