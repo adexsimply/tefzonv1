@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import DashboardLayout from "../../components/common/DashboardLayout";
+import React, { useState, useContext, useEffect } from "react";
 import {
 	Button,
 	Row,
@@ -11,7 +10,9 @@ import {
 	Popover,
 } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
-
+import { saveTeam } from "../../store/localStorage";
+import { TeamContext } from "../../store/TeamContext";
+import DashboardLayout from "../../components/common/DashboardLayout";
 import InfoCircleIcon from "../../assets/img/icons/info-circle-green.svg";
 
 import PitchBg from "../../assets/img/static/pitch-bg.png";
@@ -32,19 +33,35 @@ import MID5 from "../../assets/img/static/mid-5.jpg";
 import FWD1 from "../../assets/img/static/fwd-1.jpg";
 import FWD2 from "../../assets/img/static/fwd-2.jpg";
 import FWD3 from "../../assets/img/static/fwd-3.jpg";
+import { useHistory } from "react-router-dom";
 
 const { Option } = Select;
 
 const Teams = () => {
 	const [pitchView, setPitchView] = useState("list");
+	const [floatCard, setFloatCard] = useState("top");
+	const {
+		currentSelection,
+		currentSubSelection,
+		resetSelectionParams,
+		selectedDef,
+		selectedFwd,
+		selectedGoalKeepers,
+		selectedMid,
+		handlePlayerSelection,
+		handleSubtitutePlayerSelection,
+		removePlayerFromList,
+		handleRemoveSubtitutePlayerFromList,
+		statusMessage,
+	} = useContext(TeamContext);
 
-	const [currentSelection, setCurrentSelection] = useState(null);
-	const [currentSubSelection, setCurrentSubSelection] = useState(null);
-	const [selectedGoalKeepers, setSelectedGoalKeepers] = useState([]);
-	const [selectedMid, setSelectedMid] = useState([]);
-	const [selectedDef, setSelectedDef] = useState([]);
-	const [selectedFwd, setSelectedFwd] = useState([]);
-	const [selectedSub, setSelectedSub] = useState([]);
+	useEffect(() => {
+		if (statusMessage.msg !== "") {
+			message.warning(statusMessage.msg);
+		}
+	}, [statusMessage]);
+
+	const history = useHistory();
 
 	const playerData = [
 		{
@@ -138,134 +155,29 @@ const Teams = () => {
 			points: 95,
 		},
 	];
-	const handlePlayerSelection = (player) => {
-		switch (currentSelection) {
-			case "gk":
-				if (selectedGoalKeepers.length === 2) {
-					message.warning("Goal keepers team is complete");
-				} else {
-					setSelectedGoalKeepers([...selectedGoalKeepers, player]);
-				}
-				break;
-			case "mid":
-				if (selectedMid.length === 5) {
-					message.warning("Midfielders team is complete");
-				} else {
-					setSelectedMid([...selectedMid, player]);
-				}
-				break;
-			case "def":
-				if (selectedDef === 5) {
-					message.warning("Defenders team is complete");
-				} else {
-					setSelectedDef([...selectedDef, player]);
-				}
-				break;
-			case "fwd":
-				if (selectedFwd.length === 3) {
-					message.warning("Forwards team is complete");
-				} else {
-					setSelectedFwd([...selectedFwd, player]);
-				}
-				break;
-			default:
-				break;
-		}
-	};
-	const handleSubPlayerSelection = (player) => {
-		console.log(selectedSub["gk"], "===");
-		if (selectedSub.length === 0) {
-			setSelectedSub([...selectedSub, player]);
-		} else {
-			setSelectedSub([...selectedSub, player]);
-		}
-	};
-	const handlePlayerCheck = (player, ev) => {
-		if (ev.target.checked) {
-			handlePlayerSelection(player);
-		} else {
-			handleRemovePlayerFromList(player);
-		}
-	};
-	const handleSubPlayerCheck = (player, ev) => {
-		if (ev.target.checked) {
-			handleSubPlayerSelection(player);
-		} else {
-			handleRemoveSubPlayerFromList(player);
-		}
-	};
-	const handleRemovePlayerFromList = (player) => {
-		switch (currentSelection) {
-			case "gk":
-				const filteredGK = selectedGoalKeepers.filter(
-					(gk) => gk.name.toLowerCase() !== player.name.toLowerCase()
-				);
+	const saveSelection = (player) => handlePlayerSelection(player);
 
-				if (filteredGK) {
-					setSelectedGoalKeepers(filteredGK);
-				}
-				break;
-			case "mid":
-				const filteredMd = selectedMid.filter(
-					(mid) => mid.name.toLowerCase() !== player.name.toLowerCase()
-				);
-				if (filteredMd) {
-					selectedMid(filteredMd);
-				}
-				break;
-			case "def":
-				const filteredDEF = selectedDef.filter(
-					(def) => def.name.toLowerCase() !== player.name.toLowerCase()
-				);
-				if (filteredDEF) {
-					setSelectedDef(filteredDEF);
-				}
-				break;
-			case "fwd":
-				const filteredFwd = selectedFwd.filter(
-					(fwd) => fwd.name.toLowerCase() !== player.name.toLowerCase()
-				);
-				if (filteredFwd) {
-					setSelectedFwd(filteredFwd);
-				}
-				break;
-			default:
-				break;
+	const handleSelectPlayer = (player, ev) => {
+		if (ev.target.checked) {
+			saveSelection(player);
+		} else {
+			undoPlayerSelection(player);
 		}
 	};
-	const handleRemoveSubPlayerFromList = (player) => {
-		switch (currentSelection) {
-			case "gk":
-				setSelectedSub.gk([...selectedSub]);
 
-				break;
-			case "md":
-				const filteredMd = selectedMid.filter(
-					(mid) => mid.name.toLowerCase() !== player.name.toLowerCase()
-				);
-				if (filteredMd) {
-					selectedMid(filteredMd);
-				}
-				break;
-			case "def":
-				const filteredDEF = selectedDef.filter(
-					(def) => def.name.toLowerCase() !== player.name.toLowerCase()
-				);
-				if (filteredDEF) {
-					setSelectedDef(filteredDEF);
-				}
-				break;
-			case "fwd":
-				const filteredFwd = selectedFwd.filter(
-					(fwd) => fwd.name.toLowerCase() !== player.name.toLowerCase()
-				);
-				if (filteredFwd) {
-					setSelectedFwd(filteredFwd);
-				}
-				break;
-			default:
-				break;
+	const saveSubtituteSelection = (player) => {
+		handleSubtitutePlayerSelection(player);
+	};
+	const handleSelectSubtitutePlayers = (player, ev) => {
+		if (ev.target.checked) {
+			saveSubtituteSelection(player);
+		} else {
+			undoSubtituteSelection(player);
 		}
+	};
+	const undoPlayerSelection = (player) => removePlayerFromList(player);
+	const undoSubtituteSelection = (player) => {
+		handleRemoveSubtitutePlayerFromList(player);
 	};
 	const displayPlayers = () => {
 		if (currentSelection === null) {
@@ -296,17 +208,9 @@ const Teams = () => {
 							className="border-l border-secondary-gray-2-border border-r"
 						>
 							<div className="pl-2">
-								<a
-									href="/#/"
-									className="text-white font-bold text-regular hover:text-tw-green-light"
-									disabled={currentSelection === null}
-									onClick={(e) => {
-										e.preventDefault();
-										handlePlayerSelection(players);
-									}}
-								>
+								<span className="text-white font-bold text-regular">
 									{players.name}
-								</a>
+								</span>
 								<p className="text-white">
 									<span className="font-bold uppercase inline-block mr-4 text-xsmall">
 										JUV
@@ -360,17 +264,9 @@ const Teams = () => {
 								className="border-r border-secondary-gray-2-border h-12"
 							>
 								<div className="pl-2">
-									<a
-										href="/#/"
-										className="text-white font-bold text-regular hover:text-tw-green-light"
-										disabled={currentSelection === null}
-										onClick={(e) => {
-											e.preventDefault();
-											handlePlayerSelection(players);
-										}}
-									>
+									<span className="text-white font-bold text-regular ">
 										{players.name}
-									</a>
+									</span>
 									<p className="text-white">
 										<span className="font-bold uppercase inline-block mr-4 text-xsmall">
 											JUV
@@ -392,7 +288,7 @@ const Teams = () => {
 							>
 								<Checkbox
 									className="player-selector-checkbox"
-									onChange={(ev) => handlePlayerCheck(players, ev)}
+									onChange={(ev) => handleSelectPlayer(players, ev)}
 								/>
 							</Col>
 						</Row>
@@ -449,17 +345,9 @@ const Teams = () => {
 									className="border-r border-secondary-gray-2-border h-12"
 								>
 									<div className="pl-2">
-										<a
-											href="/#/"
-											className="text-white font-bold text-regular hover:text-tw-green-light"
-											disabled={currentSelection === null}
-											onClick={(e) => {
-												e.preventDefault();
-												handlePlayerSelection(players);
-											}}
-										>
+										<span className="text-white font-bold text-regular hover:text-tw-green-light">
 											{players.name}
-										</a>
+										</span>
 										<p className="text-white">
 											<span className="font-bold uppercase inline-block mr-4 text-xsmall">
 												JUV
@@ -483,7 +371,7 @@ const Teams = () => {
 										className="player-selector-checkbox"
 										defaultChecked
 										disabled
-										onChange={(ev) => handlePlayerCheck(players, ev)}
+										onChange={(ev) => handlePlayerSelection(players, ev)}
 									/>
 								</Col>
 							</Row>
@@ -518,17 +406,9 @@ const Teams = () => {
 									className="border-r border-secondary-gray-2-border h-12"
 								>
 									<div className="pl-2">
-										<a
-											href="/#/"
-											className="text-white font-bold text-regular hover:text-tw-green-light"
-											disabled={currentSelection === null}
-											onClick={(e) => {
-												e.preventDefault();
-												handlePlayerSelection(players);
-											}}
-										>
+										<span className="text-white font-bold text-regular">
 											{players.name}
-										</a>
+										</span>
 										<p className="text-white">
 											<span className="font-bold uppercase inline-block mr-4 text-xsmall">
 												JUV
@@ -550,7 +430,7 @@ const Teams = () => {
 								>
 									<Checkbox
 										className="player-selector-checkbox"
-										onChange={(ev) => handleSubPlayerCheck(players, ev)}
+										onChange={(ev) => handleSelectSubtitutePlayers(players, ev)}
 									/>
 								</Col>
 							</Row>
@@ -560,14 +440,7 @@ const Teams = () => {
 			}
 		}
 	};
-	const getSelectionParams = (params) => {
-		setCurrentSelection(params);
-		setCurrentSubSelection(null);
-	};
-	const getSubSelectionParams = (params) => {
-		setCurrentSubSelection(params);
-		setCurrentSelection(null);
-	};
+
 	const popMe = (playerDetails) => {
 		return (
 			<div>
@@ -575,6 +448,22 @@ const Teams = () => {
 			</div>
 		);
 	};
+	const handleListScroll = (scroll) => {
+		if (scroll >= 750 && scroll < 1200) {
+			setFloatCard("middle");
+		} else if (scroll >= 1200) {
+			setFloatCard("low");
+		} else {
+			setFloatCard("top");
+		}
+	};
+	let completeTeam = [
+		...selectedGoalKeepers,
+		...selectedDef,
+		...selectedFwd,
+		...selectedMid,
+	];
+
 	return (
 		<DashboardLayout>
 			<div className=" pt-12 w-full">
@@ -582,13 +471,25 @@ const Teams = () => {
 					<Col lg={22}>
 						<div className="teams-heading flex justify-between items-center pb-4">
 							<h2 className="f-oswald text-4xl font-medium">Squad Selection</h2>
-							<Button className="bg-tw-green rounded-none h-12 font-medium px-6">
+							<Button
+								className="bg-tw-green rounded-none h-12 font-medium px-6 inline-flex items-center hover:text-white"
+								disabled={completeTeam.length < 13}
+								onClick={() => {
+									saveTeam(completeTeam);
+									if (pitchView === "list") {
+										history.replace("/teams/list-select-captain");
+									} else {
+										history.replace("/teams/pitch-select-captain");
+									}
+								}}
+							>
 								Next
 							</Button>
 						</div>
 						<div className="teams-banner bg-primary-brand-darker py-6 flex justify-between items-center mt-4 mb-14 px-6">
 							<h2 className="text-white font-semibold text-base">
-								Players: <span className="text-2xl">(0/15)</span>
+								Players:{" "}
+								<span className="text-2xl">({completeTeam.length}/15)</span>
 							</h2>
 							<div className="inline-flex items-center">
 								<Button className="  font-medium text-base green-outline-btn bg-transparent mr-8 h-12 rounded-sm">
@@ -601,7 +502,7 @@ const Teams = () => {
 							<Row gutter={20}>
 								<Col lg={17}>
 									<div
-										className="w-full bg-no-repeat bg-cover h-auto py-2"
+										className="w-full bg-no-repeat bg-cover h-auto pt-2"
 										style={{ backgroundImage: `url(${PitchBg})` }}
 									>
 										<div className="controls py-9">
@@ -632,22 +533,14 @@ const Teams = () => {
 										</div>
 										<div className="mt-16">
 											{pitchView === "list" ? (
-												<ListView
-													setSelection={getSelectionParams}
-													goalKeepers={selectedGoalKeepers}
-													midfielders={selectedMid}
-													defenders={selectedDef}
-													forwards={selectedFwd}
-													subs={selectedSub}
-													setSubSelection={getSubSelectionParams}
-												/>
+												<ListView handleScroll={handleListScroll} />
 											) : (
 												<PitchView />
 											)}
 										</div>
 									</div>
 								</Col>
-								<Col lg={7} className=" ">
+								<Col lg={7} className=" relative ">
 									<div className="bg-secondary-gray-2 p-4">
 										<div className="search-container flex items-center">
 											<Input
@@ -657,7 +550,7 @@ const Teams = () => {
 											/>
 											<Button
 												className="ml-4 brand-outline-btn bg-transparent h-11 rounded-none"
-												onClick={() => setCurrentSelection(null)}
+												onClick={() => resetSelectionParams()}
 											>
 												Reset
 											</Button>
@@ -688,7 +581,17 @@ const Teams = () => {
 											</div>
 										</div>
 									</div>
-									<div className="bg-primary-brand p-4 max-h-825px overflow-y-auto player-list-container">
+									<div
+										className={
+											"bg-primary-brand p-4 max-h-775x overflow-y-auto player-list-container  w-full  " +
+											(floatCard === "middle"
+												? "mid-position "
+												: floatCard === "low"
+												? "low-position "
+												: "") +
+											(currentSelection !== null ? "absolute right-0 " : "")
+										}
+									>
 										{currentSubSelection !== null
 											? displaySubPlayers()
 											: displayPlayers()}
