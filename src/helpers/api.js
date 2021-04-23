@@ -126,3 +126,5 @@ export const getTeams = () => {
 		}
 	});
 };
+
+export const createTeam = (data) => {};

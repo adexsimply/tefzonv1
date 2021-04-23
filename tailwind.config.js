@@ -32,14 +32,19 @@ module.exports = {
 				"gray-3": "#6B6B6B",
 				"gray-4": "#BBBABA",
 				"gray-5": "#f3f3f3",
+				"tag-blue": "rgba(6, 6, 6, 0.8)",
 			},
 			width: {
 				"37p": "37%",
 				"85p": "85%",
 			},
+			height: {
+				"700px": "700px",
+			},
 			maxHeight: {
 				"860px": "860px",
 				"825px": "825px",
+				"775px": "775px",
 			},
 		},
 	},

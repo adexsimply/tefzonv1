@@ -55,3 +55,44 @@
 		background: #8139e6;
 	}
 }
+.player-list-container.mid-position {
+	bottom: 20%;
+}
+.player-list-container.low-position {
+	bottom: 10%;
+}
+.pitch-view-container {
+	height: 810px;
+	.pitch-stadium-bg {
+		height: 850px;
+		background-size: 100%;
+		padding: 1rem;
+		transform: rotateX(-22deg);
+		.position-container {
+			width: 80%;
+		}
+	}
+}
+.name-card {
+	background: rgba(19, 3, 41, 0.7);
+	color: #fff;
+	.ant-form-item-explain.ant-form-item-explain-error {
+		color: #fff;
+		font-weight: 600;
+		margin-top: 1rem;
+	}
+}
+.team-name-input {
+	height: 60px;
+	background: rgba(255, 255, 255, 0.2);
+	border: none;
+	border-radius: 0;
+	font-family: "Oswald";
+	font-size: 24px;
+	padding: 24px;
+	font-weight: 400;
+	color: rgba(255, 255, 255, 0.5);
+	&:focus {
+		border: 2px solid #fff;
+	}
+}

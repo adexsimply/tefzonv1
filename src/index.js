@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import AppContextProvider from "./store/AppContext";
+import TeamContextProvider from "./store/TeamContext";
 import "../node_modules/antd/dist/antd.css";
 import "./tailwind.css";
 import "./index.scss";
@@ -11,7 +12,9 @@ import reportWebVitals from "./reportWebVitals";
 ReactDOM.render(
 	<React.StrictMode>
 		<AppContextProvider>
-			<App />
+			<TeamContextProvider>
+				<App />
+			</TeamContextProvider>
 		</AppContextProvider>
 	</React.StrictMode>,
 	document.getElementById("root")

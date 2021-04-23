@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import { Row, Col, Button, Popover } from "antd";
+import { TeamContext } from "../../store/TeamContext";
 import Jersey from "../../assets/img/jersey.svg";
 import InfoCircleIcon from "../../assets/img/icons/info-circle-green.svg";
 
 const ListView = (props) => {
+	const {
+		setSelectionParams,
+		setSubSelectionParams,
+		selectedDef,
+		selectedFwd,
+		selectedGoalKeepers,
+		selectedMid,
+	} = useContext(TeamContext);
+
+	useEffect(() => {
+		window.addEventListener("scroll", handleListScroll);
+		return () => {
+			window.removeEventListener("scroll");
+		};
+		// eslint-disable-next-line
+	}, []);
+	const handleListScroll = useCallback(() => {
+		var scroller = window.scrollY;
+		props.handleScroll(scroller);
+		// eslint-disable-next-line
+	}, []);
+
 	const showPopUp = (playerDetail) => {
 		return (
 			<div>
@@ -12,7 +35,10 @@ const ListView = (props) => {
 		);
 	};
 	const displayGkPlayers = () => {
-		return props.goalKeepers.map((players) => {
+		return selectedGoalKeepers.map((players) => {
+			if (players.is_subtitute) {
+				return null;
+			}
 			return (
 				<Row className="py-2 px-6 justify-between player-row">
 					<Col lg={10}>
@@ -24,7 +50,7 @@ const ListView = (props) => {
 							<img src={Jersey} className="ml-6" alt="jersey icon" />
 							<div
 								className="border-0 text-black rounded-none p-0 font-medium ml-4"
-								onClick={() => props.setSelection("gk")}
+								onClick={() => setSelectionParams("gk")}
 							>
 								<p className="font-light">{players.name}</p>
 								<p>
@@ -51,8 +77,10 @@ const ListView = (props) => {
 			);
 		});
 	};
+
 	const displayDefenders = () => {
-		return props.defenders.map((players) => {
+		return selectedDef.map((players) => {
+			if (players.is_subtitute) return null;
 			return (
 				<Row className="py-2 px-6 justify-between player-row">
 					<Col lg={10}>
@@ -62,10 +90,7 @@ const ListView = (props) => {
 							</Popover>
 
 							<img src={Jersey} className="ml-6" alt="jersey icon" />
-							<div
-								className="border-0 text-black rounded-none p-0 font-medium ml-4"
-								onClick={() => props.setSelection("gk")}
-							>
+							<div className="border-0 text-black rounded-none p-0 font-medium ml-4">
 								<p className="font-light">{players.name}</p>
 								<p>
 									<span className="font-semibold inline-block">JUV</span>
@@ -92,7 +117,8 @@ const ListView = (props) => {
 		});
 	};
 	const displayMidfielders = () => {
-		return props.midfielders.map((players) => {
+		return selectedMid.map((players) => {
+			if (players.is_subtitute) return null;
 			return (
 				<Row className="py-2 px-6 player-row justify-between">
 					<Col lg={10}>
@@ -102,10 +128,7 @@ const ListView = (props) => {
 							</Popover>
 
 							<img src={Jersey} className="ml-6" alt="jersey icon" />
-							<div
-								className="border-0 text-black rounded-none p-0 font-medium ml-4"
-								onClick={() => props.setSelection("gk")}
-							>
+							<div className="border-0 text-black rounded-none p-0 font-medium ml-4">
 								<p className="font-light">{players.name}</p>
 								<p>
 									<span className="font-semibold inline-block">JUV</span>
@@ -131,7 +154,8 @@ const ListView = (props) => {
 		});
 	};
 	const displayForwards = () => {
-		return props.forwards.map((players) => {
+		return selectedFwd.map((players) => {
+			if (players.is_subtitute) return null;
 			return (
 				<Row className="py-2 px-6 player-row justify-between">
 					<Col lg={10}>
@@ -141,10 +165,7 @@ const ListView = (props) => {
 							</Popover>
 
 							<img src={Jersey} className="ml-6" alt="jersey icon" />
-							<div
-								className="border-0 text-black rounded-none p-0 font-medium ml-4"
-								onClick={() => props.setSelection("gk")}
-							>
+							<div className="border-0 text-black rounded-none p-0 font-medium ml-4">
 								<p className="font-light">{players.name}</p>
 								<p>
 									<span className="font-semibold inline-block">JUV</span>
@@ -170,58 +191,64 @@ const ListView = (props) => {
 		});
 	};
 	const displaySubs = () => {
-		return props.subs.map((players) => {
-			console.log(players);
+		const subsArr = [
+			...selectedDef,
+			...selectedFwd,
+			...selectedGoalKeepers,
+			...selectedMid,
+		];
 
-			return (
-				<Row className="py-2 px-6 player-row justify-between">
-					<Col lg={10}>
-						<div className="flex mr-6">
-							<Popover content={() => showPopUp(players)} title={players.name}>
-								<img src={InfoCircleIcon} alt="info icon" />
-							</Popover>
+		return subsArr.map((players) => {
+			// eslint-disable-line
+			if (players.is_subtitute) {
+				return (
+					<Row className="py-2 px-6 player-row justify-between">
+						<Col lg={10}>
+							<div className="flex mr-6">
+								<Popover
+									content={() => showPopUp(players)}
+									title={players.name}
+								>
+									<img src={InfoCircleIcon} alt="info icon" />
+								</Popover>
 
-							<img src={Jersey} className="ml-6" alt="jersey icon" />
-							<div
-								className="border-0 text-black rounded-none p-0 font-medium ml-4"
-								onClick={() => {
-									players.position("gk") && props.setSubSelection("gk");
-								}}
-							>
-								<p className="font-light">{players.name}</p>
-								<p>
-									<span className="font-semibold inline-block">JUV</span>
-									<span className="font-light uppercase inline-block ml-4">
-										{players.position}
-									</span>
-								</p>
+								<img src={Jersey} className="ml-6" alt="jersey icon" />
+								<div className="border-0 text-black rounded-none p-0 font-medium ml-4">
+									<p className="font-light">{players.name}</p>
+									<p>
+										<span className="font-semibold inline-block">JUV</span>
+										<span className="font-light uppercase inline-block ml-4">
+											{players.position}
+										</span>
+									</p>
+								</div>
 							</div>
-						</div>
-					</Col>
-					<Col lg={12}>
-						<Row>
-							<Col
-								lg={8}
-								className="border-l border-secondary-gray-2-border"
-							></Col>
-							<Col lg={8}></Col>
-							<Col lg={8}></Col>
-						</Row>
-					</Col>
-				</Row>
-			);
+						</Col>
+						<Col lg={12}>
+							<Row>
+								<Col
+									lg={8}
+									className="border-l border-secondary-gray-2-border"
+								></Col>
+								<Col lg={8}></Col>
+								<Col lg={8}></Col>
+							</Row>
+						</Col>
+					</Row>
+				);
+			}
 		});
 	};
 
 	const gkEmptyState = () => {
 		let gkContent = [];
-		for (let i = props.goalKeepers.length; i < 2; i++) {
+		for (let i = selectedGoalKeepers.length; i < 2; i++) {
 			gkContent.push(
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("gk")}
+							onClick={() => setSelectionParams("gk")}
 						>
 							Select Goal Keeper
 						</Button>
@@ -238,13 +265,13 @@ const ListView = (props) => {
 
 	const midEmptyState = () => {
 		let contents = [];
-		for (let i = props.midfielders.length; i < 5; i++) {
+		for (let i = selectedMid.length; i < 5; i++) {
 			contents.push(
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("mid")}
+							onClick={() => setSelectionParams("mid")}
 						>
 							Select Midfielder
 						</Button>
@@ -260,13 +287,13 @@ const ListView = (props) => {
 	};
 	const defEmptyState = () => {
 		let contents = [];
-		for (let i = props.defenders.length; i < 5; i++) {
+		for (let i = selectedDef.length; i < 5; i++) {
 			contents.push(
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("def")}
+							onClick={() => setSelectionParams("def")}
 						>
 							Select Defender
 						</Button>
@@ -283,13 +310,13 @@ const ListView = (props) => {
 
 	const fwdEmptyState = () => {
 		let contents = [];
-		for (let i = props.forwards.length; i < 3; i++) {
+		for (let i = selectedFwd.length; i < 3; i++) {
 			contents.push(
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSelection("fwd")}
+							onClick={() => setSelectionParams("fwd")}
 						>
 							Select Forward
 						</Button>
@@ -310,7 +337,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSubSelection("gk")}
+							onClick={() => setSubSelectionParams("gk")}
 						>
 							Select GK
 						</Button>
@@ -324,7 +351,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSubSelection("def")}
+							onClick={() => setSubSelectionParams("def")}
 						>
 							Select Defender
 						</Button>
@@ -338,7 +365,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSubSelection("mid")}
+							onClick={() => setSubSelectionParams("mid")}
 						>
 							Select Midfielder
 						</Button>
@@ -352,7 +379,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => props.setSubSelection("fwd")}
+							onClick={() => setSubSelectionParams("fwd")}
 						>
 							Select Forward
 						</Button>
@@ -382,7 +409,7 @@ const ListView = (props) => {
 	};
 
 	return (
-		<div className="teams-list-container px-3 max-h-860px overflow-y-auto">
+		<div className="teams-list-container px-3 max-h-825px overflow-y-auto">
 			<div className="bg-white h-full">
 				{/* GK */}
 				<div className="gk">
@@ -516,8 +543,8 @@ const ListView = (props) => {
 						</Row>
 					</div>
 					<div className="players text-regular">
-						{displayEmptyState()}
 						{displaySubs()}
+						{displayEmptyState()}
 					</div>
 				</div>
 			</div>
