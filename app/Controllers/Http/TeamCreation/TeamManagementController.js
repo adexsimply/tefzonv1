@@ -172,7 +172,7 @@ class TeamManagementController {
         
             return response.status(200).json({
                 result: viewUserTeam,
-                label: `Team Creation`,
+                label: `Team Fetching`,
                 statusCode: 200,
                 message: `User team Fetched successfully`,
             })
@@ -183,7 +183,7 @@ class TeamManagementController {
             return response.status(500).json({
                 status:"Internal Server Error", 
                 status_code:500, 
-                message: "There was an error viewing User Team  Player"
+                message: "There was an error viewing User Team"
              })  
         }
 
@@ -201,9 +201,9 @@ class TeamManagementController {
         
             return response.status(200).json({
                 result: viewUserTeam,
-                label: `Team Creation`,
+                label: `User Profile`,
                 statusCode: 200,
-                message: `User team Fetched successfully`,
+                message: `User Profile Fetched successfully`,
             })
 
             
@@ -212,7 +212,7 @@ class TeamManagementController {
             return response.status(500).json({
                 status:"Internal Server Error", 
                 status_code:500, 
-                message: "There was an error viewing User Team  Player"
+                message: "There was an error getting User profile Player"
              })  
         }
 
