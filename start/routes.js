@@ -30,8 +30,8 @@ Route.get("/signupTeamList","Metadata/MetadatumController.getSignUpTeamList")
 // team selection routes , select team members , remove team members , add team member(s) , view User team  , 
 Route.post("/createTeam", "TeamCreation/TeamManagementController.createTeam").middleware(['auth'])
 Route.put("/editTeam", "TeamCreation/TeamManagementController.editTeam").middleware(['auth'])
-Route.get("/viewUserTeam","TeamCreation/TeamManagementController.viewUserTeam")
-Route.get("/viewUserProfile","TeamCreation/TeamManagementController.viewUserProfile")
+Route.get("/viewUserTeam","TeamCreation/TeamManagementController.viewUserTeam").middleware(['auth'])
+Route.get("/viewUserProfile","TeamCreation/TeamManagementController.viewUserProfile").middleware(['auth'])
 
 
 

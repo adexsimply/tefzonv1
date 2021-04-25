@@ -2,6 +2,7 @@
 const TeamSquad = use("App/Models/TeamSquad");
 const TeamName = use("App/Models/TeamName");
 const Player = use("App/Models/Player");
+const User = use("App/Models/User");
 const Config = use("Config");
 const Database = use("Database")
 const makeExternalRequestFeature = use("App/Features/MakeExternalRequestFeature")
@@ -29,7 +30,6 @@ class TeamManagementController {
                 user_id:user.id, 
                 team_name:team_name
             })
-
             const squadCreation  = await TeamSquad.findOrCreate({
                 user_id:user.id,
                 team_name_id:teamNameCreation.id,
@@ -53,6 +53,7 @@ class TeamManagementController {
                         player_id:currentPlayerDetails.id,
                         squad_id:squadCreation.id,
                         wing:item.wing,
+                        is_substitute,
                         is_captain: item.is_captain 
                     })
                 }
@@ -114,6 +115,7 @@ class TeamManagementController {
                         player_name:currentPlayerDetails.name,
                         player_id:currentPlayerDetails.id,
                         wing:item.wing,
+                        is_substitute,
                         is_captain: item.is_captain 
                     })   
 
@@ -133,11 +135,10 @@ class TeamManagementController {
                         player_id:currentPlayerDetails.id,
                         squad_id:teamSquadCheck.id,
                         wing:item.wing,
+                        is_substitute,
                         is_captain: item.is_captain 
                     })
-                }
-                
-                
+                } 
             }
 
             return response.status(200).json({
@@ -158,37 +159,24 @@ class TeamManagementController {
     }
 
 
-    viewUserTeam({request , response , auth }){
+   async viewUserTeam({request , response , auth }){
         try {
 
-            let teamNameCreation = [
-                {
-                    player_name: "Neymar Jnr.",    
-                    wing: "DF",
-                    team_id:2,
-                    squad_id:1
-                },
-                 {
-                    player_name: "Gary Van",    
-                    wing: "GK",
-                    team_id:2,
-                    squad_id:1
-                },
-                 {
-                    player_name: "Paul Pogba",    
-                    wing: "MF",
-                    team_id:2,
-                    squad_id:1
-                }
+            const user = auth.current.user
+
+            const viewUserTeam = await TeamSquad.query()
+            .where("user_id", user.id)
+            .with("players")
+            .with("teamName")
+            .fetch()
         
-            ]
             return response.status(200).json({
-                result: teamNameCreation,
+                result: viewUserTeam,
                 label: `Team Creation`,
                 statusCode: 200,
                 message: `User team Fetched successfully`,
             })
-                     
+
             
         } catch (viewUserTeamError) {
             console.log(" selectSquadPlayer Error >>>>> ", viewUserTeamError);
@@ -201,6 +189,34 @@ class TeamManagementController {
 
     }
 
+    async viewUserProfile({request , response , auth }){
+        try {
+
+            const user = auth.current.user
+
+            const viewUserTeam = await User.query()
+            .where("id", user.id)
+            .with("teamName")
+            .fetch()
+        
+            return response.status(200).json({
+                result: viewUserTeam,
+                label: `Team Creation`,
+                statusCode: 200,
+                message: `User team Fetched successfully`,
+            })
+
+            
+        } catch (viewUserTeamError) {
+            console.log(" selectSquadPlayer Error >>>>> ", viewUserTeamError);
+            return response.status(500).json({
+                status:"Internal Server Error", 
+                status_code:500, 
+                message: "There was an error viewing User Team  Player"
+             })  
+        }
+
+    }
 
 }
 
