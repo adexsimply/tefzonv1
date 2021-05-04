@@ -8,6 +8,7 @@ class PlayersSchema extends Schema {
     this.create('players', (table) => {
       table.increments()
       table.string("player_name")
+      table.text("player_image")
       table.integer("player_id")
       table.integer("squad_id")
       table.string("wing")

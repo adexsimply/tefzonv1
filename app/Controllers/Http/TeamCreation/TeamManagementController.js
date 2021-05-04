@@ -47,13 +47,18 @@ class TeamManagementController {
                     if ( !item.is_captain){
                         item.is_captain = 0
                     }
-                  console.log("currentPlayerDetails",currentPlayerDetails.name, currentPlayerDetails.id,squadCreation.id, item.wing, item.is_captain);
+                    if ( !item.is_substitute){
+                        item.is_substitute = 0
+                    }
+                
+                  console.log("currentPlayerDetails",currentPlayerDetails, currentPlayerDetails.id);
                     await Player.findOrCreate({
                         player_name:currentPlayerDetails.name,
                         player_id:currentPlayerDetails.id,
+                        player_image:currentPlayerDetails.photo,
                         squad_id:squadCreation.id,
                         wing:item.wing,
-                        is_substitute,
+                        is_substitute:item.is_substitute,
                         is_captain: item.is_captain 
                     })
                 }
@@ -62,7 +67,7 @@ class TeamManagementController {
                 result: teamNameCreation,
                 label: `Team Creation`,
                 statusCode: 200,
-                message: `Team Creation Fetched successfully`,
+                message: `Team ${team_name} has been created`,
             })
                      
         } catch (createTeamError) {
@@ -111,11 +116,15 @@ class TeamManagementController {
                     if ( !item.is_captain){
                         item.is_captain = 0
                     }
+                    if ( !item.is_substitute){
+                        item.is_substitute = 0
+                    }
+
                     currentPlayerInfo.merge({
                         player_name:currentPlayerDetails.name,
                         player_id:currentPlayerDetails.id,
                         wing:item.wing,
-                        is_substitute,
+                        is_substitute:item.is_substitute,
                         is_captain: item.is_captain 
                     })   
 
@@ -161,9 +170,7 @@ class TeamManagementController {
 
    async viewUserTeam({request , response , auth }){
         try {
-
             const user = auth.current.user
-
             const viewUserTeam = await TeamSquad.query()
             .where("user_id", user.id)
             .with("players")
