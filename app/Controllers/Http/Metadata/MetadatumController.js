@@ -107,7 +107,7 @@ class MetadatumController {
 
       Promise.all(promises)
 
-       promises.forEach(function(v){ delete v.statistics });
+      //  promises.forEach(function(v){ delete v.statistics });
       
       return response.status(200).json({
         results:promises,
