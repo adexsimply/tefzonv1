@@ -17,7 +17,7 @@ const ListView = (props) => {
 	useEffect(() => {
 		window.addEventListener("scroll", handleListScroll);
 		return () => {
-			window.removeEventListener("scroll");
+			window.removeEventListener("scroll", () => console.log("unmounted"));
 		};
 		// eslint-disable-next-line
 	}, []);
@@ -40,7 +40,10 @@ const ListView = (props) => {
 				return null;
 			}
 			return (
-				<Row className="py-2 px-6 justify-between player-row">
+				<Row
+					className="py-2 px-6 justify-between player-row"
+					key={players.name}
+				>
 					<Col lg={10}>
 						<div className="flex mr-6">
 							<Popover content={() => showPopUp(players)} title={players.name}>
@@ -82,7 +85,10 @@ const ListView = (props) => {
 		return selectedDef.map((players) => {
 			if (players.is_subtitute) return null;
 			return (
-				<Row className="py-2 px-6 justify-between player-row">
+				<Row
+					className="py-2 px-6 justify-between player-row"
+					key={players.name}
+				>
 					<Col lg={10}>
 						<div className="flex mr-6">
 							<Popover content={() => showPopUp(players)} title={players.name}>
@@ -120,7 +126,10 @@ const ListView = (props) => {
 		return selectedMid.map((players) => {
 			if (players.is_subtitute) return null;
 			return (
-				<Row className="py-2 px-6 player-row justify-between">
+				<Row
+					className="py-2 px-6 player-row justify-between"
+					key={players.name}
+				>
 					<Col lg={10}>
 						<div className="flex mr-6">
 							<Popover content={() => showPopUp(players)} title={players.name}>
@@ -157,7 +166,10 @@ const ListView = (props) => {
 		return selectedFwd.map((players) => {
 			if (players.is_subtitute) return null;
 			return (
-				<Row className="py-2 px-6 player-row justify-between">
+				<Row
+					className="py-2 px-6 player-row justify-between"
+					key={players.name}
+				>
 					<Col lg={10}>
 						<div className="flex mr-6">
 							<Popover content={() => showPopUp(players)} title={players.name}>
@@ -202,7 +214,10 @@ const ListView = (props) => {
 			// eslint-disable-line
 			if (players.is_subtitute) {
 				return (
-					<Row className="py-2 px-6 player-row justify-between">
+					<Row
+						className="py-2 px-6 player-row justify-between"
+						key={players.name}
+					>
 						<Col lg={10}>
 							<div className="flex mr-6">
 								<Popover

@@ -6,11 +6,19 @@ const TeamContextProvider = (props) => {
 	const [currentSelection, setCurrentSelection] = useState(null);
 	const [currentSubSelection, setCurrentSubSelection] = useState(null);
 	const [selectedGoalKeepers, setSelectedGoalKeepers] = useState([]);
+
 	const [selectedMid, setSelectedMid] = useState([]);
 	const [selectedDef, setSelectedDef] = useState([]);
 	const [selectedFwd, setSelectedFwd] = useState([]);
 	const [statusMessage, setStatusMessage] = useState({ type: "", msg: "" });
 	const [teamName, setTeamName] = useState("");
+	const [view, setView] = useState("pitch");
+	const [dragStatus, setDragStatus] = useState("");
+	const [draggedPlayer, setDraggedPlayer] = useState(null);
+	const [playerParams, setPlayerParams] = useState(null);
+	const [selectedPitchId, setSelectedPitchId] = useState("");
+
+	const changeView = (param) => setView(param);
 
 	const setSelectionParams = (params) => {
 		setCurrentSelection(params);
@@ -197,7 +205,19 @@ const TeamContextProvider = (props) => {
 	const getTeamName = (value) => {
 		setTeamName(value);
 	};
+	const updateDragStatus = (value) => {
+		setDragStatus(value);
+	};
+	const updateDraggedPlayer = (playerDetails) => {
+		setDraggedPlayer(playerDetails);
+	};
+	const updatePlayerParams = (data) => setPlayerParams(data);
+	const updatePitchId = (id) => setSelectedPitchId(id);
 	// const resetStatusMessage = () => setStatusMessage({ type: "", msg: "" });
+	const updateGoalKeeper = (player) =>
+		setSelectedGoalKeepers([...selectedGoalKeepers, player]);
+	const updateDefenders = (player) => setSelectedDef([...selectedDef, player]);
+	const updateMidfielder = (player) => setSelectedMid([...selectedMid, player]);
 
 	return (
 		<TeamContext.Provider
@@ -218,6 +238,19 @@ const TeamContextProvider = (props) => {
 				statusMessage,
 				getTeamName,
 				teamName,
+				view,
+				changeView,
+				dragStatus,
+				updateDragStatus,
+				updateDraggedPlayer,
+				draggedPlayer,
+				updatePlayerParams,
+				playerParams,
+				updatePitchId,
+				selectedPitchId,
+				updateGoalKeeper,
+				updateDefenders,
+				updateMidfielder,
 			}}
 		>
 			{props.children}
