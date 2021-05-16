@@ -82,7 +82,7 @@ const ConfirmTeam = () => {
 			msg: `Your team ${teamName} created successfully!`,
 		});
 		setTimeout(() => {
-			history.replace("/status");
+			history.replace("/dashboard");
 		}, 2000);
 	};
 
