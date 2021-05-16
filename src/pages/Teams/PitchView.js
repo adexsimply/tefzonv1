@@ -24,12 +24,13 @@ const PitchView = () => {
 		updateGoalKeeper,
 		updateDefenders,
 		updateMidfielder,
+		updateForwards,
 	} = useContext(TeamContext);
 
 	useEffect(() => {
 		if (dragStatus === "dragging") {
-			const receivingPlayer = document.getElementById(selectedPitchId)
-				.children[0];
+			const receivingPlayer =
+				document.getElementById(selectedPitchId).children[0];
 
 			receivingPlayer.addEventListener("dragover", handleDragPlayer);
 			receivingPlayer.addEventListener("drop", handleDrop);
@@ -40,15 +41,17 @@ const PitchView = () => {
 		// eslint-disable-next-line
 	}, [dragStatus, selectedPitchId]);
 
-	const handleGoalKeepers = (player, details) => {
+	const handleGoalKeepers = () => {
 		const newGoalKeeper = { ...draggedPlayer, ...playerParams };
 		if (selectedGoalKeepers.length === 0) {
 			updateGoalKeeper(newGoalKeeper);
 		} else {
+			updateGoalKeeper(newGoalKeeper);
 		}
 		updateDragStatus("default");
+		setSelectionParams(null);
 	};
-	const handleDefenders = (player, details) => {
+	const handleDefenders = () => {
 		const newDefender = { ...draggedPlayer, ...playerParams };
 		if (selectedDef.length === 0) {
 			updateDefenders(newDefender);
@@ -56,47 +59,61 @@ const PitchView = () => {
 			updateDefenders(newDefender);
 		}
 		updateDragStatus("default");
+		setSelectionParams(null);
 	};
-	const handleMidfielders = (player, details) => {
+	const handleMidfielders = () => {
 		const newMidFielder = { ...draggedPlayer, ...playerParams };
+
 		if (selectedMid.length === 0) {
 			updateMidfielder(newMidFielder);
 		} else {
 			updateMidfielder(newMidFielder);
 		}
 		updateDragStatus("default");
+		setSelectionParams(null);
+	};
+	const handleForwards = () => {
+		const newForward = { ...draggedPlayer, ...playerParams };
+		if (selectedFwd.length === 0) {
+			updateForwards(newForward);
+		} else {
+			updateForwards(newForward);
+		}
+		updateDragStatus("default");
+		setSelectionParams(null);
 	};
 
 	const handleStorePlayerDetails = () => {
 		switch (currentSelection) {
 			case "gk":
-				handleGoalKeepers(draggedPlayer, playerParams);
+				handleGoalKeepers();
 				break;
 			case "def":
 				handleDefenders(draggedPlayer, playerParams);
 				break;
 			case "mid":
-				handleMidfielders(draggedPlayer, playerParams);
+				handleMidfielders();
+				break;
+			case "fwd":
+				handleForwards(draggedPlayer, playerParams);
 				break;
 			default:
 				break;
 		}
-		// console.log(draggedPlayer, playerParams, "ready to dispense");
 	};
 
-	const handleUndoSelection = (ev, player) => {
-		// ev.stopPropagation();
-		// let blankParentEl = ev.target.closest(".blank");
-		// let badge = blankParentEl.childNodes[0];
-		// let answersPool = document.getElementById("answers_pool");
-		// blankParentEl.removeChild(badge);
-		// answersPool?.appendChild(badge);
-	};
+	// const handleUndoSelection = (ev, player) => {
+	// ev.stopPropagation();
+	// let blankParentEl = ev.target.closest(".blank");
+	// let badge = blankParentEl.childNodes[0];
+	// let answersPool = document.getElementById("answers_pool");
+	// blankParentEl.removeChild(badge);
+	// answersPool?.appendChild(badge);
+	// };
 	const handleDrop = (ev) => {
 		ev.preventDefault();
 		ev.stopPropagation();
 
-		console.log("allow drop");
 		updateDragStatus("dropped");
 	};
 	const handleDragPlayer = (ev) => {
@@ -114,7 +131,7 @@ const PitchView = () => {
 
 	const displaySelectedGoalKeeps = () => {
 		return selectedGoalKeepers.map((player) => {
-			if (player.is_subtitute === "true") {
+			if (player.is_subtitute) {
 				return null;
 			}
 			return (
@@ -132,443 +149,140 @@ const PitchView = () => {
 			);
 		});
 	};
-	const displayDefenders = () => {
-		return selectedDef.map((player) => {
-			if (player.is_subtitute === "true") {
-				return null;
-			} else {
-				return (
-					<StyledTeamPlayer
-						className=" pitch-player "
-						style={{ marginRight: "2rem" }}
-					>
-						<button className="close-btn">
-							<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
-						</button>
-						<img src={TeamJersey} alt="" />
+	const displayDefenders = (placement) => {
+		const player = selectedDef.find(
+			(player) => player.playerPlacement === placement
+		);
+		if (player && player.is_subtitute === false) {
+			return (
+				<StyledTeamPlayer
+					className=" pitch-player "
+					style={{ marginRight: "2rem" }}
+				>
+					<button className="close-btn">
+						<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
+					</button>
+					<img src={TeamJersey} alt="" />
 
-						<div className="">
-							<div className="player-tag">{player.name}</div>
-							<div className="points-tag">{player.points}</div>
-						</div>
-					</StyledTeamPlayer>
-				);
-			}
-		});
-	};
-	const displayDefendersEmptyState = () => {
-		if (selectedDef.length === 1) {
-			return (
-				<>
-					<PitchPlayer
-						wrapperClassName="mr-8"
-						tagLabel="def"
-						subStatus={false}
-						id="def_2"
-						playerPlacement="def_2"
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "def",
-								is_subtitute: "false",
-								playerPlacement: null,
-							})
-						}
-					/>
-					<PitchPlayer
-						tagLabel="def"
-						subStatus={false}
-						playerPlacement="def_3"
-						id="def_3"
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "def",
-								is_subtitute: "false",
-								playerPlacement: null,
-							})
-						}
-					/>
-				</>
+					<div className="">
+						<div className="player-tag">{player.name}</div>
+						<div className="points-tag">{player.points}</div>
+					</div>
+				</StyledTeamPlayer>
 			);
-		} else if (selectedDef.length === 2) {
-			return (
-				<PitchPlayer
-					tagLabel="def"
-					subStatus={false}
-					playerPlacement="def_3"
-					id="def_3"
-					onClick={(ev) =>
-						handlePlayerSelection(ev, {
-							position: "def",
-							is_subtitute: "false",
-							playerPlacement: null,
-						})
-					}
-				/>
-			);
-		} else if (selectedDef.length === 3) {
-			return null;
 		} else {
-			return (
-				<>
-					<PitchPlayer
-						wrapperClassName="mr-8"
-						tagLabel="def"
-						subStatus={false}
-						id="def_1"
-						playerPlacement="def_1"
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "def",
-								is_subtitute: "false",
-								playerPlacement: null,
-							})
-						}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-8"
-						tagLabel="def"
-						subStatus={false}
-						id="def_2"
-						playerPlacement="def_2"
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "def",
-								is_subtitute: "false",
-								playerPlacement: null,
-							})
-						}
-					/>
-					<PitchPlayer
-						tagLabel="def"
-						subStatus={false}
-						playerPlacement="def_3"
-						id="def_3"
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "def",
-								is_subtitute: "false",
-								playerPlacement: null,
-							})
-						}
-					/>
-				</>
-			);
-		}
-	};
-	const displayMidFieldersEmptyState = () => {
-		if (selectedMid.length === 1) {
-			return (
-				<>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="mid"
-						playerPlacement="mid_2"
-						id="mid_2"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_2",
-							})
-						}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="mid"
-						id="mid_3"
-						playerPlacement="mid_3"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_3",
-							})
-						}
-					/>
-					<PitchPlayer
-						tagLabel="mid"
-						playerPlacement="mid_4"
-						id="mid_4"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_4",
-							})
-						}
-					/>
-				</>
-			);
-		} else if (selectedMid.length === 2) {
-			return (
-				<>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="mid"
-						playerPlacement="mid_3"
-						id="mid_3"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_3",
-							})
-						}
-					/>
-					<PitchPlayer
-						tagLabel="mid"
-						playerPlacement="mid_4"
-						subStatus={false}
-						id="mid_4"
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_4",
-							})
-						}
-					/>
-				</>
-			);
-		} else if (selectedMid.length === 3) {
-			return (
-				<PitchPlayer
-					tagLabel="mid"
-					playerPlacement="mid_4"
-					id="mid_4"
-					subStatus={false}
-					onClick={(ev) =>
-						handlePlayerSelection(ev, {
-							position: "mid",
-							is_subtitute: "false",
-							playerPlacement: "mid_4",
-						})
-					}
-				/>
-			);
-		} else if (selectedMid.length === 4) {
 			return null;
-		} else {
-			return (
-				<>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="mid"
-						subStatus={false}
-						playerPlacement="mid_1"
-						id="mid_1"
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_1",
-							})
-						}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="mid"
-						playerPlacement="mid_2"
-						id="mid_2"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_2",
-							})
-						}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="mid"
-						playerPlacement="mid_3"
-						id="mid_3"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_3",
-							})
-						}
-					/>
-					<PitchPlayer
-						tagLabel="mid"
-						playerPlacement="mid_4"
-						id="mid_4"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "mid",
-								is_subtitute: "false",
-								playerPlacement: "mid_4",
-							})
-						}
-					/>
-				</>
-			);
 		}
 	};
 
-	const displayMidfielders = () => {
-		return selectedMid.map((player) => {
-			if (player.is_subtitute === "true") {
-				return null;
-			} else {
-				return (
-					<StyledTeamPlayer
-						className=" pitch-player "
-						style={{ marginRight: "2rem" }}
-					>
-						<button className="close-btn">
-							<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
-						</button>
-						<img src={TeamJersey} alt="" />
+	const displayMidfielders = (placement) => {
+		const player = selectedMid.find(
+			(player) => player.playerPlacement === placement
+		);
 
-						<div className="">
-							<div className="player-tag">{player.name}</div>
-							<div className="points-tag">{player.points}</div>
-						</div>
-					</StyledTeamPlayer>
-				);
-			}
-		});
-	};
+		if (player && player.is_subtitute === false) {
+			return (
+				<StyledTeamPlayer
+					className=" pitch-player "
+					style={{ marginRight: "2rem" }}
+				>
+					<button className="close-btn">
+						<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
+					</button>
+					<img src={TeamJersey} alt="" />
 
-	const displayForwardEmptyState = () => {
-		if (selectedFwd.length === 1) {
-			return (
-				<>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="fwd"
-						playerPlacement="fwd_1"
-						id="fwd_1"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "fwd",
-								is_subtitute: "false",
-								playerPlacement: "fwd_1",
-							})
-						}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="fwd"
-						playerPlacement="fwd_2"
-						id="fwd_2"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "fwd",
-								is_subtitute: "false",
-								playerPlacement: "fwd_2",
-							})
-						}
-					/>
-				</>
+					<div className="">
+						<div className="player-tag">{player.name}</div>
+						<div className="points-tag">{player.points}</div>
+					</div>
+				</StyledTeamPlayer>
 			);
-		} else if (selectedFwd.length === 2) {
-			return (
-				<PitchPlayer
-					wrapperClassName="mr-12"
-					tagLabel="fwd"
-					playerPlacement="fwd_3"
-					id="fwd_3"
-					subStatus={false}
-					onClick={(ev) =>
-						handlePlayerSelection(ev, {
-							position: "fwd",
-							is_subtitute: "false",
-							playerPlacement: "fwd_3",
-						})
-					}
-				/>
-			);
-		} else if (selectedFwd.length === 3) {
-			return null;
 		} else {
-			return (
-				<>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="fwd"
-						playerPlacement="fwd_1"
-						id="fwd_1"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "fwd",
-								is_subtitute: "false",
-								playerPlacement: "fwd_1",
-							})
-						}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="fwd"
-						playerPlacement="fwd_2"
-						id="fwd_2"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "fwd",
-								is_subtitute: "false",
-								playerPlacement: "fwd_2",
-							})
-						}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="fwd"
-						playerPlacement="fwd_3"
-						id="fwd_3"
-						subStatus={false}
-						onClick={(ev) =>
-							handlePlayerSelection(ev, {
-								position: "fwd",
-								is_subtitute: "false",
-								playerPlacement: "fwd_3",
-							})
-						}
-					/>
-				</>
-			);
+			return null;
 		}
 	};
 
-	const displayForward = () => {
-		return selectedFwd.map((player) => {
-			if (player.is_subtitute === "true") {
-				return null;
-			} else {
-				return (
-					<StyledTeamPlayer
-						className=" pitch-player "
-						style={{ marginRight: "2rem" }}
-					>
-						<button
-							className="close-btn"
-							onClick={(ev) => handleUndoSelection(ev, player)}
-						>
-							<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
-						</button>
-						<img src={TeamJersey} alt="" />
+	const displayForward = (placement) => {
+		const player = selectedFwd.find(
+			(player) => player.playerPlacement === placement
+		);
+		if (player && player.is_subtitute === false) {
+			return (
+				<StyledTeamPlayer
+					className=" pitch-player "
+					style={{ marginRight: "2rem" }}
+				>
+					<button className="close-btn">
+						<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
+					</button>
+					<img src={TeamJersey} alt="" />
 
-						<div className="">
-							<div className="player-tag">{player.name}</div>
-							<div className="points-tag">{player.points}</div>
-						</div>
-					</StyledTeamPlayer>
-				);
-			}
-		});
+					<div className="">
+						<div className="player-tag">{player.name}</div>
+						<div className="points-tag">{player.points}</div>
+					</div>
+				</StyledTeamPlayer>
+			);
+		} else {
+			return null;
+		}
+	};
+	const isPlayerAvailable = (playerPlacement) => {
+		const team = [
+			...selectedDef,
+			...selectedFwd,
+			...selectedGoalKeepers,
+			...selectedMid,
+		];
+		const player = team.find(
+			(player) => player.playerPlacement === playerPlacement
+		);
+		if (player) return true;
+		return false;
+	};
+	const isSubPlayerAvailable = (playerPlacement) => {
+		const team = [
+			...selectedDef,
+			...selectedFwd,
+			...selectedGoalKeepers,
+			...selectedMid,
+		];
+		const player = team.find(
+			(player) => player.playerPlacement === playerPlacement
+		);
+
+		if (player && player.is_subtitute) return true;
+		return false;
+	};
+	const displaySub = (placement) => {
+		const team = [
+			...selectedDef,
+			...selectedFwd,
+			...selectedGoalKeepers,
+			...selectedMid,
+		];
+		const player = team.find((player) => player.playerPlacement === placement);
+
+		if (player && player.is_subtitute) {
+			return (
+				<StyledTeamPlayer
+					className=" pitch-player "
+					style={{ marginRight: "2rem" }}
+				>
+					<button className="close-btn">
+						<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
+					</button>
+					<img src={TeamJersey} alt="" />
+
+					<div className="">
+						<div className="player-tag">{player.name}</div>
+						<div className="points-tag">{player.points}</div>
+					</div>
+				</StyledTeamPlayer>
+			);
+		} else {
+			return null;
+		}
 	};
 
 	return (
@@ -587,7 +301,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "gk",
-									is_subtitute: "false",
+									is_subtitute: false,
 									playerPlacement: null,
 								})
 							}
@@ -595,16 +309,191 @@ const PitchView = () => {
 					)}
 				</div>
 				<div className="relative flex justify-center mt-10 position-container mx-auto">
-					{displayDefenders()}
-					{displayDefendersEmptyState()}
+					{/* {displayDefenders()} */}
+					{isPlayerAvailable("def_1") ? (
+						displayDefenders("def_1")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-8"
+							tagLabel="def"
+							subStatus={false}
+							id="def_1"
+							playerPlacement="def_1"
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "def",
+									is_subtitute: false,
+									playerPlacement: "def_1",
+								})
+							}
+						/>
+					)}
+					{isPlayerAvailable("def_2") ? (
+						displayDefenders("def_2")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-8"
+							tagLabel="def"
+							subStatus={false}
+							id="def_2"
+							playerPlacement="def_2"
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "def",
+									is_subtitute: false,
+									playerPlacement: "def_2",
+								})
+							}
+						/>
+					)}
+					{isPlayerAvailable("def_3") ? (
+						displayDefenders("def_3")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-8"
+							tagLabel="def"
+							subStatus={false}
+							id="def_3"
+							playerPlacement="def_1"
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "def",
+									is_subtitute: false,
+									playerPlacement: "def_3",
+								})
+							}
+						/>
+					)}
 				</div>
 				<div className="relative flex justify-center mt-12 position-container mx-auto">
-					{displayMidfielders()}
-					{displayMidFieldersEmptyState()}
+					{isPlayerAvailable("mid_1") ? (
+						displayMidfielders("mid_1")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="mid"
+							playerPlacement="mid_1"
+							id="mid_1"
+							subStatus={false}
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "mid",
+									is_subtitute: false,
+									playerPlacement: "mid_1",
+								})
+							}
+						/>
+					)}
+					{isPlayerAvailable("mid_2") ? (
+						displayMidfielders("mid_2")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="mid"
+							playerPlacement="mid_2"
+							id="mid_2"
+							subStatus={false}
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "mid",
+									is_subtitute: false,
+									playerPlacement: "mid_2",
+								})
+							}
+						/>
+					)}
+					{isPlayerAvailable("mid_3") ? (
+						displayMidfielders("mid_3")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="mid"
+							playerPlacement="mid_3"
+							id="mid_3"
+							subStatus={false}
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "mid",
+									is_subtitute: false,
+									playerPlacement: "mid_3",
+								})
+							}
+						/>
+					)}
+					{isPlayerAvailable("mid_4") ? (
+						displayMidfielders("mid_4")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="mid"
+							playerPlacement="mid_4"
+							id="mid_4"
+							subStatus={false}
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "mid",
+									is_subtitute: false,
+									playerPlacement: "mid_4",
+								})
+							}
+						/>
+					)}
 				</div>
 				<div className="relative flex justify-center mt-14 position-container mx-auto">
-					{displayForward()}
-					{displayForwardEmptyState()}
+					{isPlayerAvailable("fwd_1") ? (
+						displayForward("fwd_1")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="fwd"
+							playerPlacement="fwd_1"
+							id="fwd_1"
+							subStatus={false}
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "fwd",
+									is_subtitute: false,
+									playerPlacement: "fwd_1",
+								})
+							}
+						/>
+					)}
+					{isPlayerAvailable("fwd_2") ? (
+						displayForward("fwd_2")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="fwd"
+							playerPlacement="fwd_2"
+							id="fwd_2"
+							subStatus={false}
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "fwd",
+									is_subtitute: false,
+									playerPlacement: "fwd_2",
+								})
+							}
+						/>
+					)}
+					{isPlayerAvailable("fwd_3") ? (
+						displayForward("fwd_3")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="fwd"
+							playerPlacement="fwd_3"
+							id="fwd_3"
+							subStatus={false}
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "fwd",
+									is_subtitute: false,
+									playerPlacement: "fwd_3",
+								})
+							}
+						/>
+					)}
 				</div>
 
 				<div className="text-center mt-20">
@@ -612,22 +501,74 @@ const PitchView = () => {
 					<div className="border-b-2 border-primary-dark"></div>
 				</div>
 				<div className="relative flex justify-center mt-8 position-container mx-auto">
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="gk"
-						subStatus={true}
-					/>
-					<PitchPlayer
-						wrapperClassName="mr-12"
-						tagLabel="mid"
-						subStatus={true}
-					/>
-					<PitchPlayer
-						tagLabel="fwd"
-						wrapperClassName="mr-12"
-						subStatus={true}
-					/>
-					<PitchPlayer tagLabel="def" />
+					{isSubPlayerAvailable("gk_2") ? (
+						displaySub("gk_2")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="gk"
+							subStatus={true}
+							id="gk_2"
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "gk",
+									is_subtitute: true,
+									playerPlacement: "gk_2",
+								})
+							}
+						/>
+					)}
+					{isSubPlayerAvailable("mid_5") ? (
+						displaySub("mid_5")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="mid"
+							subStatus={true}
+							id="mid_5"
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "mid",
+									is_subtitute: true,
+									playerPlacement: "mid_5",
+								})
+							}
+						/>
+					)}
+					{isSubPlayerAvailable("def_4") ? (
+						displaySub("def_4")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="def"
+							subStatus={true}
+							id="def_4"
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "def",
+									is_subtitute: true,
+									playerPlacement: "def_4",
+								})
+							}
+						/>
+					)}
+					{isSubPlayerAvailable("fwd_4") ? (
+						displaySub("fwd_4")
+					) : (
+						<PitchPlayer
+							wrapperClassName="mr-12"
+							tagLabel="fwd"
+							subStatus={true}
+							id="fwd_4"
+							onClick={(ev) =>
+								handlePlayerSelection(ev, {
+									position: "fwd",
+									is_subtitute: true,
+									playerPlacement: "fwd_4",
+								})
+							}
+						/>
+					)}
 				</div>
 			</div>
 		</div>

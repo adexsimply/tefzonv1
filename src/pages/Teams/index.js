@@ -15,9 +15,11 @@ import { TeamContext } from "../../store/TeamContext";
 import DashboardLayout from "../../components/common/DashboardLayout";
 import InfoCircleIcon from "../../assets/img/icons/info-circle-green.svg";
 
+import styled from "styled-components";
 import PitchBg from "../../assets/img/static/pitch-bg.png";
 import ListView from "./ListView";
 import PitchView from "./PitchView";
+import TeamJersey from "../../assets/img/team-jersey.svg";
 import GK1 from "../../assets/img/static/gk-1.jpg";
 import GK2 from "../../assets/img/static/gk-2.jpg";
 import DEF1 from "../../assets/img/static/def-1.jpg";
@@ -250,91 +252,129 @@ const Teams = () => {
 		updateDraggedPlayer(player);
 		updateDragStatus("dragging");
 	};
+	const showPopUp = (playerDetail) => {
+		return (
+			<div>
+				<p>{playerDetail.name}</p>
+			</div>
+		);
+	};
 
 	const displayPlayerPitchView = (players) => {
-		// const selectedPlayersArr = [
-		// 	...selectedGoalKeepers,
-		// 	...selectedDef,
-		// 	...selectedFwd,
-		// 	...selectedMid,
-		// ];
+		return (
+			<StyledPitchPlayer>
+				{players.map((player) => {
+					return (
+						<div
+							className={
+								"player-container " +
+								(dragStatus === "dragging" ? "player-drag" : "")
+							}
+							key={player.name}
+							onDragStart={(ev) => handleDragPlayer(ev, player)}
+							draggable
+						>
+							<div className="pitch__player-wrapper">
+								<div className="info-icon">
+									<Popover
+										content={() => showPopUp(player)}
+										title={player.name}
+									>
+										<img src={InfoCircleIcon} alt="info icon" />
+									</Popover>
+								</div>
+								<div
+									className="jersey-icon"
+									style={{ backgroundImage: `url(${TeamJersey})` }}
+								></div>
+							</div>
+							<div className="player-tag">{player.name}</div>
+							<div className="points-tag">{player.points}</div>
+						</div>
+					);
+				})}
+			</StyledPitchPlayer>
+		);
 
-		return players.map((player) => {
-			// const foundPlayerMatch = selectedPlayersArr.find(
-			// 	(player) => player.name === player.name
-			// );
-			// console.log(foundPlayerMatch, "player");
-			// if (foundPlayerMatch) {
-			// 	return (
-			// 		<button
-			// 			key={player.name}
-			// 			id={player.name}
-			// 			className={dragStatus === "dragging" ? "player-drag" : ""}
-			// 			onDragStart={(ev) => handleDragPlayer(ev, player)}
-			// 			draggable
-			// 		>
-			// 			{player.name}
-			// 		</button>
-			// 	);
-			// } else {
-			return (
-				<button
-					key={player.name}
-					id={player.name}
-					className={dragStatus === "dragging" ? "player-drag" : ""}
-					onDragStart={(ev) => handleDragPlayer(ev, player)}
-					draggable
-				>
-					{player.name}
-				</button>
-			);
-			// }
+		// return players.map((player) => {
+		// const foundPlayerMatch = selectedPlayersArr.find(
+		// 	(player) => player.name === player.name
+		// );
+		// console.log(foundPlayerMatch, "player");
+		// if (foundPlayerMatch) {
+		// 	return (
+		// 		<button
+		// 			key={player.name}
+		// 			id={player.name}
+		// 			className={dragStatus === "dragging" ? "player-drag" : ""}
+		// 			onDragStart={(ev) => handleDragPlayer(ev, player)}
+		// 			draggable
+		// 		>
+		// 			{player.name}
+		// 		</button>
+		// 	);
+		// } else {
+		// return (
+		// 	<div>
+		// 		<div style={{ backgroundImage: `url(${TeamJersey})` }}></div>
+		// 	</div>
+		// <button
+		// 	key={player.name}
+		// 	id={player.name}
+		// 	className={dragStatus === "dragging" ? "player-drag" : ""}
+		// 	onDragStart={(ev) => handleDragPlayer(ev, player)}
+		// 	draggable
+		// >
+		// 	{player.name}
+		// </button>
+		// );
+		// }
 
-			// 	<Row
-			// 		className="items-center border-b border-secondary-gray-2 pb-2 pt-2 cursor-move"
-			// 		justify="space-bewteen"
-			// 		key={player.name}
-			// 	>
-			// 		<Col lg={2} className="">
-			// 			<Popover content={() => popMe(players)} title={players.name}>
-			// 				<img src={InfoCircleIcon} alt="info Icon" />
-			// 			</Popover>
-			// 		</Col>
-			// 		<Col
-			// 			lg={4}
-			// 			className="flex justify-center text-center border-l border-secondary-gray-2-border"
-			// 		>
-			// 			<img
-			// 				src={player.imgSRC}
-			// 				className="w-10 h-10 rounded-full object-contain"
-			// 				alt="player avatar"
-			// 			/>
-			// 		</Col>
-			// 		<Col
-			// 			lg={13}
-			// 			className="border-l border-secondary-gray-2-border border-r"
-			// 		>
-			// 			<div className="pl-2">
-			// 				<span className="text-white font-bold text-regular">
-			// 					{player.name}
-			// 				</span>
-			// 				<p className="text-white">
-			// 					<span className="font-bold uppercase inline-block mr-4 text-xsmall">
-			// 						JUV
-			// 					</span>
-			// 					<span className="font-light uppercase text-xsmall">
-			// 						{player.position}
-			// 					</span>
-			// 				</p>
-			// 			</div>
-			// 		</Col>
-			// 		<Col lg={3} className="pl-2">
-			// 			<p className="text-white text-base text-center font-bold">
-			// 				{player.points}
-			// 			</p>
-			// 		</Col>
-			// 	</Row>
-		});
+		// 	<Row
+		// 		className="items-center border-b border-secondary-gray-2 pb-2 pt-2 cursor-move"
+		// 		justify="space-bewteen"
+		// 		key={player.name}
+		// 	>
+		// 		<Col lg={2} className="">
+		// 			<Popover content={() => popMe(players)} title={players.name}>
+		// 				<img src={InfoCircleIcon} alt="info Icon" />
+		// 			</Popover>
+		// 		</Col>
+		// 		<Col
+		// 			lg={4}
+		// 			className="flex justify-center text-center border-l border-secondary-gray-2-border"
+		// 		>
+		// 			<img
+		// 				src={player.imgSRC}
+		// 				className="w-10 h-10 rounded-full object-contain"
+		// 				alt="player avatar"
+		// 			/>
+		// 		</Col>
+		// 		<Col
+		// 			lg={13}
+		// 			className="border-l border-secondary-gray-2-border border-r"
+		// 		>
+		// 			<div className="pl-2">
+		// 				<span className="text-white font-bold text-regular">
+		// 					{player.name}
+		// 				</span>
+		// 				<p className="text-white">
+		// 					<span className="font-bold uppercase inline-block mr-4 text-xsmall">
+		// 						JUV
+		// 					</span>
+		// 					<span className="font-light uppercase text-xsmall">
+		// 						{player.position}
+		// 					</span>
+		// 				</p>
+		// 			</div>
+		// 		</Col>
+		// 		<Col lg={3} className="pl-2">
+		// 			<p className="text-white text-base text-center font-bold">
+		// 				{player.points}
+		// 			</p>
+		// 		</Col>
+		// 	</Row>
+		// });
 	};
 	const displayPlayers = () => {
 		if (currentSelection === null) {
@@ -707,5 +747,54 @@ const Teams = () => {
 		</DashboardLayout>
 	);
 };
+
+export var StyledPitchPlayer = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	.jersey-icon {
+		width: 50px;
+		height: 45px;
+	}
+	.player-container {
+		width: 30%;
+		margin-right: 10px;
+		margin-bottom: 1rem;
+		cursor: move;
+		cursor: grab;
+		cursor: -moz-grab;
+		cursor: -webkit-grab;
+	}
+	.pitch__player-wrapper {
+		display: flex;
+		align-items: flex-start;
+	}
+	.pitch__player-wrapper .info-icon {
+		margin-right: 10px;
+		display: inline-block;
+	}
+	.player-container .player-tag {
+		background: #33175a;
+		border-radius: 2px;
+		color: #fff;
+		font-size: 10px;
+		padding: 6px 0;
+		text-align: center;
+		font-weight: 600;
+	}
+	.player-container .points-tag {
+		font-size: 10px;
+		font-weight: 600;
+		background: radial-gradient(
+				50% 50% at 50% 50%,
+				rgba(255, 255, 255, 0.51) 0%,
+				rgba(255, 255, 255, 0.37) 100%
+			),
+			#33175a;
+		text-align: center;
+		color: #fff;
+	}
+`;
 
 export default Teams;

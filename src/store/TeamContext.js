@@ -218,6 +218,7 @@ const TeamContextProvider = (props) => {
 		setSelectedGoalKeepers([...selectedGoalKeepers, player]);
 	const updateDefenders = (player) => setSelectedDef([...selectedDef, player]);
 	const updateMidfielder = (player) => setSelectedMid([...selectedMid, player]);
+	const updateForwards = (player) => setSelectedFwd([...selectedFwd, player]);
 
 	return (
 		<TeamContext.Provider
@@ -251,6 +252,7 @@ const TeamContextProvider = (props) => {
 				updateGoalKeeper,
 				updateDefenders,
 				updateMidfielder,
+				updateForwards,
 			}}
 		>
 			{props.children}

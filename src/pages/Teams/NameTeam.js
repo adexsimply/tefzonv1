@@ -7,7 +7,7 @@ import PitchBg from "../../assets/img/static/pitch-bg.png";
 
 const NameTeam = () => {
 	const [teamName, setTeamName] = useState("");
-	const { getTeamName } = useContext(TeamContext);
+	const { getTeamName, view } = useContext(TeamContext);
 
 	return (
 		<DashboardLayout>
@@ -17,7 +17,11 @@ const NameTeam = () => {
 						<div className="teams-heading flex justify-between items-center pb-4 border-b-2 border-primary-brand">
 							<h2 className="f-oswald text-4xl font-medium">Name Your Team</h2>
 							<Link
-								to="/teams/save-team"
+								to={
+									view === "list"
+										? "/teams/save-team"
+										: "/teams/pitch-confirm-team"
+								}
 								className="bg-tw-green rounded-none h-12 font-medium px-6 inline-flex items-center hover:text-white"
 								disabled={teamName === ""}
 							>
