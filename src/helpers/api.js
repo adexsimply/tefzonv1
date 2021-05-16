@@ -113,14 +113,28 @@ export const getCountries = () => {
 	});
 };
 
-export const getTeams = () => {
+export const getClubs = () => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const teams = await makeApiCall({
+			const clubs = await makeApiCall({
 				url: "/signupTeamList",
 				method: "get",
 			});
-			return resolve(teams);
+			return resolve(clubs);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getTeam = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const team = await makeApiCall({
+				url: "/viewUserTeam",
+				method: "get",
+			});
+			return resolve(team);
 		} catch (error) {
 			return reject(error);
 		}
