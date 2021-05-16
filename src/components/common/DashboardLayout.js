@@ -63,7 +63,7 @@ const DashboardLayout = (props) => {
 							{links.map(({ url, name }) => {
 								if (url === window.location.pathname) {
 									return (
-										<li className="">
+										<li className="" key={url}>
 											<Link
 												to={url}
 												className="text-black px-4 py-4 inline-block mr-4 rounded-t-md bg-white"
@@ -74,7 +74,7 @@ const DashboardLayout = (props) => {
 									);
 								} else {
 									return (
-										<li className="">
+										<li className="" key={url}>
 											<Link
 												to={url}
 												className="text-white px-4 py-4 inline-block mr-4 rounded-t-md bg-tw-green"
@@ -113,24 +113,36 @@ const DashboardLayout = (props) => {
 									<div className="flex">
 										<ul className="list-none">
 											<li>
-												<Link className="text-white">Home</Link>
+												<Link to="/dashboard" className="text-white">
+													Home
+												</Link>
 											</li>
 											<li>
-												<Link className="text-white">My Team</Link>
+												<Link to="/dashboard" className="text-white">
+													My Team
+												</Link>
 											</li>
 											<li>
-												<Link className="text-white">Transfer</Link>
+												<Link to="/dashboard" className="text-white">
+													Transfer
+												</Link>
 											</li>
 										</ul>
 										<ul className="list-none ml-8">
 											<li>
-												<Link className="text-white">Leagues</Link>
+												<Link to="/dashboard" className="text-white">
+													Leagues
+												</Link>
 											</li>
 											<li>
-												<Link className="text-white">Fixtures</Link>
+												<Link to="/dashboard" className="text-white">
+													Fixtures
+												</Link>
 											</li>
 											<li>
-												<Link className="text-white">Statistics</Link>
+												<Link to="/dashboard" className="text-white">
+													Statistics
+												</Link>
 											</li>
 										</ul>
 									</div>
@@ -145,15 +157,17 @@ const DashboardLayout = (props) => {
 
 									<ul className="list-none">
 										<li>
-											<Link className="text-white text-base">
+											<Link to="/dashboard" className="text-white text-base">
 												Privacy Policy
 											</Link>
 										</li>
 										<li>
-											<Link className="text-white text-base">Terms of use</Link>
+											<Link to="/dashboard" className="text-white text-base">
+												Terms of use
+											</Link>
 										</li>
 										<li>
-											<Link className="text-white text-base">
+											<Link to="/dashboard" className="text-white text-base">
 												Cookies Settings
 											</Link>
 										</li>

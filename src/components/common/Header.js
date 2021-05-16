@@ -36,7 +36,10 @@ const Header = () => {
 		return Links.map(({ url, name }) => {
 			if (url === window.location.pathname) {
 				return (
-					<li className="active-nav-item lg:mr-8 border-b-2 font-medium border-primary-brand w-full md:w-auto lg:inline-flex">
+					<li
+						key={url}
+						className="active-nav-item lg:mr-8 border-b-2 font-medium border-primary-brand w-full md:w-auto lg:inline-flex"
+					>
 						<Link
 							to={url}
 							className=" py-3 md:py-0 inline-flex text-primary-brand"
@@ -47,7 +50,7 @@ const Header = () => {
 				);
 			}
 			return (
-				<li className="lg:mr-8 w-full lg:w-auto font-medium">
+				<li key={url} className="lg:mr-8 w-full lg:w-auto font-medium">
 					<Link to={url} className=" py-3 md:py-0 inline-flex">
 						{name}
 					</Link>
