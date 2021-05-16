@@ -132,7 +132,7 @@ export const getTeam = () => {
 		try {
 			const team = await makeApiCall({
 				url: "/viewUserTeam",
-				method: get,
+				method: "get",
 			});
 			return resolve(team);
 		} catch (error) {
