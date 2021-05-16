@@ -18,6 +18,7 @@ const TeamCaptain = () => {
 	const [forwards, setUpdatedForwards] = useState([]);
 
 	const history = useHistory();
+
 	const team = loadTeam();
 
 	useEffect(() => {
@@ -26,11 +27,14 @@ const TeamCaptain = () => {
 		let def = team.filter((player) => player.position === "def");
 		let mids = team.filter((player) => player.position === "mid");
 		let fwds = team.filter((player) => player.position === "fwd");
+		console.log("how often here");
 		setGoalKeepers([...gk]);
 		setUpdatedDefenders([...def]);
 		setUpdatedMidfielders([...mids]);
 		setUpdatedForwards([...fwds]);
-	}, [team]);
+
+		// eslint-disable-next-line
+	}, []);
 
 	const finalTeam = [...goalKeepers, ...defenders, ...forwards, ...midfielders];
 	const resetPlayers = () => {
@@ -61,6 +65,7 @@ const TeamCaptain = () => {
 		setUpdatedForwards([...resetFwd]);
 	};
 	const handleSelectCaptain = (ev, player) => {
+		console.log("you clicked to set captain", player);
 		resetPlayers();
 
 		switch (player.position) {
@@ -117,6 +122,7 @@ const TeamCaptain = () => {
 	const displayGkPlayers = () => {
 		return goalKeepers.map((players) => {
 			if (players.is_subtitute === false) {
+				console.log(players.is_captain, "gk");
 				return (
 					<StyledTeamPlayer
 						className=" pitch-player "
@@ -151,6 +157,7 @@ const TeamCaptain = () => {
 		);
 
 		if (player && player.is_subtitute === false) {
+			console.log(player.is_captain, "def", player.name);
 			return (
 				<StyledTeamPlayer
 					className=" pitch-player "
