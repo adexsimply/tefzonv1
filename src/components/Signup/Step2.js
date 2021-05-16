@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Button, message, Spin, Divider } from "antd";
-import { getTeams } from "../../helpers/api";
+import { getClubs } from "../../helpers/api";
 import { AiFillWarning } from "react-icons/ai";
 import { FiRefreshCw } from "react-icons/fi";
 import LeftArrowIcon from "../../assets/img/icons/left-arrow.svg";
@@ -24,7 +24,7 @@ const StepTwo = (props) => {
 	const getTeamsData = async () => {
 		setLoading(true);
 		try {
-			const data = await getTeams();
+			const data = await getClubs();
 			if (data) {
 				setTeamsList(data.results);
 				setLoading(false);

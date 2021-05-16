@@ -1,14 +1,16 @@
 import React from "react";
+import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 
 const Alert = ({
 	className = "",
+	type = "",
 	msg = "",
 	closeAlert,
 	textClassName = "",
 }) => {
 	return (
-		<div
+		<StyledAlert
 			className={
 				"rounded-md px-6 py-3 flex items-center justify-between " + className
 			}
@@ -17,8 +19,8 @@ const Alert = ({
 			<button onClick={closeAlert} className="cursor-pointer">
 				<AiOutlineClose className="text-white" />
 			</button>
-		</div>
+		</StyledAlert>
 	);
 };
-
+export var StyledAlert = styled.div``;
 export default Alert;

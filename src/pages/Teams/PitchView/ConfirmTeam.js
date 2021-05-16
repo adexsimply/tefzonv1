@@ -106,13 +106,12 @@ const ConfirmTeam = () => {
 								{reqStatus.type === "success" && (
 									<Alert
 										className="success-alert"
+										type="success"
 										msg={reqStatus.msg || "Successful!"}
 									/>
 								)}
 								{reqStatus.type === "error" && (
-									<Alert className="error-alert">
-										{reqStatus.msg || "Something went wrong!"}
-									</Alert>
+									<Alert className="error-alert" type="error" msg={reqStatus.msg || "something went wrong"} />
 								)}
 							</div>
 							<Row>
