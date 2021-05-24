@@ -27,6 +27,7 @@ Route.get('/', () => {
 Route.get("/getMetadata", "Metadata/MetadatumController.getMetadata");
 Route.get("/signupTeamList","Metadata/MetadatumController.getSignUpTeamList")
 Route.get("/playersList","Metadata/MetadatumController.getAllPlayers")
+Route.get("/weekFixtures","Metadata/MetadatumController.getWeekFixtures")
 
 // team selection routes , select team members , remove team members , add team member(s) , view User team  , 
 Route.post("/createTeam", "TeamCreation/TeamManagementController.createTeam").middleware(['auth'])
