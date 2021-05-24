@@ -3,7 +3,7 @@ const Config = use("Config");
 const Countries = use("App/Models/SettingsCountry")
 const axios = require('axios');
 const makeExternalRequestFeature = use("App/Features/MakeExternalRequestFeature")
-const Logger = use('Logger')
+const moment = use('moment')
 
 class MetadatumController {
   async getMetadata({
@@ -135,35 +135,58 @@ class MetadatumController {
    }
   }
 
-  async getWeekFixtures(){  
+  async getWeekFixtures({response}){  
     try {
       const baseUrl = Config.get("rapidApi.getWeekFixturesEndpoint")
-      // async function getEnglandLeague() {
-      //   const endpoint = `${baseUrl}/2`
-      //   return await new makeExternalRequestFeature({endpoint}).makeGetRequest()
-      // }
+      
 
-      const today = moment();
-        const from_date = today.startOf('week');
-        const to_date = today.endOf('week');
-        console.log({
-          from_date: from_date.toString(),
-          today: moment().toString(),
-          to_date: to_date.toString(),
-        });
+      function getFirstDay(){
+        let today = moment()
+        const dow = today.day();
+        let firstDay 
+        if(dow == 5){
+          firstDay = today
+        }
+        else{
+         let firstWeekDay = moment().day(0)
+          firstDay = firstWeekDay.day(-2)
+        }
+        return firstDay.format('YYYY-MM-DD')
+      }
+
+      function getLastDay(){
+        let today = moment()
+        const dow = today.day();
+        let firstDay, lastDay;
+        if(dow == 5){
+          firstDay = today
+        }
+        else{
+         let firstWeekDay = moment().day(0)
+          firstDay = firstWeekDay.day(-2)
+        }
+        lastDay =  firstDay.add(6 ,'days').format('YYYY-MM-DD')
+        return lastDay;
+      }
+      
+      let lastWeekDay  = getLastDay();
+      let firstWeekDay  = getFirstDay();
 
 
       const currentyear = new Date().getFullYear() - 1;
       const teamEndpoints = [ 
-        `${baseUrl}?league=39&season=${currentyear}`,
-        `${baseUrl}?league=135&season=${currentyear}`,
-        `${baseUrl}?league=61&season=${currentyear}`,
-        `${baseUrl}?league=78&season=${currentyear}`,
-        `${baseUrl}?league=140&season=${currentyear}`,
+        `${baseUrl}?league=39&season=${currentyear}&from=${firstWeekDay}&to=${lastWeekDay}`,
+        `${baseUrl}?league=135&season=${currentyear}&from=${firstWeekDay}&to=${lastWeekDay}`,
+        `${baseUrl}?league=61&season=${currentyear}&from=${firstWeekDay}&to=${lastWeekDay}`,
+        `${baseUrl}?league=78&season=${currentyear}&from=${firstWeekDay}&to=${lastWeekDay}`,
+        `${baseUrl}?league=140&season=${currentyear}&from=${firstWeekDay}&to=${lastWeekDay}`
       ];        
       let promises = [];
         for (let i = 0; i < teamEndpoints.length; i++) {
-          const responseFromApi = await new makeExternalRequestFeature({endpoint:teamEndpoints[i]}).makeGetRequest()
+          const responseFromApi = await new makeExternalRequestFeature(
+            {endpoint:teamEndpoints[i]
+           }
+          ).makeGetRequest()
           let responseTeamObject = responseFromApi.results.response
           for(let j = 0 ;j < responseTeamObject.length; j++ ){
 
@@ -178,17 +201,15 @@ class MetadatumController {
           statusCode: 200,
           message: `Teams fetched successfully`,
         })
-  
      } catch (error) {
-       console.log("Get signup teams error ",error);
+       console.log("Get fixtures error ",error);
       return response.status(400).json({
         error,
-        label: `Signup teams  Fetching`,
+        label: `Fixtures Fetching`,
         statusCode: 400,
-        message: `We were unable to fetch teams`,
+        message: `We were unable to fetch Fixtures`,
       })
      }
-
   }
 }
 module.exports = MetadatumController

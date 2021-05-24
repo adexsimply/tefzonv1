@@ -65,7 +65,7 @@ class MakeExternalRequestFeature {
       endpoint,
       data
     } = this.data;
-    const options = {
+    const options = { 
         method: 'POST',
         headers: {
             "x-rapidapi-key": "994bb0668emshbcbf3bf20b13bccp1327cejsn8eb694f88862",
