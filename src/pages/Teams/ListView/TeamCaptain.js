@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Row, Col, Radio, Popover } from "antd";
 import { Link, useHistory } from "react-router-dom";
 
-import { loadTeam, saveTeam } from "../../store/localStorage";
-import DashboardLayout from "../../components/common/DashboardLayout";
-import PitchBg from "../../assets/img/static/pitch-bg.png";
-import Jersey from "../../assets/img/jersey.svg";
-import InfoCircleIcon from "../../assets/img/icons/info-circle-green.svg";
+import { loadTeam, saveTeam } from "../../../store/localStorage";
+import DashboardLayout from "../../../components/common/DashboardLayout";
+import PitchBg from "../../../assets/img/static/pitch-bg.png";
+import Jersey from "../../../assets/img/jersey.svg";
+import InfoCircleIcon from "../../../assets/img/icons/info-circle-green.svg";
 
 const TeamCaptain = () => {
 	const [captainSelected, setCaptainSelected] = useState(false);

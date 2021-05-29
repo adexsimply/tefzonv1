@@ -133,8 +133,26 @@ export const getTeam = () => {
 			const team = await makeApiCall({
 				url: "/viewUserTeam",
 				method: "get",
+				headers: {
+					Authorization: `Bearer ${getToken()}`,
+				},
 			});
 			return resolve(team);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getPlayers = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const player = await makeApiCall({
+				url: "/playersList",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(player);
 		} catch (error) {
 			return reject(error);
 		}

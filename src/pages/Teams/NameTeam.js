@@ -19,7 +19,7 @@ const NameTeam = () => {
 							<Link
 								to={
 									view === "list"
-										? "/teams/save-team"
+										? "/teams/list-save-team"
 										: "/teams/pitch-confirm-team"
 								}
 								className="bg-tw-green rounded-none h-12 font-medium px-6 inline-flex items-center hover:text-white"

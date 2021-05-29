@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../../components/common/Header";
-import { Button } from "antd";
+import { Button, Row, Col } from "antd";
 import { GrFacebookOption, GrTwitter } from "react-icons/gr";
 import { FcGoogle } from "react-icons/fc";
 import LoginForm from "../../components/LoginForm";
@@ -9,35 +9,41 @@ const Signin = () => {
 	return (
 		<div className="signin-container">
 			<Header />
-			<div className="signin-content-container flex justify-center">
-				<div className="w-1/3 pt-4">
+			<Row justify="center" className="signin-content-container">
+				<Col lg={8}>
 					<div className="heading text-center">
 						<h2 className="f-oswald text-3xl font-semibold">Login</h2>
 						<p className="mt-3 px-6 text-sm font-medium">
 							Welcome back to Tefzon Fantasy, please login to your account to
 							continue
 						</p>
-						<div className="flex social mb-8 justify-between mt-8">
-							<Button className="bg-fb-blue items-center flex text-white h-11 px-8">
-								<GrFacebookOption />{" "}
-								<span className="inline-block ml-3">Facebook</span>
-							</Button>
-							<Button className="flex items-center h-11 px-8">
-								<FcGoogle />
-								<span className="font-medium ml-3 inline-block">Google</span>
-							</Button>
-							<Button className="flex h-11 items-center bg-tw-blue text-white  px-8">
-								<GrTwitter />
-								<span className="inline-block ml-3">Twitter</span>
-							</Button>
-						</div>
+						<Row justify="space-between" className=" social pt-2rem">
+							<Col xs={20} lg={8} className="mx-auto">
+								<Button className="bg-fb-blue social-btn text-white w-full">
+									<GrFacebookOption />{" "}
+									<span className="inline-block ml-3">Facebook</span>
+								</Button>
+							</Col>
+							<Col xs={20} lg={8} className="mx-auto">
+								<Button className="social-btn w-full">
+									<FcGoogle />
+									<span className="font-medium ml-3 inline-block">Google</span>
+								</Button>
+							</Col>
+							<Col xs={20} lg={8} className="mx-auto">
+								<Button className="social-btn bg-tw-blue text-white w-full">
+									<GrTwitter />
+									<span className="inline-block ml-3">Twitter</span>
+								</Button>
+							</Col>
+						</Row>
 						<p className="text-base font-medium">or login with</p>
 					</div>
 					<div className="loginForm mt-12 px-8">
 						<LoginForm />
 					</div>
-				</div>
-			</div>
+				</Col>
+			</Row>
 		</div>
 	);
 };

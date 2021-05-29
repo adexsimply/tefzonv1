@@ -1,5 +1,5 @@
 import React from "react";
-import PitchPlayerIcon from "../../assets/img/pitch-jersey.svg";
+import PitchPlayerIcon from "../../../assets/img/pitch-jersey.svg";
 
 const PitchPlayer = ({
 	wrapperClassName = "",

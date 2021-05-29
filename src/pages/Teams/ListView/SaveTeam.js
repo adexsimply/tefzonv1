@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Button, Row, Col } from "antd";
-import { TeamContext } from "../../store/TeamContext";
-import Stadium from "../../assets/img/stadium.svg";
-import { loadTeam } from "../../store/localStorage";
-import PitchPlayer from "./PitchPlayer";
-import TeamJersey from "../../assets/img/team-jersey.svg";
-import DashboardLayout from "../../components/common/DashboardLayout";
-import PitchBg from "../../assets/img/static/pitch-bg.png";
+import { TeamContext } from "../../../store/TeamContext";
+import Stadium from "../../../assets/img/stadium.svg";
+import { loadTeam } from "../../../store/localStorage";
+import PitchPlayer from "../PitchView/PitchPlayer";
+import TeamJersey from "../../../assets/img/team-jersey.svg";
+import DashboardLayout from "../../../components/common/DashboardLayout";
+import PitchBg from "../../../assets/img/static/pitch-bg.png";
 
 const SaveTeam = () => {
 	const { teamName } = useContext(TeamContext);

@@ -70,7 +70,7 @@ const Header = () => {
 					<FaBars />
 				</button>
 			</div>
-			{!toggleNav && (
+			{toggleNav && (
 				<div className="navbar-collapse flex w-full md:w-auto mt-4 md:mt-0">
 					<ul className="flex flex-col md:flex-row items-center w-full">
 						{displayNavItems()}

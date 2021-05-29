@@ -97,3 +97,8 @@
 .forgot-pw-content {
 	height: calc(100vh - 82px);
 }
+@media screen and (max-width: 575px) {
+	.signin-content-container {
+		padding: 2rem 0;
+	}
+}

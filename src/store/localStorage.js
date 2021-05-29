@@ -9,7 +9,7 @@ export const saveState = (value) => {
 export const loadState = () => {
 	const serialisedState = localStorage.getItem(STATE);
 	if (serialisedState) {
-		return serialisedState;
+		return JSON.parse(serialisedState);
 	} else {
 		return null;
 	}

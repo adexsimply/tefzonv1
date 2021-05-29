@@ -9,13 +9,14 @@ import ResetPasswordPage from "../pages/Auth/ResetPassword";
 import ConfirmPage from "../pages/Auth/Confirm";
 import DashboardPage from "../pages/Dashboard";
 import TeamsPage from "../pages/Teams";
-import TeamsCaptainPage from "../pages/Teams/TeamCaptain";
+import ListCaptainPage from "../pages/Teams/ListView/TeamCaptain";
 import PitchCaptainPage from "../pages/Teams/PitchView/TeamCaptain";
 import TeamsNamePage from "../pages/Teams/NameTeam";
-import SaveTeamPage from "../pages/Teams/SaveTeam";
+import ListSaveTeamPage from "../pages/Teams/ListView/SaveTeam";
 import ConfirmTeamPage from "../pages/Teams/PitchView/ConfirmTeam";
 import ComingSoonPage from "../pages/Error/ComingSoon";
 import NotFoundPage from "../pages/Error/NotFound";
+import { TeamsRoute } from "./protectedRoutes";
 
 const Routes = () => {
 	let history = useHistory();
@@ -55,12 +56,13 @@ const Routes = () => {
 				<Route path="/statistics" component={ComingSoonPage} />
 				<Route path="/help" component={ComingSoonPage} />
 				<Route path="/contact" component={ComingSoonPage} />
-				<Route path="/teams" exact key="teams" component={TeamsPage} />
+				{/* <Route path="/teams" exact key="teams" component={TeamsPage} /> */}
+				<TeamsRoute exact key="teams" path="/teams" component={TeamsPage} />
 				<Route
 					path="/teams/list-select-captain"
 					exact
 					key="teams"
-					component={TeamsCaptainPage}
+					component={ListCaptainPage}
 				/>
 				<Route
 					path="/teams/pitch-select-captain"
@@ -75,10 +77,10 @@ const Routes = () => {
 					component={TeamsNamePage}
 				/>
 				<Route
-					path="/teams/save-team"
+					path="/teams/list-save-team"
 					exact
 					key="teams"
-					component={SaveTeamPage}
+					component={ListSaveTeamPage}
 				/>
 				<Route
 					path="/teams/pitch-confirm-team"
