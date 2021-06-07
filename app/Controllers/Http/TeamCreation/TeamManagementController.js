@@ -58,6 +58,7 @@ class TeamManagementController {
                         player_image:currentPlayerDetails.photo,
                         squad_id:squadCreation.id,
                         wing:item.wing,
+                        placement:item.placement,
                         is_substitute:item.is_substitute,
                         is_captain: item.is_captain 
                     })

@@ -2,7 +2,9 @@
 const Config = use("Config");
 const Countries = use("App/Models/SettingsCountry")
 const axios = require('axios');
-const makeExternalRequestFeature = use("App/Features/MakeExternalRequestFeature")
+const makeExternalRequestFeature = use("App/Features/MakeExternalRequestFeature");
+const updatePointsFeature = use("App/Features/UpdateRankingFeature")
+
 const moment = use('moment')
 
 class MetadatumController {
@@ -138,8 +140,6 @@ class MetadatumController {
   async getWeekFixtures({response}){  
     try {
       const baseUrl = Config.get("rapidApi.getWeekFixturesEndpoint")
-      
-
       function getFirstDay(){
         let today = moment()
         const dow = today.day();
@@ -208,6 +208,28 @@ class MetadatumController {
         label: `Fixtures Fetching`,
         statusCode: 400,
         message: `We were unable to fetch Fixtures`,
+      })
+     }
+  }
+
+  async updateRanking({response}){  
+    try {
+       let responseFromApi = await new updatePointsFeature({}).updateRankings()
+
+       console.log({responseFromApi});
+          
+        return response.status(200).json({
+          results:responseFromApi,
+          label: `Signup teams Fetching`,
+          statusCode: 200,
+        })
+     } catch (error) {
+       console.log("Get fixtures error ",error);
+      return response.status(400).json({
+        error,
+        label: `Fixtures Fetching`,
+        statusCode: 400,
+        message: `We were unable to update`,
       })
      }
   }

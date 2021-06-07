@@ -20,5 +20,8 @@ module.exports = {
   
   getWeekFixturesEndpoint:
   "https://api-football-v1.p.rapidapi.com/v3/fixtures",
+
+  getStatsByFixtures:
+  "https://api-football-v1.p.rapidapi.com/v3/fixtures",
 }
 
