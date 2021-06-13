@@ -10,11 +10,7 @@ const Alert = ({
 	textClassName = "",
 }) => {
 	return (
-		<StyledAlert
-			className={
-				"rounded-md px-6 py-3 flex items-center justify-between " + className
-			}
-		>
+		<StyledAlert className={"tf-alert " + className}>
 			<p className={textClassName}>{msg}</p>
 			<button onClick={closeAlert} className="cursor-pointer">
 				<AiOutlineClose className="text-white" />

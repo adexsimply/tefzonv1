@@ -1,0 +1,21 @@
+@import "../base/variables";
+
+.social-btn {
+	display: flex;
+	align-items: center;
+	padding: 1.5rem;
+	justify-content: center;
+	margin-bottom: 1.5rem;
+}
+.tf-alert {
+	padding: 0.8rem 1.6rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.error-alert {
+	background: $tw-red;
+}
+.success-alert {
+	background: $primary-brand;
+}

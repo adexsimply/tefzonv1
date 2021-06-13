@@ -133,6 +133,9 @@ export const getTeam = () => {
 			const team = await makeApiCall({
 				url: "/viewUserTeam",
 				method: "get",
+				headers: {
+					Authorization: `Bearer ${getToken()}`,
+				},
 			});
 			return resolve(team);
 		} catch (error) {
@@ -141,4 +144,48 @@ export const getTeam = () => {
 	});
 };
 
-export const createTeam = (data) => {};
+export const getPlayers = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const player = await makeApiCall({
+				url: "/playersList",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(player);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const createTeam = (teamData) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const team = await makeApiCall({
+				url: "/createTeam",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: teamData,
+			});
+			return resolve(team);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getFixtures = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const fixture = await makeApiCall({
+				url: "/weekFixtures",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(fixture);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};

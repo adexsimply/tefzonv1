@@ -12,6 +12,7 @@ const LoginForm = (props) => {
 
 	const handleLoginUser = async (values) => {
 		setLoading(true);
+		
 		try {
 			const login = await loginUser(values);
 			if (login) {

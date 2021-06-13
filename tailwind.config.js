@@ -9,7 +9,6 @@ module.exports = {
 				regular: "14px",
 			},
 			colors: {
-				"primary-brand": "#8139E6",
 				"primary-brand-light": "#E5DCF1",
 				"primary-dark": "#222222",
 				"primary-dark-light": "rgba(34, 34, 34, 0.6)",

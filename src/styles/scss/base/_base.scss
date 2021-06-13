@@ -1,0 +1,94 @@
+@import "./variables";
+// COLORS
+.text-white {
+	color: #fff !important;
+}
+.text-primary-brand {
+	color: $primary-brand;
+}
+
+/****BACKGROUND COLORS ****/
+.bg-primary-brand {
+	background: $primary-brand;
+}
+.bg-tw-yellow {
+	background: $tw-yellow;
+}
+.bg-tw-green-light {
+	background: $tw-green-light;
+}
+.bg-tw-sky-blue {
+	background: $tw-sky-blue;
+}
+.bg-tw-blue {
+	background: $tw-blue;
+}
+.bg-tw-red {
+	background: $tw-red;
+}
+
+// MARGINS
+.m-auto {
+	margin: auto;
+}
+.mx-auto {
+	margin-left: auto;
+	margin-right: auto;
+}
+.mt-1rem {
+	margin-top: 1rem;
+}
+.ml-1rem {
+	margin-left: 1rem;
+}
+.mr-1rem {
+	margin-right: 1rem;
+}
+.mt-2rem {
+	margin-top: 2rem;
+}
+
+// PADDINGS
+.pt-2rem {
+	padding-top: 2rem;
+}
+
+// FONT-SIZES
+
+// WITDTH
+.w-full {
+	width: 100%;
+}
+/**** DISPLAY****/
+.flex {
+	display: flex;
+}
+.block {
+	display: block;
+}
+.inline-block {
+	display: inline-block;
+}
+.inline-flex {
+	display: inline-flex;
+}
+.items-center {
+	align-items: center;
+}
+.justify-center {
+	justify-content: center;
+}
+.justify-end {
+	justify-content: flex-end;
+}
+.justify-start {
+	justify-content: flex-start;
+}
+.justify-between {
+	justify-content: space-between;
+}
+
+/**** ALIGNMENT ****/
+.text-center {
+	text-align: center;
+}

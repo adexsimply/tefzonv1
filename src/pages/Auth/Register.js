@@ -51,17 +51,13 @@ const Register = () => {
 				console.log(results);
 				setLoading(false);
 				if (results.status === "Success") {
-					const userDetails = {
-						user: results.user,
-						token: results.token,
-					};
-					saveState(userDetails);
+					saveState(results.results.token.token);
 					openNotification({
 						type: "success",
 						title: "User Registration",
 						msg: results.message,
 					});
-					history.replace("/dashboard");
+					history.replace("/teams");
 					setLoading(false);
 				} else {
 					openNotification({
