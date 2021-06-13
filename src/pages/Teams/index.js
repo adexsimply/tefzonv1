@@ -42,9 +42,9 @@ const Teams = () => {
 					return <TeamEmptyState />;
 				} else {
 					if (view === "list") {
-						return <DisplayTeamList teamInfo={teamData[11]} />;
+						return <DisplayTeamList teamInfo={teamData[0]} />;
 					} else {
-						return <DisplayTeamPitch teamInfo={teamData} />;
+						return <DisplayTeamPitch teamInfo={teamData[0]} />;
 					}
 				}
 			}
