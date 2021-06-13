@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { TeamContext } from "../../../store/TeamContext";
 import { Row, Col, Button, Popover } from "antd";
 import DashboardLayout from "../../../components/common/DashboardLayout";
 import TeamFlag from "../../../assets/img/static/team-flag.svg";
@@ -7,7 +8,9 @@ import Jersey from "../../../assets/img/jersey.svg";
 import InfoCircleIcon from "../../../assets/img/icons/info-circle-green.svg";
 import "./DisplayTeam.scss";
 
-const TeamView = ({ teamInfo }) => {
+const ListView = ({ teamInfo }) => {
+	const { changeView, view } = useContext(TeamContext);
+
 	const showPopUp = (playerDetail) => {
 		return (
 			<div>
@@ -268,8 +271,22 @@ const TeamView = ({ teamInfo }) => {
 							<div className="stadium-backdrop">
 								<Row align="center">
 									<Col lg={6}>
-										<Button className="view-btn">Pitch View</Button>
-										<Button className="view-btn active-btn">List View</Button>
+										<Button
+											className={
+												"view-btn " + (view === "pitch" ? "active-btn" : "")
+											}
+											onClick={() => changeView("pitch")}
+										>
+											Pitch View
+										</Button>
+										<Button
+											className={
+												"view-btn " + (view === "pitch" ? "active-btn" : "")
+											}
+											onClick={() => changeView("list")}
+										>
+											List View
+										</Button>
 									</Col>
 								</Row>
 								<div className="list-view">
@@ -438,4 +455,4 @@ const TeamView = ({ teamInfo }) => {
 	);
 };
 
-export default TeamView;
+export default ListView;
