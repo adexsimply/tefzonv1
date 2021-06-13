@@ -14,6 +14,7 @@ import { saveTeam } from "../../../store/localStorage";
 import { TeamContext } from "../../../store/TeamContext";
 import { useHistory } from "react-router-dom";
 import { getPlayers } from "../../../helpers/api";
+import { formatString } from "../../../helpers/utils";
 import DashboardLayout from "../../../components/common/DashboardLayout";
 import InfoCircleIcon from "../../../assets/img/icons/info-circle-green.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
@@ -21,6 +22,7 @@ import StadiumBg from "../../../assets/img/backdrop.svg";
 import styled from "styled-components";
 import ListView from "../ListView";
 import PitchView from "../PitchView";
+import "../_teams.scss";
 
 const { Option } = Select;
 
@@ -39,7 +41,7 @@ const DefaultTeam = () => {
 		selectedMid,
 		handlePlayerSelection,
 		handleSubtitutePlayerSelection,
-		removePlayerFromList,
+		removerPlayerFromList,
 		handleRemoveSubtitutePlayerFromList,
 		statusMessage,
 		view,
@@ -93,23 +95,24 @@ const DefaultTeam = () => {
 			undoSubtituteSelection(player);
 		}
 	};
-	const undoPlayerSelection = (player) => removePlayerFromList(player);
+	const undoPlayerSelection = (player) => removerPlayerFromList(player);
 	const undoSubtituteSelection = (player) => {
 		handleRemoveSubtitutePlayerFromList(player);
 	};
-	const displayPlayerListView = (filteredPlayers) => {
-		return filteredPlayers.map((players) => {
+	const displayPlayerListView = (playerList) => {
+		return playerList.map((playerInfo) => {
+			const { id, name, photo, age, position, league } = playerInfo.player;
 			return (
 				<Row
 					className="items-center border-b border-secondary-gray-2 pb-2 pt-2 "
 					justify="space-bewteen"
-					key={players.name}
+					key={id}
 				>
 					<Col
 						lg={2}
 						className="h-12 border-r border-secondary-gray-2 flex items-center"
 					>
-						<Popover content={() => popMe(players)} title={players.name}>
+						<Popover content={() => popMe(playerInfo.player)} title={name}>
 							<img src={InfoCircleIcon} alt="info Icon" />
 						</Popover>
 					</Col>
@@ -118,30 +121,75 @@ const DefaultTeam = () => {
 						className="flex justify-center text-center border-r border-secondary-gray-2-border h-12 items-center"
 					>
 						<img
-							src={players.imgSRC}
+							src={photo}
+							className="w-10 h-10 rounded-full object-contain"
+							alt="player avatar"
+						/>
+					</Col>
+					<Col lg={14} className="border-r border-secondary-gray-2-border h-12">
+						<div className="pl-2">
+							<span className="text-white font-bold text-regular ">
+								{formatString(name, 20)}
+							</span>
+							<p className="text-white">
+								<span className="font-bold uppercase inline-block mr-4 text-xsmall">
+									{league}
+								</span>
+								<span className="font-light uppercase text-xsmall">
+									{position}
+								</span>
+							</p>
+						</div>
+					</Col>
+					<Col lg={3} className="pl-2 h-12 flex items-center">
+						<p className="text-white text-base text-center font-bold">{age}</p>
+					</Col>
+				</Row>
+			);
+		});
+	};
+	const displaySelectListView = (filteredPlayers) => {
+		return filteredPlayers.map((playerInfo) => {
+			const { id, name, photo, age, position, team } = playerInfo.player;
+			return (
+				<Row
+					className="items-center border-b border-secondary-gray-2 pb-2 pt-2 "
+					justify="space-bewteen"
+					key={id}
+				>
+					<Col
+						lg={2}
+						className="h-12 border-r border-secondary-gray-2 flex items-center"
+					>
+						<Popover content={() => popMe(playerInfo.player)} title={name}>
+							<img src={InfoCircleIcon} alt="info Icon" />
+						</Popover>
+					</Col>
+					<Col
+						lg={4}
+						className="flex justify-center text-center border-r border-secondary-gray-2-border h-12 items-center"
+					>
+						<img
+							src={photo}
 							className="w-10 h-10 rounded-full object-contain"
 							alt="player avatar"
 						/>
 					</Col>
 					<Col lg={12} className="border-r border-secondary-gray-2-border h-12">
 						<div className="pl-2">
-							<span className="text-white font-bold text-regular ">
-								{players.name}
-							</span>
+							<span className="text-white font-bold text-regular ">{name}</span>
 							<p className="text-white">
 								<span className="font-bold uppercase inline-block mr-4 text-xsmall">
-									JUV
+									{formatString(team, 5)}
 								</span>
 								<span className="font-light uppercase text-xsmall">
-									{players.position}
+									{position}
 								</span>
 							</p>
 						</div>
 					</Col>
 					<Col lg={3} className="pl-2 h-12 flex items-center">
-						<p className="text-white text-base text-center font-bold">
-							{players.points}
-						</p>
+						<p className="text-white text-base text-center font-bold">{age}</p>
 					</Col>
 					<Col
 						lg={3}
@@ -149,7 +197,7 @@ const DefaultTeam = () => {
 					>
 						<Checkbox
 							className="player-selector-checkbox"
-							onChange={(ev) => handleSelectPlayer(players, ev)}
+							onChange={(ev) => handleSelectPlayer(playerInfo.player, ev)}
 						/>
 					</Col>
 				</Row>
@@ -159,7 +207,6 @@ const DefaultTeam = () => {
 
 	const handleDragPlayer = (ev, player) => {
 		// ev.preventDefault();
-
 		updateDraggedPlayer(player);
 		updateDragStatus("dragging");
 	};
@@ -170,6 +217,7 @@ const DefaultTeam = () => {
 			</div>
 		);
 	};
+
 	// DISPLAY PLAYERS FOR PITCH VIEW DRAG & DROP
 	const displayPlayerPitchView = (playerList) => {
 		return (
@@ -189,7 +237,7 @@ const DefaultTeam = () => {
 							<div className="pitch__player-wrapper">
 								<div className="info-icon">
 									<Popover
-										content={() => showPopUp(players)}
+										content={() => showPopUp(player.player)}
 										title={player.name}
 									>
 										<img src={InfoCircleIcon} alt="info icon" />
@@ -208,75 +256,36 @@ const DefaultTeam = () => {
 			</StyledPitchPlayer>
 		);
 	};
+
 	const displayPlayers = () => {
 		if (loadingPlayers === true) {
 			return <div>Loading...</div>;
 		} else {
-			if (playerData?.length === 0) {
-				return <div>No Player Available</div>;
+			if (playerData === null) {
+				return <div>Loading...</div>;
 			} else {
-				if (currentSelection === null) {
-					return playerData?.map((players) => {
-						const { player } = players;
-						return (
-							<Row
-								className="items-center border-b border-secondary-gray-2 pb-2 pt-2"
-								justify="space-bewteen"
-								key={player.id}
-							>
-								<Col lg={2} className="">
-									<Popover content={() => popMe(players)} title={player.name}>
-										<img src={InfoCircleIcon} alt="info Icon" />
-									</Popover>
-								</Col>
-								<Col
-									lg={4}
-									className="flex justify-center text-center border-l border-secondary-gray-2-border"
-								>
-									<img
-										src={player.photo}
-										className="w-10 h-10 rounded-full object-contain"
-										alt="player avatar"
-									/>
-								</Col>
-								<Col
-									lg={13}
-									className="border-l border-secondary-gray-2-border border-r"
-								>
-									<div className="pl-2">
-										<span className="text-white font-bold text-regular">
-											{player.name}
-										</span>
-										<p className="text-white">
-											<span className="font-bold uppercase inline-block mr-4 text-xsmall">
-												JUV
-											</span>
-											<span className="font-light uppercase text-xsmall">
-												{/* {players.position} */}
-											</span>
-										</p>
-									</div>
-								</Col>
-								<Col lg={3} className="pl-2">
-									<p className="text-white text-base text-center font-bold">
-										{player.age}
-									</p>
-								</Col>
-							</Row>
-						);
-					});
+				if (playerData?.length === 0) {
+					return <div>No Player Available</div>;
 				} else {
-					return null;
-					// const filteredPlayers = playerData.filter(
-					// 	(player) => player.position === currentSelection
-					// );
-					// if (filteredPlayers) {
-					// 	if (view === "list") {
-					// 		displayPlayerListView(players);
-					// 	} else {
-					// 		return displayPlayerPitchView(players);
-					// 	}
-					// }
+					if (currentSelection === null) {
+						if (view === "list") {
+							return displayPlayerListView(playerData);
+						} else {
+							return displayPlayerListView(playerData);
+						}
+					} else {
+						const filteredPlayers = playerData.filter(
+							(playerInfo) =>
+								playerInfo.player.position.toLowerCase() === currentSelection
+						);
+						if (filteredPlayers) {
+							if (view === "list") {
+								return displaySelectListView(filteredPlayers);
+							} else {
+								return displayPlayerPitchView(filteredPlayers);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -292,25 +301,30 @@ const DefaultTeam = () => {
 			return null;
 		} else {
 			const filteredPlayers = playerData.filter(
-				(player) => player.position === currentSubSelection
+				(playerInfo) =>
+					playerInfo.player.position.toLowerCase() === currentSubSelection
 			);
 			if (filteredPlayers) {
 				return filteredPlayers.map((players) => {
+					const { name, id, position, photo, age } =
+						players.player;
+
 					const foundPlayerMatch = selectedPlayersArr.find(
-						(player) => player.name === players.name
+						(player) => player.id === id
 					);
+
 					if (foundPlayerMatch) {
 						return (
 							<Row
 								className="items-center border-b border-secondary-gray-2 pb-2 pt-2"
 								justify="space-bewteen"
-								key={players.name}
+								key={id}
 							>
 								<Col
 									lg={2}
 									className="h-12 border-r border-secondary-gray-2 flex items-center"
 								>
-									<Popover content={() => popMe(players)} title={players.name}>
+									<Popover content={() => popMe(players.player)} title={name}>
 										<img src={InfoCircleIcon} alt="info Icon" />
 									</Popover>
 								</Col>
@@ -319,7 +333,7 @@ const DefaultTeam = () => {
 									className="flex justify-center text-center border-r border-secondary-gray-2-border h-12 items-center"
 								>
 									<img
-										src={players.imgSRC}
+										src={photo}
 										className="w-10 h-10 rounded-full object-contain"
 										alt="player avatar"
 									/>
@@ -330,21 +344,21 @@ const DefaultTeam = () => {
 								>
 									<div className="pl-2">
 										<span className="text-white font-bold text-regular hover:text-tw-green-light">
-											{players.name}
+											{name}
 										</span>
 										<p className="text-white">
 											<span className="font-bold uppercase inline-block mr-4 text-xsmall">
 												JUV
 											</span>
 											<span className="font-light uppercase text-xsmall">
-												{players.position}
+												{position}
 											</span>
 										</p>
 									</div>
 								</Col>
 								<Col lg={3} className="pl-2 h-12 flex items-center">
 									<p className="text-white text-base text-center font-bold">
-										{players.points}
+										{age}
 									</p>
 								</Col>
 								<Col
@@ -355,7 +369,9 @@ const DefaultTeam = () => {
 										className="player-selector-checkbox"
 										defaultChecked
 										disabled
-										onChange={(ev) => handlePlayerSelection(players, ev)}
+										onChange={(ev) =>
+											handleSubtitutePlayerSelection(players.player, ev)
+										}
 									/>
 								</Col>
 							</Row>
@@ -365,13 +381,13 @@ const DefaultTeam = () => {
 							<Row
 								className="items-center border-b border-secondary-gray-2 pb-2 pt-2"
 								justify="space-bewteen"
-								key={players.name}
+								key={id}
 							>
 								<Col
 									lg={2}
 									className="h-12 border-r border-secondary-gray-2 flex items-center"
 								>
-									<Popover content={() => popMe(players)} title={players.name}>
+									<Popover content={() => popMe(players.player)} title={name}>
 										<img src={InfoCircleIcon} alt="info Icon" />
 									</Popover>
 								</Col>
@@ -380,7 +396,7 @@ const DefaultTeam = () => {
 									className="flex justify-center text-center border-r border-secondary-gray-2-border h-12 items-center"
 								>
 									<img
-										src={players.imgSRC}
+										src={photo}
 										className="w-10 h-10 rounded-full object-contain"
 										alt="player avatar"
 									/>
@@ -391,21 +407,21 @@ const DefaultTeam = () => {
 								>
 									<div className="pl-2">
 										<span className="text-white font-bold text-regular">
-											{players.name}
+											{name}
 										</span>
 										<p className="text-white">
 											<span className="font-bold uppercase inline-block mr-4 text-xsmall">
 												JUV
 											</span>
 											<span className="font-light uppercase text-xsmall">
-												{players.position}
+												{position}
 											</span>
 										</p>
 									</div>
 								</Col>
 								<Col lg={3} className="pl-2 h-12 flex items-center">
 									<p className="text-white text-base text-center font-bold">
-										{players.points}
+										{age}
 									</p>
 								</Col>
 								<Col
@@ -414,7 +430,9 @@ const DefaultTeam = () => {
 								>
 									<Checkbox
 										className="player-selector-checkbox"
-										onChange={(ev) => handleSelectSubtitutePlayers(players, ev)}
+										onChange={(ev) =>
+											handleSelectSubtitutePlayers(players.player, ev)
+										}
 									/>
 								</Col>
 							</Row>
@@ -566,7 +584,7 @@ const DefaultTeam = () => {
 									</div>
 									<div
 										className={
-											"bg-primary-brand p-4 max-h-775x overflow-y-auto player-list-container  w-full  " +
+											"bg-primary-brand  player-list-container  w-full  " +
 											(floatCard === "middle"
 												? "mid-position "
 												: floatCard === "low"
@@ -623,6 +641,7 @@ export var StyledPitchPlayer = styled.div`
 		text-align: center;
 		font-weight: 600;
 	}
+
 	.player-container .points-tag {
 		font-size: 10px;
 		font-weight: 600;

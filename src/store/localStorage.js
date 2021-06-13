@@ -8,6 +8,7 @@ export const saveState = (value) => {
 
 export const loadState = () => {
 	const serialisedState = localStorage.getItem(STATE);
+
 	if (serialisedState) {
 		return JSON.parse(serialisedState);
 	} else {
@@ -28,4 +29,9 @@ export const loadTeam = () => {
 	} else {
 		return null;
 	}
+};
+export const getView = () => {
+	const viewState = localStorage.getItem("TEF_VIEW");
+	if (viewState) return viewState;
+	return null;
 };

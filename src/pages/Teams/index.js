@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { message } from "antd";
+import { getView } from "../../store/localStorage";
 
-import DefaultTeam from "./EmptyState";
-import DisplayTeam from "./DisplayTeam";
+import TeamEmptyState from "./EmptyState";
+import DisplayTeamList from "./DisplayTeam/ListView";
+import DisplayTeamPitch from "./DisplayTeam/PitchView";
 import { getTeam } from "../../helpers/api";
 
 const Teams = () => {
 	const [teamData, setTeamData] = useState(null);
 	const [loadingTeam, setLoadingTeam] = useState(false);
+	const view = getView();
 
 	useEffect(() => {
 		getTeamData();
@@ -16,10 +19,10 @@ const Teams = () => {
 	const getTeamData = async () => {
 		setLoadingTeam(true);
 		try {
-			const results = await getTeam();
+			const teams = await getTeam();
 
-			if (results.statusCode === 200) {
-				setTeamData(results.result);
+			if (teams.statusCode === 200) {
+				setTeamData(teams.result);
 			}
 		} catch (error) {
 			message.error(error);
@@ -36,9 +39,13 @@ const Teams = () => {
 				return <div>Loading...</div>;
 			} else {
 				if (teamData.length === 0) {
-					return <DefaultTeam />;
+					return <TeamEmptyState />;
 				} else {
-					return <DisplayTeam teamInfo={teamData} />;
+					if (view === "list") {
+						return <DisplayTeamList teamInfo={teamData[11]} />;
+					} else {
+						return <DisplayTeamPitch teamInfo={teamData} />;
+					}
 				}
 			}
 		}

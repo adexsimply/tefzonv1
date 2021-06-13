@@ -43,6 +43,8 @@ const DashboardLayout = (props) => {
 			name: "Help",
 		},
 	];
+	const matchRoute = window.location.pathname.split("/")[1];
+
 	return (
 		<div className="dashboardLayout-container w-full">
 			<Header />
@@ -61,7 +63,7 @@ const DashboardLayout = (props) => {
 					<Col lg={22} className="h-full">
 						<ul className="flex items-center list-none h-full mb-0">
 							{links.map(({ url, name }) => {
-								if (url === window.location.pathname) {
+								if (`/${matchRoute}` === url) {
 									return (
 										<li className="" key={url}>
 											<Link

@@ -11,14 +11,16 @@ const TeamContextProvider = (props) => {
 	const [selectedDef, setSelectedDef] = useState([]);
 	const [selectedFwd, setSelectedFwd] = useState([]);
 	const [statusMessage, setStatusMessage] = useState({ type: "", msg: "" });
-	const [teamName, setTeamName] = useState("");
 	const [view, setView] = useState("pitch");
 	const [dragStatus, setDragStatus] = useState("");
 	const [draggedPlayer, setDraggedPlayer] = useState(null);
 	const [playerParams, setPlayerParams] = useState(null);
 	const [selectedPitchId, setSelectedPitchId] = useState("");
 
-	const changeView = (param) => setView(param);
+	const changeView = (param) => {
+		setView(param);
+		localStorage.setItem("TEF_VIEW", param);
+	};
 
 	const setSelectionParams = (params) => {
 		setCurrentSelection(params);
@@ -33,36 +35,37 @@ const TeamContextProvider = (props) => {
 		setSubSelectionParams(null);
 	};
 	const handlePlayerSelection = (player) => {
+		console.log(player, "plaayer sel");
 		switch (currentSelection) {
-			case "gk":
-				if (selectedGoalKeepers.length === 2) {
+			case "goalkeeper":
+				if (selectedGoalKeepers.length === 1) {
 					updateStatusMessage("warning", "Goal keepers team is complete");
 				} else {
 					setSelectedGoalKeepers([
 						...selectedGoalKeepers,
-						{ ...player, is_subtitute: false },
+						{ ...player, is_substitute: false },
 					]);
 				}
 				break;
-			case "mid":
-				if (selectedMid.length === 5) {
+			case "midfielder":
+				if (selectedMid.length === 4) {
 					updateStatusMessage("warning", "Midfielders team is complete");
 				} else {
-					setSelectedMid([...selectedMid, { ...player, is_subtitute: false }]);
+					setSelectedMid([...selectedMid, { ...player, is_substitute: false }]);
 				}
 				break;
-			case "def":
-				if (selectedDef === 5) {
+			case "defender":
+				if (selectedDef.length === 3) {
 					updateStatusMessage("warning", "Defenders team is complete");
 				} else {
-					setSelectedDef([...selectedDef, { ...player, is_subtitute: false }]);
+					setSelectedDef([...selectedDef, { ...player, is_substitute: false }]);
 				}
 				break;
-			case "fwd":
+			case "attacker":
 				if (selectedFwd.length === 3) {
 					updateStatusMessage("warning", "Forwards team is complete");
 				} else {
-					setSelectedFwd([...selectedFwd, { ...player, is_subtitute: false }]);
+					setSelectedFwd([...selectedFwd, { ...player, is_substitute: false }]);
 				}
 				break;
 			default:
@@ -71,35 +74,28 @@ const TeamContextProvider = (props) => {
 	};
 	const removerPlayerFromList = (player) => {
 		switch (currentSelection) {
-			case "gk":
+			case "goalkeeper":
 				const filteredGK = selectedGoalKeepers.filter(
-					(gk) => gk.name.toLowerCase() !== player.name.toLowerCase()
+					(gk) => gk.id !== player.id
 				);
-
 				if (filteredGK) {
 					setSelectedGoalKeepers(filteredGK);
 				}
 				break;
-			case "mid":
-				const filteredMd = selectedMid.filter(
-					(mid) => mid.name.toLowerCase() !== player.name.toLowerCase()
-				);
+			case "midfielder":
+				const filteredMd = selectedMid.filter((mid) => mid.id !== player.id);
 				if (filteredMd) {
 					selectedMid(filteredMd);
 				}
 				break;
-			case "def":
-				const filteredDEF = selectedDef.filter(
-					(def) => def.name.toLowerCase() !== player.name.toLowerCase()
-				);
+			case "defender":
+				const filteredDEF = selectedDef.filter((def) => def.id !== player.id);
 				if (filteredDEF) {
 					setSelectedDef(filteredDEF);
 				}
 				break;
-			case "fwd":
-				const filteredFwd = selectedFwd.filter(
-					(fwd) => fwd.name.toLowerCase() !== player.name.toLowerCase()
-				);
+			case "attacker":
+				const filteredFwd = selectedFwd.filter((fwd) => fwd.id !== player.id);
 				if (filteredFwd) {
 					setSelectedFwd(filteredFwd);
 				}
@@ -110,8 +106,8 @@ const TeamContextProvider = (props) => {
 	};
 	const handleSubtitutePlayerSelection = (player) => {
 		switch (currentSubSelection) {
-			case "gk":
-				if (selectedGoalKeepers.length === 3) {
+			case "goalkeeper":
+				if (selectedGoalKeepers.length === 2) {
 					updateStatusMessage(
 						"warning",
 						"Subtitute Goal keeper has been added"
@@ -119,32 +115,32 @@ const TeamContextProvider = (props) => {
 				} else {
 					setSelectedGoalKeepers([
 						...selectedGoalKeepers,
-						{ ...player, is_subtitute: true },
+						{ ...player, is_substitute: true },
 					]);
 				}
 				break;
-			case "mid":
-				if (selectedMid.length === 6) {
+			case "midfielder":
+				if (selectedMid.length === 5) {
 					updateStatusMessage(
 						"warning",
 						"Substitute Midfielder has been added"
 					);
 				} else {
-					setSelectedMid([...selectedMid, { ...player, is_subtitute: true }]);
+					setSelectedMid([...selectedMid, { ...player, is_substitute: true }]);
 				}
 				break;
-			case "def":
+			case "defender":
 				if (selectedDef === 6) {
 					updateStatusMessage("warning", "Susbtitute defender has been added");
 				} else {
-					setSelectedDef([...selectedDef, { ...player, is_subtitute: true }]);
+					setSelectedDef([...selectedDef, { ...player, is_substitute: true }]);
 				}
 				break;
-			case "fwd":
+			case "attacker":
 				if (selectedFwd.length === 4) {
 					updateStatusMessage("warning", "Substitute Forward has been added");
 				} else {
-					setSelectedFwd([...selectedFwd, { ...player, is_subtitute: true }]);
+					setSelectedFwd([...selectedFwd, { ...player, is_substitute: true }]);
 				}
 				break;
 			default:
@@ -153,43 +149,33 @@ const TeamContextProvider = (props) => {
 	};
 	const handleRemoveSubtitutePlayerFromList = (player) => {
 		switch (currentSubSelection) {
-			case "gk":
+			case "goalkeeper":
 				const filteredGK = selectedGoalKeepers.filter(
-					(gk) =>
-						gk.name.toLowerCase() !== player.name.toLowerCase() &&
-						gk.name.is_subtitute
+					(gk) => gk.id !== player.id && gk.is_substitute
 				);
-
 				if (filteredGK) {
 					setSelectedGoalKeepers(filteredGK);
 				}
-
 				break;
-			case "md":
+			case "midfielder":
 				const filteredMd = selectedMid.filter(
-					(mid) =>
-						mid.name.toLowerCase() !== player.name.toLowerCase() &&
-						mid.name.is_subtitute
+					(mid) => mid.id !== player.id && mid.is_substitute
 				);
 				if (filteredMd) {
 					selectedMid(filteredMd);
 				}
 				break;
-			case "def":
+			case "defender":
 				const filteredDEF = selectedDef.filter(
-					(def) =>
-						def.name.toLowerCase() !== player.name.toLowerCase() &&
-						def.name.is_subtitute
+					(def) => def.id !== player.id && def.is_substitute
 				);
 				if (filteredDEF) {
 					setSelectedDef(filteredDEF);
 				}
 				break;
-			case "fwd":
+			case "attacker":
 				const filteredFwd = selectedFwd.filter(
-					(fwd) =>
-						fwd.name.toLowerCase() !== player.name.toLowerCase() &&
-						fwd.name.is_subtitute
+					(fwd) => fwd.id !== player.id && fwd.is_substitute
 				);
 				if (filteredFwd) {
 					setSelectedFwd(filteredFwd);
@@ -202,8 +188,9 @@ const TeamContextProvider = (props) => {
 	const updateStatusMessage = (msgType, response) => {
 		setStatusMessage({ type: msgType, msg: response });
 	};
-	const getTeamName = (value) => {
-		setTeamName(value);
+	const getTeamName = () => {
+		const name = localStorage.getItem("TEF_NAME");
+		return JSON.stringify(name);
 	};
 	const updateDragStatus = (value) => {
 		setDragStatus(value);
@@ -238,7 +225,6 @@ const TeamContextProvider = (props) => {
 				handleRemoveSubtitutePlayerFromList,
 				statusMessage,
 				getTeamName,
-				teamName,
 				view,
 				changeView,
 				dragStatus,

@@ -12,3 +12,11 @@ export const TeamsRoute = ({ component: Component, ...rest }) => (
 		}
 	/>
 );
+export const FixturesRoute = ({ component: Component, ...rest }) => (
+	<Route
+		{...rest}
+		render={(props) =>
+			token ? <Component {...props} /> : <Redirect to="/login" />
+		}
+	/>
+);

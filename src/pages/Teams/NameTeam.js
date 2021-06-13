@@ -1,13 +1,24 @@
 import React, { useState, useContext } from "react";
 import { Row, Col, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { TeamContext } from "../../store/TeamContext";
 import DashboardLayout from "../../components/common/DashboardLayout";
 import PitchBg from "../../assets/img/static/pitch-bg.png";
 
 const NameTeam = () => {
 	const [teamName, setTeamName] = useState("");
-	const { getTeamName, view } = useContext(TeamContext);
+	const { view } = useContext(TeamContext);
+	const history = useHistory();
+
+	console.log(view, "view");
+	const updateTeamName = () => {
+		localStorage.setItem("TEF_NAME", teamName);
+		if (view === "list") {
+			history.replace("/teams/list-save-team");
+		} else {
+			history.replace("/teams/pitch-confirm-team");
+		}
+	};
 
 	return (
 		<DashboardLayout>
@@ -17,13 +28,12 @@ const NameTeam = () => {
 						<div className="teams-heading flex justify-between items-center pb-4 border-b-2 border-primary-brand">
 							<h2 className="f-oswald text-4xl font-medium">Name Your Team</h2>
 							<Link
-								to={
-									view === "list"
-										? "/teams/list-save-team"
-										: "/teams/pitch-confirm-team"
-								}
 								className="bg-tw-green rounded-none h-12 font-medium px-6 inline-flex items-center hover:text-white"
 								disabled={teamName === ""}
+								onClick={(e) => {
+									e.preventDefault();
+									updateTeamName();
+								}}
 							>
 								Next
 							</Link>
@@ -61,7 +71,6 @@ const NameTeam = () => {
 																className="team-name-input"
 																placeholder="Enter Team Name"
 																onChange={({ target: { value } }) => {
-																	getTeamName(value);
 																	setTeamName(value);
 																}}
 																value={teamName}

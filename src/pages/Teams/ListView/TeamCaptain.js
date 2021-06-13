@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Radio, Popover } from "antd";
 import { Link, useHistory } from "react-router-dom";
 
@@ -14,43 +14,68 @@ const TeamCaptain = () => {
 	const [updatedDefenders, setUpdatedDefenders] = useState([]);
 	const [updatedMidfielders, setUpdatedMidfielders] = useState([]);
 	const [updatedForwards, setupdatedForwards] = useState([]);
+
 	const team = loadTeam();
 	const history = useHistory();
 
-	let goalKeepers = team.filter((player) => player.position === "gk");
-	let defenders = team.filter((player) => player.position === "def");
-	let midfielders = team.filter((player) => player.position === "mid");
-	let forwards = team.filter((player) => player.position === "fwd");
+	useEffect(() => {
+		getInitValues();
+		// eslint-disable-next-line
+	}, []);
+
+	const getInitValues = () => {
+		let goalKeepers = team.filter(
+			(player) => player.position.toLowerCase() === "goalkeeper"
+		);
+		let defenders = team.filter(
+			(player) => player.position.toLowerCase() === "defender"
+		);
+		let midfielders = team.filter(
+			(player) => player.position.toLowerCase() === "midfielder"
+		);
+		let forwards = team.filter(
+			(player) => player.position.toLowerCase() === "attacker"
+		);
+		if (goalKeepers) setGoalKeepers([...goalKeepers]);
+		if (defenders) setUpdatedDefenders([...defenders]);
+		if (midfielders) setUpdatedMidfielders([...midfielders]);
+		if (forwards) setupdatedForwards([...forwards]);
+	};
 
 	const handleCaptainSelect = (ev) => {
 		const { value } = ev.target;
 
-		switch (value) {
-			case "gk":
-				const results = filterSelectedPlayer(value, goalKeepers);
-				setGoalKeepers([...results]);
-				break;
-			case "mid":
-				const mid = filterSelectedPlayer(value, midfielders);
-				setUpdatedMidfielders(mid);
-				break;
-			case "def":
-				const def = filterSelectedPlayer(value, defenders);
-				setUpdatedDefenders(def);
-				break;
-			case "fwd":
-				const fwd = filterSelectedPlayer(value, forwards);
-				setupdatedForwards(fwd);
-				break;
-			default:
-				break;
+		const capt = team.filter((player) => player.id === value);
+
+		if (capt) {
+			switch (capt[0].position.toLowerCase()) {
+				case "goalkeeper":
+					const results = filterSelectedPlayer(value, updatedGoalKeepers);
+					setGoalKeepers([...results]);
+					break;
+				case "midfielder":
+					const mid = filterSelectedPlayer(value, updatedMidfielders);
+					setUpdatedMidfielders(mid);
+					break;
+				case "defender":
+					const def = filterSelectedPlayer(value, updatedDefenders);
+					setUpdatedDefenders(def);
+					break;
+				case "attacker":
+					const fwd = filterSelectedPlayer(value, updatedForwards);
+					setupdatedForwards(fwd);
+					break;
+				default:
+					break;
+			}
+			setCaptainSelected(true);
 		}
-		setCaptainSelected(true);
 	};
-	const filterSelectedPlayer = (playersName, data) => {
+	const filterSelectedPlayer = (playerId, data) => {
 		for (let item of data) {
-			if (item.name === playersName) {
-				item.is_captain = true;
+			if (item.id === playerId) {
+				item.is_captain = 1;
+				console.log(item);
 			}
 			return data;
 		}
@@ -66,7 +91,7 @@ const TeamCaptain = () => {
 	const displayGkPlayers = () => {
 		if (team !== null) {
 			return team.map((players) => {
-				if (players.position === "gk") {
+				if (players.position.toLowerCase() === "goalkeeper") {
 					return (
 						<Row
 							className="py-2 px-6 justify-between player-row"
@@ -105,7 +130,7 @@ const TeamCaptain = () => {
 								</Row>
 							</Col>
 							<Col lg={1}>
-								<Radio value={players.name} />
+								<Radio value={players.id} />
 							</Col>
 						</Row>
 					);
@@ -119,7 +144,7 @@ const TeamCaptain = () => {
 	const displayMidfielders = () => {
 		if (team !== null) {
 			return team.map((players) => {
-				if (players.position === "mid") {
+				if (players.position.toLowerCase() === "midfielder") {
 					return (
 						<Row className="py-2 px-6 player-row justify-between">
 							<Col lg={10}>
@@ -154,7 +179,7 @@ const TeamCaptain = () => {
 								</Row>
 							</Col>
 							<Col lg={1}>
-								<Radio value={players.name} />
+								<Radio value={players.id} />
 							</Col>
 						</Row>
 					);
@@ -167,7 +192,7 @@ const TeamCaptain = () => {
 	const displayDefenders = () => {
 		if (team !== null) {
 			return team.map((players) => {
-				if (players.position === "def") {
+				if (players.position.toLowerCase() === "defender") {
 					return (
 						<Row className="py-2 px-6 player-row justify-between">
 							<Col lg={10}>
@@ -202,7 +227,7 @@ const TeamCaptain = () => {
 								</Row>
 							</Col>
 							<Col lg={1}>
-								<Radio value={players.name} />
+								<Radio value={players.id} />
 							</Col>
 						</Row>
 					);
@@ -215,7 +240,7 @@ const TeamCaptain = () => {
 	const displayForwards = () => {
 		if (team !== null) {
 			return team.map((players) => {
-				if (players.position === "fwd") {
+				if (players.position.toLowerCase() === "attacker") {
 					return (
 						<Row className="py-2 px-6 player-row justify-between">
 							<Col lg={10}>
@@ -250,7 +275,7 @@ const TeamCaptain = () => {
 								</Row>
 							</Col>
 							<Col lg={1}>
-								<Radio value={players.name} />
+								<Radio value={players.id} />
 							</Col>
 						</Row>
 					);
@@ -267,6 +292,7 @@ const TeamCaptain = () => {
 		...updatedForwards,
 		...updatedMidfielders,
 	];
+	console.log(finalTeam);
 	const updateTeamInfo = () => {
 		saveTeam(finalTeam);
 		history.replace("/teams/team-name");

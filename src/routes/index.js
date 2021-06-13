@@ -14,9 +14,10 @@ import PitchCaptainPage from "../pages/Teams/PitchView/TeamCaptain";
 import TeamsNamePage from "../pages/Teams/NameTeam";
 import ListSaveTeamPage from "../pages/Teams/ListView/SaveTeam";
 import ConfirmTeamPage from "../pages/Teams/PitchView/ConfirmTeam";
+import FixturesPage from "../pages/Fixtures";
 import ComingSoonPage from "../pages/Error/ComingSoon";
 import NotFoundPage from "../pages/Error/NotFound";
-import { TeamsRoute } from "./protectedRoutes";
+import { TeamsRoute, FixturesRoute } from "./protectedRoutes";
 
 const Routes = () => {
 	let history = useHistory();
@@ -58,6 +59,12 @@ const Routes = () => {
 				<Route path="/contact" component={ComingSoonPage} />
 				{/* <Route path="/teams" exact key="teams" component={TeamsPage} /> */}
 				<TeamsRoute exact key="teams" path="/teams" component={TeamsPage} />
+				<FixturesRoute
+					exact
+					key="fixtures"
+					path="/fixtures"
+					component={FixturesPage}
+				/>
 				<Route
 					path="/teams/list-select-captain"
 					exact

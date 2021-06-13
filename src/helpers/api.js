@@ -159,4 +159,33 @@ export const getPlayers = () => {
 	});
 };
 
-export const createTeam = (data) => {};
+export const createTeam = (teamData) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const team = await makeApiCall({
+				url: "/createTeam",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: teamData,
+			});
+			return resolve(team);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getFixtures = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const fixture = await makeApiCall({
+				url: "/weekFixtures",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(fixture);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};

@@ -21,6 +21,7 @@ const ListView = (props) => {
 		};
 		// eslint-disable-next-line
 	}, []);
+
 	const handleListScroll = useCallback(() => {
 		var scroller = window.scrollY;
 		props.handleScroll(scroller);
@@ -34,6 +35,7 @@ const ListView = (props) => {
 			</div>
 		);
 	};
+
 	const displayGkPlayers = () => {
 		return selectedGoalKeepers.map((players) => {
 			if (players.is_subtitute) {
@@ -122,6 +124,7 @@ const ListView = (props) => {
 			);
 		});
 	};
+
 	const displayMidfielders = () => {
 		return selectedMid.map((players) => {
 			if (players.is_subtitute) return null;
@@ -162,6 +165,7 @@ const ListView = (props) => {
 			);
 		});
 	};
+
 	const displayForwards = () => {
 		return selectedFwd.map((players) => {
 			if (players.is_subtitute) return null;
@@ -202,6 +206,7 @@ const ListView = (props) => {
 			);
 		});
 	};
+
 	const displaySubs = () => {
 		const subsArr = [
 			...selectedDef,
@@ -256,14 +261,14 @@ const ListView = (props) => {
 	};
 
 	const gkEmptyState = () => {
-		let gkContent = [];
-		for (let i = selectedGoalKeepers.length; i < 2; i++) {
-			gkContent.push(
+		let contents = [];
+		for (let i = selectedGoalKeepers.length; i < 1; i++) {
+			contents.push(
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("gk")}
+							onClick={() => setSelectionParams("goalkeeper")}
 						>
 							Select Goal Keeper
 						</Button>
@@ -275,18 +280,18 @@ const ListView = (props) => {
 				</Row>
 			);
 		}
-		return gkContent;
+		return contents;
 	};
 
 	const midEmptyState = () => {
 		let contents = [];
-		for (let i = selectedMid.length; i < 5; i++) {
+		for (let i = selectedMid.length; i < 4; i++) {
 			contents.push(
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("mid")}
+							onClick={() => setSelectionParams("midfielder")}
 						>
 							Select Midfielder
 						</Button>
@@ -300,15 +305,16 @@ const ListView = (props) => {
 		}
 		return contents;
 	};
+
 	const defEmptyState = () => {
 		let contents = [];
-		for (let i = selectedDef.length; i < 5; i++) {
+		for (let i = selectedDef.length; i < 3; i++) {
 			contents.push(
 				<Row className="py-2 px-6 player-row">
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("def")}
+							onClick={() => setSelectionParams("defender")}
 						>
 							Select Defender
 						</Button>
@@ -331,7 +337,7 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("fwd")}
+							onClick={() => setSelectionParams("attacker")}
 						>
 							Select Forward
 						</Button>
@@ -345,78 +351,87 @@ const ListView = (props) => {
 		}
 		return contents;
 	};
+
 	const subEmptyState = () => {
 		return (
 			<>
-				<Row className="py-2 px-6 player-row">
-					<Col lg={10}>
-						<Button
-							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSubSelectionParams("gk")}
-						>
-							Select GK
-						</Button>
-					</Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-				</Row>
-				<Row className="py-2 px-6 player-row">
-					<Col lg={10}>
-						<Button
-							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSubSelectionParams("def")}
-						>
-							Select Defender
-						</Button>
-					</Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-				</Row>
-				<Row className="py-2 px-6 player-row">
-					<Col lg={10}>
-						<Button
-							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSubSelectionParams("mid")}
-						>
-							Select Midfielder
-						</Button>
-					</Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-				</Row>
-				<Row className="py-2 px-6 player-row">
-					<Col lg={10}>
-						<Button
-							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSubSelectionParams("fwd")}
-						>
-							Select Forward
-						</Button>
-					</Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-					<Col lg={3}></Col>
-				</Row>
+				{selectedGoalKeepers.length === 2 ? null : (
+					<Row className="py-2 px-6 player-row">
+						<Col lg={10}>
+							<Button
+								className="border-0 text-black rounded-none p-0 font-medium"
+								onClick={() => setSubSelectionParams("goalkeeper")}
+							>
+								Select GK
+							</Button>
+						</Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+					</Row>
+				)}
+				{selectedDef.length === 4 ? null : (
+					<Row className="py-2 px-6 player-row">
+						<Col lg={10}>
+							<Button
+								className="border-0 text-black rounded-none p-0 font-medium"
+								onClick={() => setSubSelectionParams("defender")}
+							>
+								Select Defender
+							</Button>
+						</Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+					</Row>
+				)}
+				{selectedMid.length === 5 ? null : (
+					<Row className="py-2 px-6 player-row">
+						<Col lg={10}>
+							<Button
+								className="border-0 text-black rounded-none p-0 font-medium"
+								onClick={() => setSubSelectionParams("midfielder")}
+							>
+								Select Midfielder
+							</Button>
+						</Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+					</Row>
+				)}
+				{selectedFwd.length === 4 ? null : (
+					<Row className="py-2 px-6 player-row">
+						<Col lg={10}>
+							<Button
+								className="border-0 text-black rounded-none p-0 font-medium"
+								onClick={() => setSubSelectionParams("attacker")}
+							>
+								Select Forward
+							</Button>
+						</Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+						<Col lg={3}></Col>
+					</Row>
+				)}
 			</>
 		);
 	};
 
 	const displayEmptyState = (position) => {
 		switch (position) {
-			case "gk":
+			case "goalkeeper":
 				return gkEmptyState();
-			case "mid":
+			case "midfielder":
 				return midEmptyState();
-			case "def":
+			case "defender":
 				return defEmptyState();
-			case "fwd":
+			case "attacker":
 				return fwdEmptyState();
 			default:
 				return subEmptyState();
@@ -449,7 +464,7 @@ const ListView = (props) => {
 						</Row>
 					</div>
 					<div className="players text-regular">
-						{displayEmptyState("gk")}
+						{displayEmptyState("goalkeeper")}
 						{displayGkPlayers()}
 					</div>
 				</div>
@@ -476,7 +491,7 @@ const ListView = (props) => {
 						</Row>
 					</div>
 					<div className="players text-regular">
-						{displayEmptyState("def")}
+						{displayEmptyState("defender")}
 						{displayDefenders()}
 					</div>
 				</div>
@@ -503,7 +518,7 @@ const ListView = (props) => {
 						</Row>
 					</div>
 					<div className="players text-regular">
-						{displayEmptyState("mid")}
+						{displayEmptyState("midfielder")}
 						{displayMidfielders()}
 					</div>
 				</div>
@@ -531,7 +546,7 @@ const ListView = (props) => {
 						</Row>
 					</div>
 					<div className="players text-regular">
-						{displayEmptyState("fwd")}
+						{displayEmptyState("attacker")}
 						{displayForwards()}
 					</div>
 				</div>

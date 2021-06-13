@@ -1,3 +1,5 @@
+@import "../../styles/scss/base/variables";
+
 .ant-select.sort-select .ant-select-selector {
 	height: 44px;
 }
@@ -9,6 +11,7 @@
 	height: 700px;
 }
 .ant-checkbox-wrapper.player-selector-checkbox {
+	background: $primary-brand;
 	.ant-checkbox:hover {
 		.ant-checkbox-inner {
 			outline: none;
@@ -34,8 +37,15 @@
 		}
 	}
 }
-.teams-list-container,
+.alert-display-wrapper {
+	width: 92%;
+	margin: auto;
+	margin-bottom: 1rem;
+}
 .player-list-container {
+	max-height: 780px;
+	overflow-y: auto;
+	padding: 0 1rem;
 	&::-webkit-scrollbar {
 		width: 10px;
 	}
