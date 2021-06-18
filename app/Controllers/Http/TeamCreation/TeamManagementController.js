@@ -2,6 +2,7 @@
 const TeamSquad = use("App/Models/TeamSquad");
 const TeamName = use("App/Models/TeamName");
 const Player = use("App/Models/Player");
+const PlayerSquad = use("App/Models/PlayerSquad");
 const User = use("App/Models/User");
 const Config = use("Config");
 const Database = use("Database")
@@ -16,7 +17,19 @@ class TeamManagementController {
         try {
             const user  = auth.current.user
             let {squad_selection,team_name  } = request.all()
+            const teamUserCheck = await TeamName.query()
+            .where("user_id",user.id).first()
 
+
+            if(teamUserCheck){
+                return response.status(400).json({
+                    results:teamUserCheck, 
+                    status:"Error", 
+                    status_code:400, 
+                    message: "User already has created a team"
+                 }) 
+            }
+            
             const teamNameLookup = await Database.raw(`select * from team_names TN where TN.team_name = '${team_name}' `,)
 
             if(teamNameLookup[0][0]){
@@ -34,7 +47,7 @@ class TeamManagementController {
                 user_id:user.id,
                 team_name_id:teamNameCreation.id,
             })
-            const playerEndpoint  =  Config.get("rapidApi.getPlayerbyId")
+            const playerEndpoint  =  Config.get("rapidApi.getPlayer")
             let year = moment().format("YYYY");
             let yearInt = parseInt(year)-1
 
@@ -52,10 +65,14 @@ class TeamManagementController {
                     }
                 
                   console.log("currentPlayerDetails",currentPlayerDetails, currentPlayerDetails.id);
-                    await Player.findOrCreate({
-                        player_name:currentPlayerDetails.name,
-                        player_id:currentPlayerDetails.id,
-                        player_image:currentPlayerDetails.photo,
+                   const playerInfo =  await Player.findOrCreate({
+                            player_name:currentPlayerDetails.name,
+                            player_id:currentPlayerDetails.id,
+                            player_image:currentPlayerDetails.photo
+                    })
+
+                    await PlayerSquad.findOrCreate({
+                        player_id: playerInfo.id ,
                         squad_id:squadCreation.id,
                         wing:item.wing,
                         placement:item.placement,
@@ -98,56 +115,77 @@ class TeamManagementController {
                 })
             }
 
-            const playerEndpoint  =  Config.get("rapidApi.getPlayerbyId")
+            const playerEndpoint  =  Config.get("rapidApi.getPlayer")
             let year = moment().format("YYYY");
             let yearInt = parseInt(year)-1
+
+
+            const getUserSquad  =  await TeamSquad.query().where({ user_id:user.id}).first() 
 
             squad_selection.forEach(myFunction);
 
             async function myFunction(item){
-                    let itemId  = parseInt(item.id)
+                    let itemId  = parseInt(item.player_id)
                     let currentPlayerEndpoint = `${playerEndpoint}?id=${itemId}&season=${yearInt}`
 
                     let currentPlayerInfo =  await Player.query().where({
-                        player_id:item.id
+                        player_id:item.player_id
                     }).first() 
+
                 if(currentPlayerInfo){
-                    const responseFromApi = await new makeExternalRequestFeature({endpoint:`${currentPlayerEndpoint}`}).makeGetRequest()
-                    let currentPlayerDetails  =  responseFromApi.results.response[0].player
-                    if ( !item.is_captain){
-                        item.is_captain = 0
+                    let getCurrentPlayerSquad;
+                  if(item.id){
+                     getCurrentPlayerSquad  =  await PlayerSquad.query()
+                    .where({ squad_id:getUserSquad.id,
+                            player_id:item.id })
+                    .first() 
+                  }
+                  else{
+                     getCurrentPlayerSquad  =  await PlayerSquad.query()
+                    .where({ squad_id:getUserSquad.id})
+                    .first() 
+                  }
+                    if(getCurrentPlayerSquad){
+                        getCurrentPlayerSquad.merge({
+                            wing:item.wing? item.wing:getCurrentPlayerSquad.wing,
+                            is_substitute:item.is_substitute?item.is_substitute: getCurrentPlayerSquad.is_substitute,
+                            is_captain: item.is_captain ? item.is_captain : getCurrentPlayerSquad.is_captain
+                        })   
+    
+                        await getCurrentPlayerSquad.save();
                     }
-                    if ( !item.is_substitute){
-                        item.is_substitute = 0
+                    else{   
+                        await PlayerSquad.findOrCreate({
+                            player_id:currentPlayerInfo.id,
+                            squad_id:getUserSquad.id,
+                            wing:item.wing? item.wing: 0,
+                            is_substitute:item.is_substitute?item.is_substitute: 0,
+                            is_captain: item.is_captain ?item.is_captain:0
+                        })
+                        
                     }
-
-                    currentPlayerInfo.merge({
-                        player_name:currentPlayerDetails.name,
-                        player_id:currentPlayerDetails.id,
-                        wing:item.wing,
-                        is_substitute:item.is_substitute,
-                        is_captain: item.is_captain 
-                    })   
-
-                    await currentPlayerInfo.save();
-
                 }
                 else{
-                    let itemId  = parseInt(item.id)
                     let currentPlayerEndpoint = `${playerEndpoint}?id=${itemId}&season=${yearInt}`
                     const responseFromApi = await new makeExternalRequestFeature({endpoint:`${currentPlayerEndpoint}`}).makeGetRequest()
                     let currentPlayerDetails  =  responseFromApi.results.response[0].player
                     if ( !item.is_captain){
                         item.is_captain = 0
                     }
-                    await Player.findOrCreate({
+                 const PlayerCreation =  await Player.findOrCreate({
                         player_name:currentPlayerDetails.name,
                         player_id:currentPlayerDetails.id,
-                        squad_id:teamSquadCheck.id,
-                        wing:item.wing,
-                        is_substitute,
-                        is_captain: item.is_captain 
+                        player_image:currentPlayerDetails.photo
                     })
+            
+                    await PlayerSquad.findOrCreate({
+                        player_id:PlayerCreation.id,
+                        squad_id:getUserSquad.id,
+                        wing:item.wing? item.wing: 0,
+                        is_substitute:item.is_substitute?item.is_substitute: 0,
+                        is_captain: item.is_captain ?item.is_captain:0
+                    })
+                  
                 } 
             }
 
@@ -155,7 +193,7 @@ class TeamManagementController {
                 result: teamSquadCheck,
                 label: `Team Creation`,
                 statusCode: 200,
-                message: `Team Creation Updated successfully`,
+                message: `Team  Updated successfully`,
             })
                      
         } catch (UpdateTeamError) {
@@ -205,6 +243,11 @@ class TeamManagementController {
             const viewUserTeam = await User.query()
             .where("id", user.id)
             .with("teamName")
+            .setHidden([
+                "created_at",
+                "password",
+                "updated_at",
+              ])
             .fetch()
         
             return response.status(200).json({

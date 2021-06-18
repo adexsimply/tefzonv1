@@ -7,8 +7,7 @@ class PrizeSchema extends Schema {
   up () {
     this.create('prizes', (table) => {
       table.increments()
-      table.integer("season_id")
-      table.integer("week_id")
+      table.integer("week_season_id")
       table.string("position")
       table.string("prize")
       table.timestamps()

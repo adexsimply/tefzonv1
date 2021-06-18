@@ -2,12 +2,18 @@
 const PointRanking = use("App/Models/PointRanking");
 const PointSetting = use("App/Models/PointSetting");
 const Player = use("App/Models/Player");
+const PlayerSquad  = use("App/Models/PlayerSquad");
+const WeekSeason  = use("App/Models/WeekSeason");
+const PlayerWeeklyPoint  = use("App/Models/PlayerWeeklyPoint");
 const League = use("App/Models/League");
 const makeExternalRequestFeature = use("App/Features/MakeExternalRequestFeature");
 const Config = use("Config");
 const Env = use("Env");
 const moment = use('moment')
 const safeAwait = require("safe-await");
+const PointParams = use("App/Models/PointParam")
+
+ 
 
 class UpdateRankingFeature {
   constructor(data) {
@@ -15,21 +21,55 @@ class UpdateRankingFeature {
   }
 
   async updateRankings(){
-    try {
 
+    async function updatePlayerScores(paramType , playerWing , playerInfo){
+      console.log(paramType , playerWing , playerInfo );
+      // get points for goals for player
+      const pointParameters = await PointParams.query().where({
+        param_type: paramType,
+        player_type: playerWing
+      }).first()
+
+      const currentweekSeason  = await WeekSeason.query().where("is_current_week", 1).andWhere("is_current_season",  1).first()
+      const pointSettings = await PointSetting.query().where("param_id" ,pointParameters.id).first()
+      const pointsForPlayer = pointSettings.points
+    const playerToUpdate =  await PlayerWeeklyPoint.query()
+        .where({
+          player_id:playerInfo[0],
+          week_season_id: currentweekSeason.id
+        }).first()
+
+        console.log({playerToUpdate});
+
+      if(!playerToUpdate){
+        await PlayerWeeklyPoint.create({
+          player_id:playerInfo[0],
+          week_season_id:currentweekSeason.id,
+          points_total:pointsForPlayer
+        })
+      }
+      else{
+        playerToUpdate.points_total = playerToUpdate.points_total + pointsForPlayer
+        
+        const responseFromUpdate = await  playerToUpdate.save()
+        return responseFromUpdate
+      }
+       
+    }
+
+    try {
       // get today fixtures 
+      // get players by fixtures
       // run each player by fixture 
       // update user stats 
-
+      const getAllPlayerIds  = await Player.query().pluck("player_id")
+      const getPointSettings = await PointSetting.query().fetch()
 
       const fixturesBaseUrl = Config.get("rapidApi.getWeekFixturesEndpoint")
-      const statsFixtureEndpoint = Config.get("rapidApi.getStatsByFixtures")
-      const currentyear = new Date().getFullYear() - 1;
+      const playerBaseUrl = Config.get("rapidApi.getFixturePlayers")
+      const currentyear = new Date().getFullYear()-1;
       // let today = moment().format('YYYY-MM-DD')
-      let today = "2020-06-07"
-
-
-      const Endpontss =`${fixturesBaseUrl}?league=39&season=${currentyear}&date=${today}`
+      let today = "2021-01-12"
 
       const teamEndpoints = [ 
         `${fixturesBaseUrl}?league=39&season=${currentyear}&date=${today}`,
@@ -39,7 +79,6 @@ class UpdateRankingFeature {
         `${fixturesBaseUrl}?league=140&season=${currentyear}&date=${today}`
         ];        
 
-
       let promises = [];
       for (let i = 0; i < teamEndpoints.length; i++) {
         const responseFromApi = await new makeExternalRequestFeature(
@@ -47,44 +86,68 @@ class UpdateRankingFeature {
          }
         ).makeGetRequest()
         let responseTeamObject = responseFromApi.results
-        console.log(responseTeamObject);
-
-          // promises.push(responseTeamObject.results)
-        
+        for(let j = 0 ;j < responseTeamObject.response.length; j++ ){
+            promises.push(responseTeamObject.response[j])
+          }
       } 
-      // Promise.all(promises)
+      Promise.all(promises)
 
-      // let fixtureResponse = promises
+      // get all fixture IDs  for current day
+      let fixtureIds = []
+      for (let i = 0; i < promises.length; i++) {
+        fixtureIds.push(promises[i].fixture.id)
+      }
 
-      // console.log({promises});
+      // pull players for every fixture on that day
+      let playerFixtureStatistics = [];
+      for (let i = 0; i < fixtureIds.length; i++) {
+        const fixtureEndpoint = `${playerBaseUrl}?fixture=${fixtureIds[i]}`
+        const responseFromApi = await new makeExternalRequestFeature(
+          {endpoint:fixtureEndpoint}
+        ).makeGetRequest()
+        
+        let singleFixturePlayers = responseFromApi.results.response[0].players
+          // console.log(singleFixturePlayers[0].player);
+        for(let j = 0 ;j < singleFixturePlayers.length; j++ ){
+          playerFixtureStatistics.push(singleFixturePlayers[j])
+          }
+      } 
+      console.log("playerFixtureStatistics" , playerFixtureStatistics.length);
+      // compare players in system to players in fixtures that day 
+      for (let i = 0; i < playerFixtureStatistics.length ; i++) {
+          if(getAllPlayerIds.includes(playerFixtureStatistics[i].player.id)){
+           console.log("THIS MATCHES" , playerFixtureStatistics[i].player.id); 
+            const getPlayerInSystem = await Player.query().where("player_id", playerFixtureStatistics[i].player.id ).pluck("id")
+            const getPlayerDetails = await PlayerSquad.query()
+                  .where({
+                      player_id: getPlayerInSystem[0]
+                  })
+                  .fetch()
 
-      // squad_selection.forEach(myFunction);
-      // async function myFunction(item){
-      //     let itemId  = parseInt(item.id)
-      //     let currentPlayerEndpoint = `${playerEndpoint}?id=${itemId}&season=${yearInt}`
-      //      const responseFromApi = await new makeExternalRequestFeature({endpoint:`${currentPlayerEndpoint}`}).makeGetRequest()
-      //      let currentPlayerDetails  =  responseFromApi.results.response[0].player
-      //     if ( !item.is_captain){
-      //         item.is_captain = 0
-      //     }
-      //     if ( !item.is_substitute){
-      //         item.is_substitute = 0
-      //     }
-      
-      //   console.log("currentPlayerDetails",currentPlayerDetails, currentPlayerDetails.id);
-      //     await Player.findOrCreate({
-      //         player_name:currentPlayerDetails.name,
-      //         player_id:currentPlayerDetails.id,
-      //         player_image:currentPlayerDetails.photo,
-      //         squad_id:squadCreation.id,
-      //         wing:item.wing,
-      //         is_substitute:item.is_substitute,
-      //         is_captain: item.is_captain 
-      //     })
-      // }
-
+            const  playerDetailsJson = getPlayerDetails.toJSON();
+            const playerWing = playerDetailsJson[0].wing
+            // check if player scored a goal
+            const playerGoalStat =  playerFixtureStatistics[i].statistics["0"].goals
+            let paramType;
+            if(playerGoalStat.total){ //CHECK THIS LOGIC HERE AGAIN 
+               paramType = "Goal";
+               const resultFromUpdate =await updatePlayerScores(paramType, playerWing,  getPlayerInSystem)
+               console.log({resultFromUpdate});
+            }
+            else if(!playerGoalStat.conceded){
+              paramType = "Clean Sheet";
+              const resultFromUpdate =await updatePlayerScores(paramType, playerWing,  getPlayerInSystem)
+              console.log({resultFromUpdate});
+            }
+            else if(playerGoalStat.assists){
+              paramType = "Goal Assist";
+              const resultFromUpdate =await updatePlayerScores(paramType, playerWing,  getPlayerInSystem)
+              console.log({resultFromUpdate});
+            }
+          } 
+      }
     } catch (updatePointsError) {
-      console.log("update Points rankings >>>>> ", updatePointsError);
+      console.log("update Points rankings >>>>>", updatePointsError);
       return {
           status:"Internal Server Error", 
           status_code:500, 

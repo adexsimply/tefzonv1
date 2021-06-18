@@ -3,11 +3,11 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class LeaguesSchema extends Schema {
+class PlayerWeeklyPointsSchema extends Schema {
   up () {
-    this.create('leagues', (table) => {
+    this.create('player_weekly_points', (table) => {
       table.increments()
-      table.integer("player_squad_id")
+      table.integer("player_id")
       table.integer("week_season_id")
       table.integer("points_total")
       table.timestamps()
@@ -15,8 +15,8 @@ class LeaguesSchema extends Schema {
   }
 
   down () {
-    this.drop('leagues')
+    this.drop('player_weekly_points')
   }
 }
 
-module.exports = LeaguesSchema
+module.exports = PlayerWeeklyPointsSchema

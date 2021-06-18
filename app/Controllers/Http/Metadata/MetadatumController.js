@@ -85,7 +85,7 @@ class MetadatumController {
 
   async getAllPlayers({ response}){
    try {
-    const baseUrl = Config.get("rapidApi.getPlayerByLeagueIdEndpoint")
+    const baseUrl = Config.get("rapidApi.getPlayer")
     // async function getEnglandLeague() {
     //   const endpoint = `${baseUrl}/2`
     //   return await new makeExternalRequestFeature({endpoint}).makeGetRequest()
