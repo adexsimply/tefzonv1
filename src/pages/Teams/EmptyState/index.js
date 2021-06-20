@@ -210,10 +210,75 @@ const DefaultTeam = () => {
 		updateDraggedPlayer(player);
 		updateDragStatus("dragging");
 	};
-	const showPopUp = (playerDetail) => {
+	const showPopUp = (playerDetails) => {
+		const { player } = playerDetails;
 		return (
 			<div>
-				<p>{playerDetail.name}</p>
+				<Row justify="center" className="player-photo">
+					<Col lg={12}>
+						<img src={player.photo} alt={player.name} />
+					</Col>
+				</Row>
+				<Row className="player-detail-info-row">
+					<Col lg={8}>
+						<p>
+							<strong>First Name</strong>
+						</p>
+					</Col>
+					<Col lg={16}>
+						<p>{player.firstname}</p>
+					</Col>
+				</Row>
+				<Row className="player-detail-info-row">
+					<Col lg={8}>
+						<p>
+							<strong>Last Name</strong>
+						</p>
+					</Col>
+					<Col lg={16}>
+						<p>{player.lastname}</p>
+					</Col>
+				</Row>
+				<Row className="player-detail-info-row">
+					<Col lg={8}>
+						<p>
+							<strong>Known Name</strong>
+						</p>
+					</Col>
+					<Col lg={16}>
+						<p>{player.name}</p>
+					</Col>
+				</Row>
+				<Row className="player-detail-info-row">
+					<Col lg={8}>
+						<p>
+							<strong>Height</strong>
+						</p>
+					</Col>
+					<Col lg={16}>
+						<p>{player.height}</p>
+					</Col>
+				</Row>
+				<Row className="player-detail-info-row">
+					<Col lg={8}>
+						<p>
+							<strong>Nationality</strong>
+						</p>
+					</Col>
+					<Col lg={16}>
+						<p>{player.nationality}</p>
+					</Col>
+				</Row>
+				<Row className="player-detail-info-row">
+					<Col lg={8}>
+						<p>
+							<strong>Position</strong>
+						</p>
+					</Col>
+					<Col lg={16}>
+						<p>{player.position}</p>
+					</Col>
+				</Row>
 			</div>
 		);
 	};
@@ -224,6 +289,7 @@ const DefaultTeam = () => {
 			<StyledPitchPlayer>
 				{playerList.map((players) => {
 					const { player } = players;
+
 					return (
 						<div
 							className={
@@ -237,7 +303,8 @@ const DefaultTeam = () => {
 							<div className="pitch__player-wrapper">
 								<div className="info-icon">
 									<Popover
-										content={() => showPopUp(player.player)}
+										content={() => showPopUp(players)}
+										overlayClassName="player-details-popup"
 										title={player.name}
 									>
 										<img src={InfoCircleIcon} alt="info icon" />
@@ -248,8 +315,11 @@ const DefaultTeam = () => {
 									style={{ backgroundImage: `url(${TeamJersey})` }}
 								></div>
 							</div>
-							<div className="player-tag">{player.name}</div>
+							<div className="player-tag" title={player.name}>
+								{formatString(player.name, 12)}
+							</div>
 							<div className="points-tag">{player.age}</div>
+							<div className="points-tag position">{player.position}</div>
 						</div>
 					);
 				})}
@@ -271,7 +341,7 @@ const DefaultTeam = () => {
 						if (view === "list") {
 							return displayPlayerListView(playerData);
 						} else {
-							return displayPlayerListView(playerData);
+							return displayPlayerPitchView(playerData);
 						}
 					} else {
 						const filteredPlayers = playerData.filter(
@@ -306,136 +376,111 @@ const DefaultTeam = () => {
 			);
 			if (filteredPlayers) {
 				return filteredPlayers.map((players) => {
-					const { name, id, position, photo, age } =
-						players.player;
+					const { name, id, position, photo, age } = players.player;
 
 					const foundPlayerMatch = selectedPlayersArr.find(
 						(player) => player.id === id
 					);
-
-					if (foundPlayerMatch) {
-						return (
-							<Row
-								className="items-center border-b border-secondary-gray-2 pb-2 pt-2"
-								justify="space-bewteen"
-								key={id}
-							>
-								<Col
-									lg={2}
-									className="h-12 border-r border-secondary-gray-2 flex items-center"
+					if (view === "list") {
+						if (foundPlayerMatch) {
+							return null;
+						} else {
+							return (
+								<Row
+									className="items-center border-b border-secondary-gray-2 pb-2 pt-2"
+									justify="space-bewteen"
+									key={id}
 								>
-									<Popover content={() => popMe(players.player)} title={name}>
-										<img src={InfoCircleIcon} alt="info Icon" />
-									</Popover>
-								</Col>
-								<Col
-									lg={4}
-									className="flex justify-center text-center border-r border-secondary-gray-2-border h-12 items-center"
-								>
-									<img
-										src={photo}
-										className="w-10 h-10 rounded-full object-contain"
-										alt="player avatar"
-									/>
-								</Col>
-								<Col
-									lg={12}
-									className="border-r border-secondary-gray-2-border h-12"
-								>
-									<div className="pl-2">
-										<span className="text-white font-bold text-regular hover:text-tw-green-light">
-											{name}
-										</span>
-										<p className="text-white">
-											<span className="font-bold uppercase inline-block mr-4 text-xsmall">
-												JUV
+									<Col
+										lg={2}
+										className="h-12 border-r border-secondary-gray-2 flex items-center"
+									>
+										<Popover content={() => popMe(players.player)} title={name}>
+											<img src={InfoCircleIcon} alt="info Icon" />
+										</Popover>
+									</Col>
+									<Col
+										lg={4}
+										className="flex justify-center text-center border-r border-secondary-gray-2-border h-12 items-center"
+									>
+										<img
+											src={photo}
+											className="w-10 h-10 rounded-full object-contain"
+											alt="player avatar"
+										/>
+									</Col>
+									<Col
+										lg={12}
+										className="border-r border-secondary-gray-2-border h-12"
+									>
+										<div className="pl-2">
+											<span className="text-white font-bold text-regular">
+												{name}
 											</span>
-											<span className="font-light uppercase text-xsmall">
-												{position}
-											</span>
+											<p className="text-white">
+												<span className="font-bold uppercase inline-block mr-4 text-xsmall">
+													JUV
+												</span>
+												<span className="font-light uppercase text-xsmall">
+													{position}
+												</span>
+											</p>
+										</div>
+									</Col>
+									<Col lg={3} className="pl-2 h-12 flex items-center">
+										<p className="text-white text-base text-center font-bold">
+											{age}
 										</p>
-									</div>
-								</Col>
-								<Col lg={3} className="pl-2 h-12 flex items-center">
-									<p className="text-white text-base text-center font-bold">
-										{age}
-									</p>
-								</Col>
-								<Col
-									lg={3}
-									className="border-l border-secondary-gray-2-border pl-3 h-12 flex items-center justify-end"
-								>
-									<Checkbox
-										className="player-selector-checkbox"
-										defaultChecked
-										disabled
-										onChange={(ev) =>
-											handleSubtitutePlayerSelection(players.player, ev)
-										}
-									/>
-								</Col>
-							</Row>
-						);
+									</Col>
+									<Col
+										lg={3}
+										className="border-l border-secondary-gray-2-border pl-3 h-12 flex items-center justify-end"
+									>
+										<Checkbox
+											className="player-selector-checkbox"
+											onChange={(ev) =>
+												handleSelectSubtitutePlayers(players.player, ev)
+											}
+										/>
+									</Col>
+								</Row>
+							);
+						}
 					} else {
+						if (foundPlayerMatch) {
+							return null;
+						}
 						return (
-							<Row
-								className="items-center border-b border-secondary-gray-2 pb-2 pt-2"
-								justify="space-bewteen"
+							<div
+								className={
+									"player-container " +
+									(dragStatus === "dragging" ? "player-drag" : "")
+								}
 								key={id}
+								onDragStart={(ev) => handleDragPlayer(ev, players.player)}
+								draggable
 							>
-								<Col
-									lg={2}
-									className="h-12 border-r border-secondary-gray-2 flex items-center"
-								>
-									<Popover content={() => popMe(players.player)} title={name}>
-										<img src={InfoCircleIcon} alt="info Icon" />
-									</Popover>
-								</Col>
-								<Col
-									lg={4}
-									className="flex justify-center text-center border-r border-secondary-gray-2-border h-12 items-center"
-								>
-									<img
-										src={photo}
-										className="w-10 h-10 rounded-full object-contain"
-										alt="player avatar"
-									/>
-								</Col>
-								<Col
-									lg={12}
-									className="border-r border-secondary-gray-2-border h-12"
-								>
-									<div className="pl-2">
-										<span className="text-white font-bold text-regular">
-											{name}
-										</span>
-										<p className="text-white">
-											<span className="font-bold uppercase inline-block mr-4 text-xsmall">
-												JUV
-											</span>
-											<span className="font-light uppercase text-xsmall">
-												{position}
-											</span>
-										</p>
+								<div className="pitch__player-wrapper">
+									<div className="info-icon">
+										<Popover
+											content={() => showPopUp(players)}
+											overlayClassName="player-details-popup"
+											title={name}
+										>
+											<img src={InfoCircleIcon} alt="info icon" />
+										</Popover>
 									</div>
-								</Col>
-								<Col lg={3} className="pl-2 h-12 flex items-center">
-									<p className="text-white text-base text-center font-bold">
-										{age}
-									</p>
-								</Col>
-								<Col
-									lg={3}
-									className="border-l border-secondary-gray-2-border pl-3 h-12 flex items-center justify-end"
-								>
-									<Checkbox
-										className="player-selector-checkbox"
-										onChange={(ev) =>
-											handleSelectSubtitutePlayers(players.player, ev)
-										}
-									/>
-								</Col>
-							</Row>
+									<div
+										className="jersey-icon"
+										style={{ backgroundImage: `url(${TeamJersey})` }}
+									></div>
+								</div>
+								<div className="player-tag" title={name}>
+									{formatString(name, 12)}
+								</div>
+								<div className="points-tag">{age}</div>
+								<div className="points-tag position">{position}</div>
+							</div>
 						);
 					}
 				});
@@ -611,6 +656,7 @@ export var StyledPitchPlayer = styled.div`
 	align-items: center;
 	justify-content: flex-start;
 	flex-wrap: wrap;
+	padding: 2rem 0;
 	.jersey-icon {
 		width: 50px;
 		height: 45px;
@@ -653,6 +699,15 @@ export var StyledPitchPlayer = styled.div`
 			#33175a;
 		text-align: center;
 		color: #fff;
+	}
+	.player-container .points-tag.position {
+		background: #33175a;
+		border-radius: 2px;
+		color: #fff;
+		font-size: 10px;
+		padding: 6px 0;
+		text-align: center;
+		font-weight: 600;
 	}
 `;
 export default DefaultTeam;

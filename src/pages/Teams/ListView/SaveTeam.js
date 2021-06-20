@@ -25,7 +25,7 @@ const SaveTeam = () => {
 				wing: item.position.toLowerCase(),
 				is_susbtitute: item.is_substitute === true ? 1 : 0,
 				is_captain: item.is_captain === true ? 1 : 0,
-				placement: "",
+				placement: null,
 			});
 		});
 		console.log(payload);

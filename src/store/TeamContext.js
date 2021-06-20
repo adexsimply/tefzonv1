@@ -190,7 +190,7 @@ const TeamContextProvider = (props) => {
 	};
 	const getTeamName = () => {
 		const name = localStorage.getItem("TEF_NAME");
-		return JSON.stringify(name);
+		return name;
 	};
 	const updateDragStatus = (value) => {
 		setDragStatus(value);

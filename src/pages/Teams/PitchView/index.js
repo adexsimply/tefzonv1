@@ -43,6 +43,7 @@ const PitchView = () => {
 
 	const handleGoalKeepers = () => {
 		const newGoalKeeper = { ...draggedPlayer, ...playerParams };
+		console.log(draggedPlayer, playerParams);
 		if (selectedGoalKeepers.length === 0) {
 			updateGoalKeeper(newGoalKeeper);
 		} else {
@@ -52,7 +53,14 @@ const PitchView = () => {
 		setSelectionParams(null);
 	};
 	const handleDefenders = () => {
-		const newDefender = { ...draggedPlayer, ...playerParams };
+		const newDefender = {
+			id: draggedPlayer.id,
+			wing: draggedPlayer.position,
+			name: draggedPlayer.name,
+			...playerParams,
+		};
+		console.log(draggedPlayer, newDefender);
+
 		if (selectedDef.length === 0) {
 			updateDefenders(newDefender);
 		} else {
@@ -85,16 +93,16 @@ const PitchView = () => {
 
 	const handleStorePlayerDetails = () => {
 		switch (currentSelection) {
-			case "gk":
+			case "goalkeeper":
 				handleGoalKeepers();
 				break;
-			case "def":
+			case "defender":
 				handleDefenders(draggedPlayer, playerParams);
 				break;
-			case "mid":
+			case "midfielder":
 				handleMidfielders();
 				break;
-			case "fwd":
+			case "attacker":
 				handleForwards(draggedPlayer, playerParams);
 				break;
 			default:
@@ -143,7 +151,7 @@ const PitchView = () => {
 
 					<div className="">
 						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="points-tag">{player.position}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -166,7 +174,7 @@ const PitchView = () => {
 
 					<div className="">
 						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="points-tag">{player.position}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -193,7 +201,7 @@ const PitchView = () => {
 
 					<div className="">
 						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="points-tag">{player.position}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -219,7 +227,7 @@ const PitchView = () => {
 
 					<div className="">
 						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="points-tag">{player.position}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -300,7 +308,7 @@ const PitchView = () => {
 							id="gk_1"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "gk",
+									position: "goalkeeper",
 									is_subtitute: false,
 									playerPlacement: null,
 								})
@@ -321,7 +329,7 @@ const PitchView = () => {
 							playerPlacement="def_1"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "def",
+									position: "defender",
 									is_subtitute: false,
 									playerPlacement: "def_1",
 								})
@@ -339,7 +347,7 @@ const PitchView = () => {
 							playerPlacement="def_2"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "def",
+									position: "defender",
 									is_subtitute: false,
 									playerPlacement: "def_2",
 								})
@@ -357,7 +365,7 @@ const PitchView = () => {
 							playerPlacement="def_1"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "def",
+									position: "defender",
 									is_subtitute: false,
 									playerPlacement: "def_3",
 								})
@@ -377,7 +385,7 @@ const PitchView = () => {
 							subStatus={false}
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "mid",
+									position: "midfielder",
 									is_subtitute: false,
 									playerPlacement: "mid_1",
 								})
@@ -395,7 +403,7 @@ const PitchView = () => {
 							subStatus={false}
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "mid",
+									position: "midfielder",
 									is_subtitute: false,
 									playerPlacement: "mid_2",
 								})
@@ -413,7 +421,7 @@ const PitchView = () => {
 							subStatus={false}
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "mid",
+									position: "midfielder",
 									is_subtitute: false,
 									playerPlacement: "mid_3",
 								})
@@ -431,7 +439,7 @@ const PitchView = () => {
 							subStatus={false}
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "mid",
+									position: "midfielder",
 									is_subtitute: false,
 									playerPlacement: "mid_4",
 								})
@@ -451,7 +459,7 @@ const PitchView = () => {
 							subStatus={false}
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "fwd",
+									position: "attacker",
 									is_subtitute: false,
 									playerPlacement: "fwd_1",
 								})
@@ -469,7 +477,7 @@ const PitchView = () => {
 							subStatus={false}
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "fwd",
+									position: "attacker",
 									is_subtitute: false,
 									playerPlacement: "fwd_2",
 								})
@@ -487,7 +495,7 @@ const PitchView = () => {
 							subStatus={false}
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "fwd",
+									position: "attacker",
 									is_subtitute: false,
 									playerPlacement: "fwd_3",
 								})
@@ -511,7 +519,7 @@ const PitchView = () => {
 							id="gk_2"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "gk",
+									position: "goalkeepeer",
 									is_subtitute: true,
 									playerPlacement: "gk_2",
 								})
@@ -528,7 +536,7 @@ const PitchView = () => {
 							id="mid_5"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "mid",
+									position: "midfielder",
 									is_subtitute: true,
 									playerPlacement: "mid_5",
 								})
@@ -545,7 +553,7 @@ const PitchView = () => {
 							id="def_4"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "def",
+									position: "defender",
 									is_subtitute: true,
 									playerPlacement: "def_4",
 								})
@@ -562,7 +570,7 @@ const PitchView = () => {
 							id="fwd_4"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "fwd",
+									position: "attacker",
 									is_subtitute: true,
 									playerPlacement: "fwd_4",
 								})
