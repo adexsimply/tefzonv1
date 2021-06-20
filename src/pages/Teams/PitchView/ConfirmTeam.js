@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Button, Row, Col } from "antd";
 import { TeamContext } from "../../../store/TeamContext";
 import { loadTeam } from "../../../store/localStorage";
+import { createTeam } from "../../../helpers/api";
 import { useHistory } from "react-router-dom";
 import Stadium from "../../../assets/img/stadium.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
@@ -12,14 +13,17 @@ import Alert from "../../../components/common/Alert";
 import CaptainIcon from "../../../assets/img/icons/captain.svg";
 
 const ConfirmTeam = () => {
-	const { teamName } = useContext(TeamContext);
+	const { getTeamName } = useContext(TeamContext);
 	const [reqStatus, setReqStatus] = useState({ type: "", msg: "" });
+	const [loading, setLoading] = useState(false);
+
 	const team = loadTeam();
+	const teamName = getTeamName();
 	const history = useHistory();
 
 	const displayGkPlayers = () => {
 		return team.map((players) => {
-			if (players.position === "gk" && players.is_subtitute === false) {
+			if (players.position === "goalkeeper" && players.is_subtitute === false) {
 				return (
 					<StyledTeamPlayer>
 						<div
@@ -37,7 +41,35 @@ const ConfirmTeam = () => {
 
 						<div className="">
 							<div className="player-tag">{players.name}</div>
-							<div className="points-tag">{players.points}</div>
+							<div className="points-tag">{players.position}</div>
+						</div>
+					</StyledTeamPlayer>
+				);
+			}
+		});
+	};
+
+	const displaySubs = () => {
+		return team.map((players) => {
+			if (players.is_subtitute) {
+				return (
+					<StyledTeamPlayer style={{ marginRight: "1rem" }}>
+						<div
+							className="team-jersey-bg"
+							style={{ backgroundImage: `url(${TeamJersey})` }}
+						>
+							{players.is_captain && (
+								<img
+									src={CaptainIcon}
+									className="captain-tag"
+									alt="captain icon"
+								/>
+							)}
+						</div>
+
+						<div className="">
+							<div className="player-tag">{players.name}</div>
+							<div className="points-tag">{players.position}</div>
 						</div>
 					</StyledTeamPlayer>
 				);
@@ -76,16 +108,46 @@ const ConfirmTeam = () => {
 		}
 	};
 
-	const handleSaveTeam = () => {
-		setReqStatus({
-			type: "success",
-			msg: `Your team ${teamName} created successfully!`,
+	const handleSaveTeam = async () => {
+		const payload = [];
+		team.forEach((item) => {
+			payload.push({
+				id: item.id,
+				wing: item.position.toLowerCase(),
+				is_susbtitute: item.is_substitute === true ? 1 : 0,
+				is_captain: item.is_captain === true ? 1 : 0,
+				placement: item.playerPlacement,
+			});
 		});
-		setTimeout(() => {
-			history.replace("/dashboard");
-		}, 2000);
+		console.log(payload);
+		try {
+			const results = await createTeam({
+				team_name: teamName,
+				squad_selection: payload,
+			});
+			console.log(results);
+			if (results) {
+				setReqStatus({
+					type: "success",
+					msg: results.result.msg,
+				});
+				setLoading(false);
+				resetTeam();
+				history.replace("/teams");
+			}
+		} catch (error) {
+			console.log(error);
+			setReqStatus({
+				type: "error",
+				msg: error,
+			});
+			setLoading(false);
+		}
 	};
-
+	const resetTeam = () => {
+		localStorage.removeItem("TEFZON_TEAM");
+		localStorage.removeItem("TEF_NAME");
+	};
 	return (
 		<DashboardLayout>
 			<StyledTeamPage>
@@ -96,8 +158,9 @@ const ConfirmTeam = () => {
 							<Button
 								onClick={handleSaveTeam}
 								className="bg-tw-green rounded-none h-12 font-medium px-6 inline-flex items-center hover:text-white"
+								disabled={loading}
 							>
-								Save
+								{loading ? "Saving your team..." : "Save"}
 							</Button>
 						</div>
 
@@ -111,7 +174,11 @@ const ConfirmTeam = () => {
 									/>
 								)}
 								{reqStatus.type === "error" && (
-									<Alert className="error-alert" type="error" msg={reqStatus.msg || "something went wrong"} />
+									<Alert
+										className="error-alert"
+										type="error"
+										msg={reqStatus.msg || "something went wrong"}
+									/>
 								)}
 							</div>
 							<Row>
@@ -152,8 +219,8 @@ const ConfirmTeam = () => {
 														{displayPlayer("fwd_3")}
 													</div>
 
-													<div className="relative flex justify-center mt-14 position-container mx-auto">
-														{/* {displaySubs()} */}
+													<div className="subs-display  mt-14 position-container mx-auto">
+														{displaySubs()}
 													</div>
 												</div>
 											</div>
@@ -264,6 +331,11 @@ export const StyledTeamPage = styled.div`
 		text-align: center;
 		color: #000000;
 		margin-bottom: 1rem;
+	}
+	.subs-display {
+		position: relative;
+		justify-content: center;
+		display: flex;
 	}
 `;
 

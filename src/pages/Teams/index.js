@@ -10,10 +10,12 @@ import { getTeam } from "../../helpers/api";
 const Teams = () => {
 	const [teamData, setTeamData] = useState(null);
 	const [loadingTeam, setLoadingTeam] = useState(false);
+
 	const view = getView();
 
 	useEffect(() => {
 		getTeamData();
+		// eslint-disable-next-line
 	}, []);
 
 	const getTeamData = async () => {
@@ -26,12 +28,16 @@ const Teams = () => {
 			}
 		} catch (error) {
 			message.error(error);
+			if (error) {
+				setLoadingTeam(false);
+			}
 		} finally {
 			setLoadingTeam(false);
 		}
 	};
 
 	const handleDisplayTeams = () => {
+		console.log(loadingTeam, "===");
 		if (loadingTeam) {
 			return <div>Loading...</div>;
 		} else {

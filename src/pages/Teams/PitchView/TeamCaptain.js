@@ -22,11 +22,11 @@ const TeamCaptain = () => {
 	const team = loadTeam();
 
 	useEffect(() => {
-		let gk = team.filter((player) => player.position === "gk");
+		let gk = team.filter((player) => player.position === "goalkeeper");
 
-		let def = team.filter((player) => player.position === "def");
-		let mids = team.filter((player) => player.position === "mid");
-		let fwds = team.filter((player) => player.position === "fwd");
+		let def = team.filter((player) => player.position === "defender");
+		let mids = team.filter((player) => player.position === "midfielder");
+		let fwds = team.filter((player) => player.position === "attacker");
 		console.log("how often here");
 		setGoalKeepers([...gk]);
 		setUpdatedDefenders([...def]);
@@ -69,7 +69,7 @@ const TeamCaptain = () => {
 		resetPlayers();
 
 		switch (player.position) {
-			case "gk":
+			case "goalkeeper":
 				const newGk = [];
 				goalKeepers.forEach((item) => {
 					if (item.name !== player.name) {
@@ -80,7 +80,7 @@ const TeamCaptain = () => {
 				newGk.push(gkCaptain);
 				setGoalKeepers([...newGk]);
 				break;
-			case "def":
+			case "defender":
 				const newDef = [];
 				defenders.forEach((item) => {
 					if (item.name !== player.name) {
@@ -91,7 +91,7 @@ const TeamCaptain = () => {
 				newDef.push(defCaptain);
 				setUpdatedDefenders([...newDef]);
 				break;
-			case "mid":
+			case "midfielder":
 				const newMid = [];
 				midfielders.forEach((item) => {
 					if (item.name !== player.name) {
@@ -102,7 +102,7 @@ const TeamCaptain = () => {
 				newMid.push(midCaptain);
 				setUpdatedMidfielders([...newMid]);
 				break;
-			case "fwd":
+			case "atacker":
 				const newFwd = [];
 				forwards.forEach((item) => {
 					if (item.name !== player.name) {
@@ -121,33 +121,30 @@ const TeamCaptain = () => {
 
 	const displayGkPlayers = () => {
 		return goalKeepers.map((players) => {
-			if (players.is_subtitute === false) {
-				console.log(players.is_captain, "gk");
-				return (
-					<StyledTeamPlayer
-						className=" pitch-player "
-						onClick={(ev) => handleSelectCaptain(ev, players)}
+			return (
+				<StyledTeamPlayer
+					className=" pitch-player "
+					onClick={(ev) => handleSelectCaptain(ev, players)}
+				>
+					<div
+						className="team-jersey-bg"
+						style={{ backgroundImage: `url(${TeamJersey})` }}
 					>
-						<div
-							className="team-jersey-bg"
-							style={{ backgroundImage: `url(${TeamJersey})` }}
-						>
-							{players.is_captain && (
-								<img
-									src={CaptainIcon}
-									className="captain-tag"
-									alt="captain icon"
-								/>
-							)}
-						</div>
+						{players.is_captain && (
+							<img
+								src={CaptainIcon}
+								className="captain-tag"
+								alt="captain icon"
+							/>
+						)}
+					</div>
 
-						<div className="">
-							<div className="player-tag">{players.name}</div>
-							<div className="points-tag">{players.points}</div>
-						</div>
-					</StyledTeamPlayer>
-				);
-			}
+					<div className="">
+						<div className="player-tag">{players.name}</div>
+						<div className="points-tag">{players.points}</div>
+					</div>
+				</StyledTeamPlayer>
+			);
 		});
 	};
 
@@ -156,7 +153,7 @@ const TeamCaptain = () => {
 			(player) => player.playerPlacement === placement
 		);
 
-		if (player && player.is_subtitute === false) {
+		if (player) {
 			console.log(player.is_captain, "def", player.name);
 			return (
 				<StyledTeamPlayer
@@ -191,7 +188,7 @@ const TeamCaptain = () => {
 			(player) => player.playerPlacement === placement
 		);
 
-		if (player && player.is_subtitute === false) {
+		if (player) {
 			return (
 				<StyledTeamPlayer
 					className=" pitch-player "
@@ -225,7 +222,7 @@ const TeamCaptain = () => {
 			(player) => player.playerPlacement === placement
 		);
 
-		if (player && player.is_subtitute === false) {
+		if (player) {
 			return (
 				<StyledTeamPlayer
 					className=" pitch-player "
