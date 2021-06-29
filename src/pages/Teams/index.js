@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { message } from "antd";
+// import { Button } from "antd";
 import { getView } from "../../store/localStorage";
+import { getTeam } from "../../helpers/api";
 
 import TeamEmptyState from "./EmptyState";
 import DisplayTeamList from "./DisplayTeam/ListView";
 import DisplayTeamPitch from "./DisplayTeam/PitchView";
-import { getTeam } from "../../helpers/api";
+// import DashboardLayout from "../../components/common/Layout";
+// import { AiOutlineWarning } from "react-icons/ai";
+// import { FiRefreshCcw } from "react-icons/fi";
 
 const Teams = () => {
 	const [teamData, setTeamData] = useState(null);
@@ -27,7 +30,6 @@ const Teams = () => {
 				setTeamData(teams.result);
 			}
 		} catch (error) {
-			message.error(error);
 			if (error) {
 				setLoadingTeam(false);
 			}
@@ -36,13 +38,28 @@ const Teams = () => {
 		}
 	};
 
+	// // should display when there's an error getting teams
+	// const errorView = () => {
+	// 	return (
+	// 		<DashboardLayout>
+	// 			<div className="error-container">
+	// 				<AiOutlineWarning className="warning-icon" />
+	// 				<p>Something went wrong, click the button to refresh</p>
+	// 				<Button className="refresh-btn" onClick={getTeamData}>
+	// 					<FiRefreshCcw />{" "}
+	// 				</Button>
+	// 			</div>
+	// 		</DashboardLayout>
+	// 	);
+	// };
+
 	const handleDisplayTeams = () => {
-		console.log(loadingTeam, "===");
 		if (loadingTeam) {
 			return <div>Loading...</div>;
 		} else {
 			if (teamData === null) {
-				return <div>Loading...</div>;
+				// return errorView();
+				return <TeamEmptyState />;
 			} else {
 				if (teamData.length === 0) {
 					return <TeamEmptyState />;

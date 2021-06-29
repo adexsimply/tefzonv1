@@ -12,6 +12,7 @@ const PitchView = () => {
 		draggedPlayer,
 		currentSelection,
 		setSelectionParams,
+		setSubSelectionParams,
 		updatePlayerParams,
 		selectedPitchId,
 		playerParams,
@@ -37,9 +38,16 @@ const PitchView = () => {
 		}
 		if (dragStatus === "dropped") {
 			handleStorePlayerDetails();
+			resetPlayerFilter();
 		}
 		// eslint-disable-next-line
 	}, [dragStatus, selectedPitchId]);
+
+	const resetPlayerFilter = () => {
+		// reset selected player filter
+		setSelectionParams(null);
+		setSubSelectionParams(null);
+	};
 
 	const handleGoalKeepers = () => {
 		const newGoalKeeper = { ...draggedPlayer, ...playerParams };
@@ -519,7 +527,7 @@ const PitchView = () => {
 							id="gk_2"
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
-									position: "goalkeepeer",
+									position: "goalkeeper",
 									is_subtitute: true,
 									playerPlacement: "gk_2",
 								})

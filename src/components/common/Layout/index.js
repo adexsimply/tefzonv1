@@ -1,12 +1,12 @@
 import React from "react";
-import Header from "./Header";
+import Header from "../Header";
 import FooterBackdrop from "../../assets/img/footer-backdrop.svg";
 import DashboardBackdrop from "../../assets/img/backdrop.svg";
 import Logo from "../../assets/img/footer-logo.svg";
-
 import { GrFacebookOption, GrInstagram, GrTwitter } from "react-icons/gr";
 import { Row, Col } from "antd";
 import { Link } from "react-router-dom";
+import "./Layout.scss";
 
 const DashboardLayout = (props) => {
 	const links = [
@@ -46,7 +46,7 @@ const DashboardLayout = (props) => {
 	const matchRoute = window.location.pathname.split("/")[1];
 
 	return (
-		<div className="dashboardLayout-container w-full">
+		<div className="dashboardLayout-container ">
 			<Header />
 			<div
 				className="dashboard-banner h-56 w-full bg-cover bg-no-repeat"
