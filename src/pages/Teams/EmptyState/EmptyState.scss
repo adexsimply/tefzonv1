@@ -1,0 +1,16 @@
+.empty-teams-container {
+	padding-top: 3rem;
+	width: 100%;
+	.teams-heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-bottom: 1rem;
+		h2 {
+			font-family: "Oswald";
+			font-size: 36px;
+			line-height: 40px;
+			font-weight: 500;
+		}
+	}
+}

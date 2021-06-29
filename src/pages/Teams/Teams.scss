@@ -110,3 +110,31 @@
 .player-drag {
 	z-index: 1000;
 }
+
+.error-container {
+	height: calc(100vh - 300px);
+	width: 40%;
+	margin: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	border: 1px solid #8139e6;
+	.warning-icon {
+		width: 3rem;
+		height: 4rem;
+		fill: #8139e6;
+	}
+	p {
+		font-size: 20px;
+		letter-spacing: -1px;
+		margin-top: 1rem;
+	}
+	.refresh-btn {
+		border: 1px solid #8139e6;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 2rem;
+	}
+}

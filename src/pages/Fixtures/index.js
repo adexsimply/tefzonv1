@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DashboardLayout from "../../components/common/DashboardLayout";
+import DashboardLayout from "../../components/common/Layout";
 import { Row, Col, Button, Spin } from "antd";
 import { getFixtures } from "../../helpers/api";
 import CalendarIcon from "../../assets/img/icons/calendar.svg";

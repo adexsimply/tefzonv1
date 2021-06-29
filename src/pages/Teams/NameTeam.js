@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Row, Col, Form, Input } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import { TeamContext } from "../../store/TeamContext";
-import DashboardLayout from "../../components/common/DashboardLayout";
+import DashboardLayout from "../../components/common/Layout";
 import PitchBg from "../../assets/img/static/pitch-bg.png";
 
 const NameTeam = () => {

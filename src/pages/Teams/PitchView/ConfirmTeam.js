@@ -6,7 +6,7 @@ import { createTeam } from "../../../helpers/api";
 import { useHistory } from "react-router-dom";
 import Stadium from "../../../assets/img/stadium.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
-import DashboardLayout from "../../../components/common/DashboardLayout";
+import DashboardLayout from "../../../components/common/Layout";
 import PitchBg from "../../../assets/img/static/pitch-bg.png";
 import styled from "styled-components";
 import Alert from "../../../components/common/Alert";

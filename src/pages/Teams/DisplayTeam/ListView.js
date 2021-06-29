@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { TeamContext } from "../../../store/TeamContext";
 import { Row, Col, Button, Popover } from "antd";
-import DashboardLayout from "../../../components/common/DashboardLayout";
+import DashboardLayout from "../../../components/common/Layout";
 import TeamFlag from "../../../assets/img/static/team-flag.svg";
 import ArrowRightIcon from "../../../assets/img/icons/arrow-right-icon.svg";
 import Jersey from "../../../assets/img/jersey.svg";

@@ -7,7 +7,7 @@ import Alert from "../../../components/common/Alert";
 import Stadium from "../../../assets/img/stadium.svg";
 import PitchPlayer from "../PitchView/PitchPlayer";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
-import DashboardLayout from "../../../components/common/DashboardLayout";
+import DashboardLayout from "../../../components/common/Layout";
 import PitchBg from "../../../assets/img/static/pitch-bg.png";
 
 const SaveTeam = () => {

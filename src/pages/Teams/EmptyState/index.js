@@ -15,14 +15,15 @@ import { TeamContext } from "../../../store/TeamContext";
 import { useHistory } from "react-router-dom";
 import { getPlayers } from "../../../helpers/api";
 import { formatString } from "../../../helpers/utils";
-import DashboardLayout from "../../../components/common/DashboardLayout";
+import DashboardLayout from "../../../components/common/Layout";
 import InfoCircleIcon from "../../../assets/img/icons/info-circle-green.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
 import StadiumBg from "../../../assets/img/backdrop.svg";
 import styled from "styled-components";
 import ListView from "../ListView";
 import PitchView from "../PitchView";
-import "../_teams.scss";
+import "../Teams.scss";
+import "./EmptyState.scss";
 
 const { Option } = Select;
 
@@ -74,6 +75,8 @@ const DefaultTeam = () => {
 			setLoadingPlayers(false);
 		}
 	};
+
+	console.log(currentSelection, currentSubSelection, "reset player drag");
 
 	const saveSelection = (player) => handlePlayerSelection(player);
 
@@ -291,9 +294,43 @@ const DefaultTeam = () => {
 					const { player } = players;
 
 					return (
+						<div className="player-container " key={player.id}>
+							<div className="pitch__player-wrapper">
+								<div className="info-icon">
+									<Popover
+										content={() => showPopUp(players)}
+										overlayClassName="player-details-popup"
+										title={player.name}
+									>
+										<img src={InfoCircleIcon} alt="info icon" />
+									</Popover>
+								</div>
+								<div
+									className="jersey-icon"
+									style={{ backgroundImage: `url(${TeamJersey})` }}
+								></div>
+							</div>
+							<div className="player-tag" title={player.name}>
+								{formatString(player.name, 12)}
+							</div>
+							<div className="points-tag">{player.age}</div>
+							<div className="points-tag position">{player.position}</div>
+						</div>
+					);
+				})}
+			</StyledPitchPlayer>
+		);
+	};
+	const displayDraggablePlayerPitchView = (playerList) => {
+		return (
+			<StyledPitchPlayer>
+				{playerList.map((players) => {
+					const { player } = players;
+
+					return (
 						<div
 							className={
-								"player-container " +
+								"player-container  draggable " +
 								(dragStatus === "dragging" ? "player-drag" : "")
 							}
 							key={player.id}
@@ -352,7 +389,7 @@ const DefaultTeam = () => {
 							if (view === "list") {
 								return displaySelectListView(filteredPlayers);
 							} else {
-								return displayPlayerPitchView(filteredPlayers);
+								return displayDraggablePlayerPitchView(filteredPlayers);
 							}
 						}
 					}
@@ -512,11 +549,11 @@ const DefaultTeam = () => {
 	];
 	return (
 		<DashboardLayout>
-			<div className=" pt-12 w-full">
+			<div className="empty-teams-container">
 				<Row align="center">
 					<Col lg={22}>
-						<div className="teams-heading flex justify-between items-center pb-4">
-							<h2 className="f-oswald text-4xl font-medium">Squad Selection</h2>
+						<div className="teams-heading">
+							<h2>Squad Selection</h2>
 							<Button
 								className="bg-tw-green rounded-none h-12 font-medium px-6 inline-flex items-center hover:text-white"
 								disabled={completeTeam.length < 13}
@@ -662,6 +699,11 @@ export var StyledPitchPlayer = styled.div`
 		height: 45px;
 	}
 	.player-container {
+		width: 30%;
+		margin-right: 10px;
+		margin-bottom: 1rem;
+	}
+	.player-container.draggable {
 		width: 30%;
 		margin-right: 10px;
 		margin-bottom: 1rem;

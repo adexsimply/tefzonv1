@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Row, Col } from "antd";
 import { loadTeam, saveTeam } from "../../../store/localStorage";
 import { Link, useHistory } from "react-router-dom";
-import DashboardLayout from "../../../components/common/DashboardLayout";
+import DashboardLayout from "../../../components/common/Layout";
 import PitchBg from "../../../assets/img/static/pitch-bg.png";
 import CaptainIcon from "../../../assets/img/icons/captain.svg";
 import Stadium from "../../../assets/img/stadium.svg";
