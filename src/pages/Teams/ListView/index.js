@@ -7,7 +7,6 @@ import InfoCircleIcon from "../../../assets/img/icons/info-circle-green.svg";
 const ListView = (props) => {
 	const {
 		setSelectionParams,
-		setSubSelectionParams,
 		selectedDef,
 		selectedFwd,
 		selectedGoalKeepers,
@@ -38,7 +37,8 @@ const ListView = (props) => {
 
 	const displayGkPlayers = () => {
 		return selectedGoalKeepers.map((players) => {
-			if (players.is_subtitute) {
+			console.log(players);
+			if (players.is_substitute) {
 				return null;
 			}
 			return (
@@ -217,7 +217,8 @@ const ListView = (props) => {
 
 		return subsArr.map((players) => {
 			// eslint-disable-line
-			if (players.is_subtitute) {
+			console.log(players);
+			if (players.is_substitute) {
 				return (
 					<Row
 						className="py-2 px-6 player-row justify-between"
@@ -268,7 +269,9 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("goalkeeper")}
+							onClick={() =>
+								setSelectionParams({ type: "normal", selection: "goalkeeper" })
+							}
 						>
 							Select Goal Keeper
 						</Button>
@@ -291,7 +294,9 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("midfielder")}
+							onClick={() =>
+								setSelectionParams({ type: "normal", selection: "midfielder" })
+							}
 						>
 							Select Midfielder
 						</Button>
@@ -314,7 +319,9 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("defender")}
+							onClick={() =>
+								setSelectionParams({ type: "normal", selection: "defender" })
+							}
 						>
 							Select Defender
 						</Button>
@@ -337,7 +344,9 @@ const ListView = (props) => {
 					<Col lg={10}>
 						<Button
 							className="border-0 text-black rounded-none p-0 font-medium"
-							onClick={() => setSelectionParams("attacker")}
+							onClick={() =>
+								setSelectionParams({ type: "normal", selection: "attacker" })
+							}
 						>
 							Select Forward
 						</Button>
@@ -360,7 +369,9 @@ const ListView = (props) => {
 						<Col lg={10}>
 							<Button
 								className="border-0 text-black rounded-none p-0 font-medium"
-								onClick={() => setSubSelectionParams("goalkeeper")}
+								onClick={() =>
+									setSelectionParams({ type: "sub", selection: "goalkeeper" })
+								}
 							>
 								Select GK
 							</Button>
@@ -376,7 +387,9 @@ const ListView = (props) => {
 						<Col lg={10}>
 							<Button
 								className="border-0 text-black rounded-none p-0 font-medium"
-								onClick={() => setSubSelectionParams("defender")}
+								onClick={() =>
+									setSelectionParams({ type: "sub", selection: "defender" })
+								}
 							>
 								Select Defender
 							</Button>
@@ -392,7 +405,9 @@ const ListView = (props) => {
 						<Col lg={10}>
 							<Button
 								className="border-0 text-black rounded-none p-0 font-medium"
-								onClick={() => setSubSelectionParams("midfielder")}
+								onClick={() =>
+									setSelectionParams({ type: "sub", selection: "midfielder" })
+								}
 							>
 								Select Midfielder
 							</Button>
@@ -408,7 +423,9 @@ const ListView = (props) => {
 						<Col lg={10}>
 							<Button
 								className="border-0 text-black rounded-none p-0 font-medium"
-								onClick={() => setSubSelectionParams("attacker")}
+								onClick={() =>
+									setSelectionParams({ type: "sub", selection: "attacker" })
+								}
 							>
 								Select Forward
 							</Button>
