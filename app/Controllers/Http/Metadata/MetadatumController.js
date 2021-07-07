@@ -169,11 +169,13 @@ class MetadatumController {
         return lastDay;
       }
       
-      let lastWeekDay  = getLastDay();
-      let firstWeekDay  = getFirstDay();
+      // let lastWeekDay  = getLastDay();
+      // let firstWeekDay  = getFirstDay();
 
+       let lastWeekDay  = "2021-05-24";
+       let firstWeekDay  = "2021-02-21";
 
-      const currentyear = new Date().getFullYear() - 1;
+      const currentyear = new Date().getFullYear() - 1 ;
       const teamEndpoints = [ 
         `${baseUrl}?league=39&season=${currentyear}&from=${firstWeekDay}&to=${lastWeekDay}`,
         `${baseUrl}?league=135&season=${currentyear}&from=${firstWeekDay}&to=${lastWeekDay}`,
@@ -197,9 +199,9 @@ class MetadatumController {
           
         return response.status(200).json({
           results:promises,
-          label: `Signup teams Fetching`,
+          label: `Weekly fixtures`,
           statusCode: 200,
-          message: `Teams fetched successfully`,
+          message: `Fixtures fetched successfully`,
         })
      } catch (error) {
        console.log("Get fixtures error ",error);
