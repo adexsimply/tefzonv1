@@ -19,3 +19,18 @@
 .success-alert {
 	background: $primary-brand;
 }
+.next-btn {
+	background: $tw-green;
+	border-radius: 0;
+	height: 48px;
+	font-weight: 500;
+	padding: 0 24px;
+	display: inline-flex;
+	align-items: center;
+	color: #fff;
+	cursor: pointer;
+	&:hover {
+		background: $tw-green;
+		color: #fff;
+	}
+}

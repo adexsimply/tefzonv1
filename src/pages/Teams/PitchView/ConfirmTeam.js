@@ -4,6 +4,7 @@ import { TeamContext } from "../../../store/TeamContext";
 import { loadTeam } from "../../../store/localStorage";
 import { createTeam } from "../../../helpers/api";
 import { useHistory } from "react-router-dom";
+import { formatString } from "../../../helpers/utils";
 import Stadium from "../../../assets/img/stadium.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
 import DashboardLayout from "../../../components/common/Layout";
@@ -21,71 +22,12 @@ const ConfirmTeam = () => {
 	const teamName = getTeamName();
 	const history = useHistory();
 
-	const displayGkPlayers = () => {
-		return team.map((players) => {
-			if (players.position === "goalkeeper" && players.is_subtitute === false) {
-				return (
-					<StyledTeamPlayer>
-						<div
-							className="team-jersey-bg"
-							style={{ backgroundImage: `url(${TeamJersey})` }}
-						>
-							{players.is_captain && (
-								<img
-									src={CaptainIcon}
-									className="captain-tag"
-									alt="captain icon"
-								/>
-							)}
-						</div>
-
-						<div className="">
-							<div className="player-tag">{players.name}</div>
-							<div className="points-tag">{players.position}</div>
-						</div>
-					</StyledTeamPlayer>
-				);
-			}
-		});
-	};
-
-	const displaySubs = () => {
-		return team.map((players) => {
-			if (players.is_subtitute) {
-				return (
-					<StyledTeamPlayer style={{ marginRight: "1rem" }}>
-						<div
-							className="team-jersey-bg"
-							style={{ backgroundImage: `url(${TeamJersey})` }}
-						>
-							{players.is_captain && (
-								<img
-									src={CaptainIcon}
-									className="captain-tag"
-									alt="captain icon"
-								/>
-							)}
-						</div>
-
-						<div className="">
-							<div className="player-tag">{players.name}</div>
-							<div className="points-tag">{players.position}</div>
-						</div>
-					</StyledTeamPlayer>
-				);
-			}
-		});
-	};
-
 	const displayPlayer = (placement) => {
 		const player = team.find((player) => player.playerPlacement === placement);
 
-		if (player && player.is_subtitute === false) {
+		if (player) {
 			return (
-				<StyledTeamPlayer
-					className=" pitch-player "
-					style={{ marginRight: "2rem" }}
-				>
+				<StyledTeamPlayer className=" pitch-player ">
 					<div
 						className="team-jersey-bg"
 						style={{ backgroundImage: `url(${TeamJersey})` }}
@@ -100,8 +42,10 @@ const ConfirmTeam = () => {
 					</div>
 
 					<div className="">
-						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="player-tag" title={player.name}>
+							{formatString(player.name, 8)}
+						</div>
+						<div className="points-tag">{player.age}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -157,7 +101,7 @@ const ConfirmTeam = () => {
 							<h2 className="f-oswald text-4xl font-medium">Save Your Team</h2>
 							<Button
 								onClick={handleSaveTeam}
-								className="bg-tw-green rounded-none h-12 font-medium px-6 inline-flex items-center hover:text-white"
+								className="next-btn"
 								disabled={loading}
 							>
 								{loading ? "Saving your team..." : "Save"}
@@ -198,7 +142,7 @@ const ConfirmTeam = () => {
 													style={{ backgroundImage: `url(${Stadium})` }}
 												>
 													<div className="players-lane gk-lane">
-														{displayGkPlayers()}
+														{displayPlayer("gk_1")}
 													</div>
 
 													<div className="players-lane def-lane">
@@ -220,7 +164,10 @@ const ConfirmTeam = () => {
 													</div>
 
 													<div className="subs-display  mt-14 position-container mx-auto">
-														{displaySubs()}
+														{displayPlayer("gk_2")}
+														{displayPlayer("def_4")}
+														{displayPlayer("mid_5")}
+														{displayPlayer("fwd_4")}
 													</div>
 												</div>
 											</div>
@@ -238,14 +185,17 @@ const ConfirmTeam = () => {
 
 export const StyledTeamPlayer = styled.div`
 	display: inline-flex;
-	justify-content: center;
+	justify-content: flex-end;
 	flex-direction: column;
 	align-items: center;
 	cursor: pointer;
 	position: relative;
+	width: 120px;
+	height: 100px;
 	.team-jersey-bg {
-		width: 50px;
-		height: 45px;
+		width: 60px;
+		height: 50px;
+		background-repeat: no-repeat;
 		position: relative;
 	}
 	.captain-tag {
@@ -263,6 +213,7 @@ export const StyledTeamPlayer = styled.div`
 	}
 	.points-tag {
 		font-size: 10px;
+		height: 14px;
 		background: radial-gradient(
 				50% 50% at 50% 50%,
 				rgba(255, 255, 255, 0.51) 0%,
@@ -299,7 +250,7 @@ export const StyledTeamPage = styled.div`
 	.field-bg {
 		width: 100%;
 		background-repeat: no-repeat;
-		height: 750px;
+		height: 850px;
 		background-size: 100%;
 		padding: 1rem;
 		transform: rotateX(-22deg);
@@ -307,21 +258,28 @@ export const StyledTeamPage = styled.div`
 	.players-lane {
 		position: relative;
 		display: flex;
-		justify-content: center;
+
 		margin: 2rem auto 0;
-		width: 80%;
 	}
 	.gk-lane {
-		margin-top: 3rem;
+		margin-top: 1rem;
+		width: 300px;
+		justify-content: center;
 	}
 	.def-lane {
 		margin-top: 3rem;
+		width: 450px;
+		justify-content: space-evenly;
 	}
 	.mid-lane {
 		margin-top: 4rem;
+		width: 550px;
+		justify-content: space-evenly;
 	}
 	.fwd-lane {
 		margin-top: 4rem;
+		width: 450px;
+		justify-content: space-evenly;
 	}
 	.success-alert {
 		background: rgba(74, 174, 117, 0.5);
@@ -336,6 +294,8 @@ export const StyledTeamPage = styled.div`
 		position: relative;
 		justify-content: center;
 		display: flex;
+		width: 550px;
+		justify-content: space-evenly;
 	}
 `;
 

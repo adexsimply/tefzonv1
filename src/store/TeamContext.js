@@ -4,7 +4,6 @@ export const TeamContext = createContext();
 
 const TeamContextProvider = (props) => {
 	const [currentSelection, setCurrentSelection] = useState(null);
-	const [currentSubSelection, setCurrentSubSelection] = useState(null);
 	const [selectedGoalKeepers, setSelectedGoalKeepers] = useState([]);
 
 	const [selectedMid, setSelectedMid] = useState([]);
@@ -24,15 +23,13 @@ const TeamContextProvider = (props) => {
 
 	const setSelectionParams = (params) => {
 		setCurrentSelection(params);
-		setCurrentSubSelection(null);
 	};
-	const setSubSelectionParams = (params) => {
-		setCurrentSubSelection(params);
-		setCurrentSelection(null);
-	};
+	// const setSubSelectionParams = (params) => {
+	// 	setCurrentSubSelection(params);
+	// 	setCurrentSelection(null);
+	// };
 	const resetSelectionParams = () => {
 		setSelectionParams(null);
-		setSubSelectionParams(null);
 	};
 	const handlePlayerSelection = (player) => {
 		console.log(player, "plaayer sel");
@@ -73,7 +70,9 @@ const TeamContextProvider = (props) => {
 		}
 	};
 	const removerPlayerFromList = (player) => {
-		switch (currentSelection) {
+		const { position } = player;
+
+		switch (position) {
 			case "goalkeeper":
 				const filteredGK = selectedGoalKeepers.filter(
 					(gk) => gk.id !== player.id
@@ -85,7 +84,7 @@ const TeamContextProvider = (props) => {
 			case "midfielder":
 				const filteredMd = selectedMid.filter((mid) => mid.id !== player.id);
 				if (filteredMd) {
-					selectedMid(filteredMd);
+					setSelectedMid(filteredMd);
 				}
 				break;
 			case "defender":
@@ -104,87 +103,87 @@ const TeamContextProvider = (props) => {
 				break;
 		}
 	};
-	const handleSubtitutePlayerSelection = (player) => {
-		switch (currentSubSelection) {
-			case "goalkeeper":
-				if (selectedGoalKeepers.length === 2) {
-					updateStatusMessage(
-						"warning",
-						"Subtitute Goal keeper has been added"
-					);
-				} else {
-					setSelectedGoalKeepers([
-						...selectedGoalKeepers,
-						{ ...player, is_substitute: true },
-					]);
-				}
-				break;
-			case "midfielder":
-				if (selectedMid.length === 5) {
-					updateStatusMessage(
-						"warning",
-						"Substitute Midfielder has been added"
-					);
-				} else {
-					setSelectedMid([...selectedMid, { ...player, is_substitute: true }]);
-				}
-				break;
-			case "defender":
-				if (selectedDef === 6) {
-					updateStatusMessage("warning", "Susbtitute defender has been added");
-				} else {
-					setSelectedDef([...selectedDef, { ...player, is_substitute: true }]);
-				}
-				break;
-			case "attacker":
-				if (selectedFwd.length === 4) {
-					updateStatusMessage("warning", "Substitute Forward has been added");
-				} else {
-					setSelectedFwd([...selectedFwd, { ...player, is_substitute: true }]);
-				}
-				break;
-			default:
-				break;
-		}
-	};
-	const handleRemoveSubtitutePlayerFromList = (player) => {
-		switch (currentSubSelection) {
-			case "goalkeeper":
-				const filteredGK = selectedGoalKeepers.filter(
-					(gk) => gk.id !== player.id && gk.is_substitute
-				);
-				if (filteredGK) {
-					setSelectedGoalKeepers(filteredGK);
-				}
-				break;
-			case "midfielder":
-				const filteredMd = selectedMid.filter(
-					(mid) => mid.id !== player.id && mid.is_substitute
-				);
-				if (filteredMd) {
-					selectedMid(filteredMd);
-				}
-				break;
-			case "defender":
-				const filteredDEF = selectedDef.filter(
-					(def) => def.id !== player.id && def.is_substitute
-				);
-				if (filteredDEF) {
-					setSelectedDef(filteredDEF);
-				}
-				break;
-			case "attacker":
-				const filteredFwd = selectedFwd.filter(
-					(fwd) => fwd.id !== player.id && fwd.is_substitute
-				);
-				if (filteredFwd) {
-					setSelectedFwd(filteredFwd);
-				}
-				break;
-			default:
-				break;
-		}
-	};
+	// const handleSubtitutePlayerSelection = (player) => {
+	// 	switch (currentSubSelection) {
+	// 		case "goalkeeper":
+	// 			if (selectedGoalKeepers.length === 2) {
+	// 				updateStatusMessage(
+	// 					"warning",
+	// 					"Subtitute Goal keeper has been added"
+	// 				);
+	// 			} else {
+	// 				setSelectedGoalKeepers([
+	// 					...selectedGoalKeepers,
+	// 					{ ...player, is_substitute: true },
+	// 				]);
+	// 			}
+	// 			break;
+	// 		case "midfielder":
+	// 			if (selectedMid.length === 5) {
+	// 				updateStatusMessage(
+	// 					"warning",
+	// 					"Substitute Midfielder has been added"
+	// 				);
+	// 			} else {
+	// 				setSelectedMid([...selectedMid, { ...player, is_substitute: true }]);
+	// 			}
+	// 			break;
+	// 		case "defender":
+	// 			if (selectedDef === 6) {
+	// 				updateStatusMessage("warning", "Susbtitute defender has been added");
+	// 			} else {
+	// 				setSelectedDef([...selectedDef, { ...player, is_substitute: true }]);
+	// 			}
+	// 			break;
+	// 		case "attacker":
+	// 			if (selectedFwd.length === 4) {
+	// 				updateStatusMessage("warning", "Substitute Forward has been added");
+	// 			} else {
+	// 				setSelectedFwd([...selectedFwd, { ...player, is_substitute: true }]);
+	// 			}
+	// 			break;
+	// 		default:
+	// 			break;
+	// 	}
+	// };
+	// const handleRemoveSubtitutePlayerFromList = (player) => {
+	// 	switch (currentSubSelection) {
+	// 		case "goalkeeper":
+	// 			const filteredGK = selectedGoalKeepers.filter(
+	// 				(gk) => gk.id !== player.id && gk.is_substitute
+	// 			);
+	// 			if (filteredGK) {
+	// 				setSelectedGoalKeepers(filteredGK);
+	// 			}
+	// 			break;
+	// 		case "midfielder":
+	// 			const filteredMd = selectedMid.filter(
+	// 				(mid) => mid.id !== player.id && mid.is_substitute
+	// 			);
+	// 			if (filteredMd) {
+	// 				selectedMid(filteredMd);
+	// 			}
+	// 			break;
+	// 		case "defender":
+	// 			const filteredDEF = selectedDef.filter(
+	// 				(def) => def.id !== player.id && def.is_substitute
+	// 			);
+	// 			if (filteredDEF) {
+	// 				setSelectedDef(filteredDEF);
+	// 			}
+	// 			break;
+	// 		case "attacker":
+	// 			const filteredFwd = selectedFwd.filter(
+	// 				(fwd) => fwd.id !== player.id && fwd.is_substitute
+	// 			);
+	// 			if (filteredFwd) {
+	// 				setSelectedFwd(filteredFwd);
+	// 			}
+	// 			break;
+	// 		default:
+	// 			break;
+	// 	}
+	// };
 	const updateStatusMessage = (msgType, response) => {
 		setStatusMessage({ type: msgType, msg: response });
 	};
@@ -211,9 +210,7 @@ const TeamContextProvider = (props) => {
 		<TeamContext.Provider
 			value={{
 				currentSelection,
-				currentSubSelection,
 				setSelectionParams,
-				setSubSelectionParams,
 				resetSelectionParams,
 				selectedGoalKeepers,
 				selectedMid,
@@ -221,8 +218,6 @@ const TeamContextProvider = (props) => {
 				selectedFwd,
 				handlePlayerSelection,
 				removerPlayerFromList,
-				handleSubtitutePlayerSelection,
-				handleRemoveSubtitutePlayerFromList,
 				statusMessage,
 				getTeamName,
 				view,
