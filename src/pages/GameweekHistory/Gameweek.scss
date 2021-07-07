@@ -1,0 +1,144 @@
+@import "../../styles/scss/base/variables";
+
+.gameweek-history-container {
+  background: #fff;
+  margin-top: 80px;
+  .team-details {
+    margin-bottom: 2rem;
+    .title {
+      margin-bottom: 22px;
+      p {
+        font-family: "Montserrat";
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 22px;
+        text-align: center;
+        color: $dark;
+        text-align: left;
+      }
+    }
+    .navigation {
+      margin-bottom: 3rem;
+      .ant-row {
+        align-items: center;
+      }
+      .game-date {
+        text-align: center;
+        font-weight: 600;
+        font-size: 20px;
+      }
+      .ant-btn {
+        width: 100%;
+        height: 50px;
+        border-radius: 5px;
+        background: $btn-gray;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 600;
+        svg {
+          font-size: 1.5rem;
+        }
+      }
+    }
+    .game-stats {
+      background: $btn-gray;
+      padding: 1rem;
+      .stats-card {
+        background: $white;
+        height: 110px;
+        padding: 8px;
+      }
+      .points {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: "Montserrat";
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 17px;
+        color: $dark;
+        .game-point {
+          color: $tw-red;
+          font-size: 36px;
+          line-height: 44px;
+          font-weight: bold;
+        }
+      }
+      .average-points {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 0;
+        .text {
+          font-size: 14px;
+        }
+        .value {
+          font-weight: 600;
+          color: $dark;
+          font-size: 14px;
+        }
+        .value.red {
+          color: $tw-red;
+        }
+      }
+      .average-points:first-child {
+        border-bottom: 1px solid $gray-4;
+      }
+      .leaderboard {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+        .ant-btn {
+          border-radius: 20px;
+          width: 250px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          font-weight: bold;
+          border: none;
+          svg {
+            font-size: 1.5rem;
+          }
+        }
+      }
+    }
+  }
+  .team-view-container {
+    margin-bottom: 1rem;
+    .stadium-bg {
+      background-image: url("../../assets/img/static/pitch-bg.png");
+      height: 80vh;
+      width: 100%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding: 2rem;
+      .view-btn {
+        width: 100%;
+        height: 44px;
+        background: #ffffff;
+        border-radius: 2px;
+        font-family: "Montserrat";
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 22px;
+        text-align: center;
+        color: #000000;
+        border: none;
+      }
+      .active {
+        background: #8139e6;
+        color: $white;
+      }
+      .field-bg {
+        background-size: cover;
+        background-image: url("../../assets/img/stadium.svg");
+        background-repeat: no-repeat;
+        width: 100%;
+        transform: rotateX(23deg);
+        height: 70vh;
+      }
+    }
+  }
+}

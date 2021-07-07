@@ -1,10 +1,11 @@
 import React, { useEffect, useContext } from "react";
 import { TeamContext } from "../../../store/TeamContext";
+import { AiOutlineClose } from "react-icons/ai";
+import { formatString } from "../../../helpers/utils";
 import PitchPlayer from "./PitchPlayer";
 import Stadium from "../../../assets/img/stadium.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
 import styled from "styled-components";
-import { AiOutlineClose } from "react-icons/ai";
 
 const PitchView = () => {
 	const {
@@ -12,7 +13,7 @@ const PitchView = () => {
 		draggedPlayer,
 		currentSelection,
 		setSelectionParams,
-		setSubSelectionParams,
+
 		updatePlayerParams,
 		selectedPitchId,
 		playerParams,
@@ -26,6 +27,7 @@ const PitchView = () => {
 		updateDefenders,
 		updateMidfielder,
 		updateForwards,
+		removerPlayerFromList,
 	} = useContext(TeamContext);
 
 	useEffect(() => {
@@ -46,12 +48,11 @@ const PitchView = () => {
 	const resetPlayerFilter = () => {
 		// reset selected player filter
 		setSelectionParams(null);
-		setSubSelectionParams(null);
 	};
 
 	const handleGoalKeepers = () => {
 		const newGoalKeeper = { ...draggedPlayer, ...playerParams };
-		console.log(draggedPlayer, playerParams);
+
 		if (selectedGoalKeepers.length === 0) {
 			updateGoalKeeper(newGoalKeeper);
 		} else {
@@ -144,15 +145,20 @@ const PitchView = () => {
 		setSelectionParams(data.position);
 		updatePlayerParams(data);
 	};
+	const undoPlayerSelection = (player) => removerPlayerFromList(player);
 
-	const displaySelectedGoalKeeps = () => {
-		return selectedGoalKeepers.map((player) => {
-			if (player.is_subtitute) {
-				return null;
-			}
+	const displaySelectedGoalKeeps = (placement) => {
+		const player = selectedGoalKeepers.find(
+			(player) => player.playerPlacement === placement
+		);
+
+		if (player) {
 			return (
 				<StyledTeamPlayer className=" pitch-player ">
-					<button className="close-btn">
+					<button
+						className="close-btn"
+						onClick={() => undoPlayerSelection(player)}
+					>
 						<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
 					</button>
 					<img src={TeamJersey} alt="" />
@@ -163,13 +169,13 @@ const PitchView = () => {
 					</div>
 				</StyledTeamPlayer>
 			);
-		});
+		}
 	};
 	const displayDefenders = (placement) => {
 		const player = selectedDef.find(
 			(player) => player.playerPlacement === placement
 		);
-		if (player && player.is_subtitute === false) {
+		if (player) {
 			return (
 				<StyledTeamPlayer
 					className=" pitch-player "
@@ -181,7 +187,9 @@ const PitchView = () => {
 					<img src={TeamJersey} alt="" />
 
 					<div className="">
-						<div className="player-tag">{player.name}</div>
+						<div className="player-tag" title={player.name}>
+							{formatString(player.name, 10)}
+						</div>
 						<div className="points-tag">{player.position}</div>
 					</div>
 				</StyledTeamPlayer>
@@ -196,7 +204,7 @@ const PitchView = () => {
 			(player) => player.playerPlacement === placement
 		);
 
-		if (player && player.is_subtitute === false) {
+		if (player) {
 			return (
 				<StyledTeamPlayer
 					className=" pitch-player "
@@ -222,7 +230,7 @@ const PitchView = () => {
 		const player = selectedFwd.find(
 			(player) => player.playerPlacement === placement
 		);
-		if (player && player.is_subtitute === false) {
+		if (player) {
 			return (
 				<StyledTeamPlayer
 					className=" pitch-player "
@@ -256,50 +264,6 @@ const PitchView = () => {
 		if (player) return true;
 		return false;
 	};
-	const isSubPlayerAvailable = (playerPlacement) => {
-		const team = [
-			...selectedDef,
-			...selectedFwd,
-			...selectedGoalKeepers,
-			...selectedMid,
-		];
-		const player = team.find(
-			(player) => player.playerPlacement === playerPlacement
-		);
-
-		if (player && player.is_subtitute) return true;
-		return false;
-	};
-	const displaySub = (placement) => {
-		const team = [
-			...selectedDef,
-			...selectedFwd,
-			...selectedGoalKeepers,
-			...selectedMid,
-		];
-		const player = team.find((player) => player.playerPlacement === placement);
-
-		if (player && player.is_subtitute) {
-			return (
-				<StyledTeamPlayer
-					className=" pitch-player "
-					style={{ marginRight: "2rem" }}
-				>
-					<button className="close-btn">
-						<AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
-					</button>
-					<img src={TeamJersey} alt="" />
-
-					<div className="">
-						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
-					</div>
-				</StyledTeamPlayer>
-			);
-		} else {
-			return null;
-		}
-	};
 
 	return (
 		<div className="pitch-view-container">
@@ -308,7 +272,7 @@ const PitchView = () => {
 				style={{ backgroundImage: `url(${Stadium})` }}
 			>
 				<div className="relative flex justify-center position-container mx-auto">
-					{displaySelectedGoalKeeps()}
+					{displaySelectedGoalKeeps("gk_1")}
 					{selectedGoalKeepers.length === 0 && (
 						<PitchPlayer
 							tagLabel="gk"
@@ -317,15 +281,14 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "goalkeeper",
-									is_subtitute: false,
-									playerPlacement: null,
+									is_substitute: false,
+									playerPlacement: "gk_1",
 								})
 							}
 						/>
 					)}
 				</div>
 				<div className="relative flex justify-center mt-10 position-container mx-auto">
-					{/* {displayDefenders()} */}
 					{isPlayerAvailable("def_1") ? (
 						displayDefenders("def_1")
 					) : (
@@ -338,7 +301,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "defender",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "def_1",
 								})
 							}
@@ -356,7 +319,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "defender",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "def_2",
 								})
 							}
@@ -374,7 +337,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "defender",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "def_3",
 								})
 							}
@@ -394,7 +357,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "midfielder",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "mid_1",
 								})
 							}
@@ -412,7 +375,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "midfielder",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "mid_2",
 								})
 							}
@@ -430,7 +393,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "midfielder",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "mid_3",
 								})
 							}
@@ -448,7 +411,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "midfielder",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "mid_4",
 								})
 							}
@@ -468,7 +431,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "attacker",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "fwd_1",
 								})
 							}
@@ -486,7 +449,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "attacker",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "fwd_2",
 								})
 							}
@@ -504,7 +467,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "attacker",
-									is_subtitute: false,
+									is_substitute: false,
 									playerPlacement: "fwd_3",
 								})
 							}
@@ -517,8 +480,8 @@ const PitchView = () => {
 					<div className="border-b-2 border-primary-dark"></div>
 				</div>
 				<div className="relative flex justify-center mt-8 position-container mx-auto">
-					{isSubPlayerAvailable("gk_2") ? (
-						displaySub("gk_2")
+					{isPlayerAvailable("gk_2") ? (
+						displaySelectedGoalKeeps("gk_2")
 					) : (
 						<PitchPlayer
 							wrapperClassName="mr-12"
@@ -528,14 +491,14 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "goalkeeper",
-									is_subtitute: true,
+									is_substitute: true,
 									playerPlacement: "gk_2",
 								})
 							}
 						/>
 					)}
-					{isSubPlayerAvailable("mid_5") ? (
-						displaySub("mid_5")
+					{isPlayerAvailable("mid_5") ? (
+						displayMidfielders("mid_5")
 					) : (
 						<PitchPlayer
 							wrapperClassName="mr-12"
@@ -545,14 +508,14 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "midfielder",
-									is_subtitute: true,
+									is_substitute: true,
 									playerPlacement: "mid_5",
 								})
 							}
 						/>
 					)}
-					{isSubPlayerAvailable("def_4") ? (
-						displaySub("def_4")
+					{isPlayerAvailable("def_4") ? (
+						displayDefenders("def_4")
 					) : (
 						<PitchPlayer
 							wrapperClassName="mr-12"
@@ -562,14 +525,14 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "defender",
-									is_subtitute: true,
+									is_substitute: true,
 									playerPlacement: "def_4",
 								})
 							}
 						/>
 					)}
-					{isSubPlayerAvailable("fwd_4") ? (
-						displaySub("fwd_4")
+					{isPlayerAvailable("fwd_4") ? (
+						displayForward("fwd_4")
 					) : (
 						<PitchPlayer
 							wrapperClassName="mr-12"
@@ -579,7 +542,7 @@ const PitchView = () => {
 							onClick={(ev) =>
 								handlePlayerSelection(ev, {
 									position: "attacker",
-									is_subtitute: true,
+									is_substitute: true,
 									playerPlacement: "fwd_4",
 								})
 							}
@@ -598,11 +561,13 @@ export const StyledTeamPlayer = styled.div`
 	align-items: center;
 	cursor: pointer;
 	position: relative;
+	width: 100px;
+	height: 80px;
 
 	button.close-btn {
 		position: absolute;
 		top: -4px;
-		left: 51px;
+		right: 20px;
 		background: #fff;
 		border-radius: 50px;
 		width: 20px;

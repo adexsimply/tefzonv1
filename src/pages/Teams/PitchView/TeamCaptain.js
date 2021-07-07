@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Row, Col } from "antd";
 import { loadTeam, saveTeam } from "../../../store/localStorage";
 import { Link, useHistory } from "react-router-dom";
+import { formatString } from "../../../helpers/utils";
 import DashboardLayout from "../../../components/common/Layout";
 import PitchBg from "../../../assets/img/static/pitch-bg.png";
 import CaptainIcon from "../../../assets/img/icons/captain.svg";
@@ -27,7 +28,7 @@ const TeamCaptain = () => {
 		let def = team.filter((player) => player.position === "defender");
 		let mids = team.filter((player) => player.position === "midfielder");
 		let fwds = team.filter((player) => player.position === "attacker");
-		console.log("how often here");
+
 		setGoalKeepers([...gk]);
 		setUpdatedDefenders([...def]);
 		setUpdatedMidfielders([...mids]);
@@ -65,52 +66,52 @@ const TeamCaptain = () => {
 		setUpdatedForwards([...resetFwd]);
 	};
 	const handleSelectCaptain = (ev, player) => {
-		console.log("you clicked to set captain", player);
 		resetPlayers();
 
 		switch (player.position) {
 			case "goalkeeper":
-				const newGk = [];
+				let newGk = [];
 				goalKeepers.forEach((item) => {
-					if (item.name !== player.name) {
+					if (item.id !== player.id) {
 						newGk.push(item);
+					} else {
+						newGk.push({ ...player, is_captain: true });
 					}
 				});
-				const gkCaptain = { ...player, is_captain: true };
-				newGk.push(gkCaptain);
 				setGoalKeepers([...newGk]);
 				break;
 			case "defender":
-				const newDef = [];
+				let newDef = [];
 				defenders.forEach((item) => {
-					if (item.name !== player.name) {
+					if (item.id !== player.id) {
 						newDef.push({ ...item, is_captain: false });
+					} else {
+						newDef.push({ ...player, is_captain: true });
 					}
 				});
-				const defCaptain = { ...player, is_captain: true };
-				newDef.push(defCaptain);
 				setUpdatedDefenders([...newDef]);
 				break;
 			case "midfielder":
-				const newMid = [];
+				let newMid = [];
 				midfielders.forEach((item) => {
-					if (item.name !== player.name) {
+					if (item.id !== player.id) {
 						newMid.push({ ...item, is_captain: false });
+					} else {
+						newMid.push({ ...player, is_captain: true });
 					}
 				});
-				const midCaptain = { ...player, is_captain: true };
-				newMid.push(midCaptain);
+
 				setUpdatedMidfielders([...newMid]);
 				break;
-			case "atacker":
-				const newFwd = [];
+			case "attacker":
+				let newFwd = [];
 				forwards.forEach((item) => {
-					if (item.name !== player.name) {
+					if (item.id !== player.id) {
 						newFwd.push({ ...item, is_captain: false });
+					} else {
+						newFwd.push({ ...player, is_captain: true });
 					}
 				});
-				const fwdCaptain = { ...player, is_captain: true };
-				newFwd.push(fwdCaptain);
 				setUpdatedForwards([...newFwd]);
 				break;
 			default:
@@ -119,47 +120,16 @@ const TeamCaptain = () => {
 		setCaptainSelected(true);
 	};
 
-	const displayGkPlayers = () => {
-		return goalKeepers.map((players) => {
-			return (
-				<StyledTeamPlayer
-					className=" pitch-player "
-					onClick={(ev) => handleSelectCaptain(ev, players)}
-				>
-					<div
-						className="team-jersey-bg"
-						style={{ backgroundImage: `url(${TeamJersey})` }}
-					>
-						{players.is_captain && (
-							<img
-								src={CaptainIcon}
-								className="captain-tag"
-								alt="captain icon"
-							/>
-						)}
-					</div>
-
-					<div className="">
-						<div className="player-tag">{players.name}</div>
-						<div className="points-tag">{players.points}</div>
-					</div>
-				</StyledTeamPlayer>
-			);
-		});
-	};
-
-	const displayDefenders = (placement) => {
-		const player = defenders.find(
+	const displayGkPlayers = (placement) => {
+		const player = goalKeepers.find(
 			(player) => player.playerPlacement === placement
 		);
 
 		if (player) {
-			console.log(player.is_captain, "def", player.name);
 			return (
 				<StyledTeamPlayer
 					className=" pitch-player "
 					onClick={(ev) => handleSelectCaptain(ev, player)}
-					style={{ marginRight: "2rem" }}
 				>
 					<div
 						className="team-jersey-bg"
@@ -175,8 +145,46 @@ const TeamCaptain = () => {
 					</div>
 
 					<div className="">
-						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="player-tag" title={player.name}>
+							{formatString(player.name, 8)}
+						</div>
+						<div className="points-tag">{player.age}</div>
+					</div>
+				</StyledTeamPlayer>
+			);
+		}
+		return null;
+	};
+
+	const displayDefenders = (placement) => {
+		const player = defenders.find(
+			(player) => player.playerPlacement === placement
+		);
+
+		if (player) {
+			return (
+				<StyledTeamPlayer
+					className=" pitch-player "
+					onClick={(ev) => handleSelectCaptain(ev, player)}
+				>
+					<div
+						className="team-jersey-bg"
+						style={{ backgroundImage: `url(${TeamJersey})` }}
+					>
+						{player.is_captain && (
+							<img
+								src={CaptainIcon}
+								className="captain-tag"
+								alt="captain icon"
+							/>
+						)}
+					</div>
+
+					<div className="">
+						<div className="player-tag" title={player.name}>
+							{formatString(player.name, 8)}
+						</div>
+						<div className="points-tag">{player.age}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -193,7 +201,6 @@ const TeamCaptain = () => {
 				<StyledTeamPlayer
 					className=" pitch-player "
 					onClick={(ev) => handleSelectCaptain(ev, player)}
-					style={{ marginRight: "2rem" }}
 				>
 					<div
 						className="team-jersey-bg"
@@ -209,8 +216,10 @@ const TeamCaptain = () => {
 					</div>
 
 					<div className="">
-						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="player-tag" title={player.name}>
+							{formatString(player.name, 8)}
+						</div>
+						<div className="points-tag">{player.age}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -227,7 +236,6 @@ const TeamCaptain = () => {
 				<StyledTeamPlayer
 					className=" pitch-player "
 					onClick={(ev) => handleSelectCaptain(ev, player)}
-					style={{ marginRight: "2rem" }}
 				>
 					<div
 						className="team-jersey-bg"
@@ -243,8 +251,10 @@ const TeamCaptain = () => {
 					</div>
 
 					<div className="">
-						<div className="player-tag">{player.name}</div>
-						<div className="points-tag">{player.points}</div>
+						<div className="player-tag" title={player.name}>
+							{formatString(player.name, 8)}
+						</div>
+						<div className="points-tag">{player.age}</div>
 					</div>
 				</StyledTeamPlayer>
 			);
@@ -291,7 +301,7 @@ const TeamCaptain = () => {
 										style={{ backgroundImage: `url(${Stadium})` }}
 									>
 										<div className="players-lane gk-lane">
-											{displayGkPlayers()}
+											{displayGkPlayers("gk_1")}
 										</div>
 										<div className="players-lane def-lane">
 											{displayDefenders("def_1")}
@@ -308,6 +318,12 @@ const TeamCaptain = () => {
 											{displayForwards("fwd_1")}
 											{displayForwards("fwd_2")}
 											{displayForwards("fwd_3")}
+										</div>
+										<div className="players-lane subs-lane">
+											{displayGkPlayers("gk_2")}
+											{displayDefenders("def_4")}
+											{displayMidfielders("mid_5")}
+											{displayForwards("fwd_4")}
 										</div>
 									</div>
 								</div>
@@ -353,29 +369,35 @@ export var StyledPitchPage = styled.div`
 	.players-lane {
 		position: relative;
 		display: flex;
-		justify-content: center;
+
 		margin: 2rem auto 0;
-		width: 80%;
 	}
 	.gk-lane {
+		width: 300px;
+		justify-content: center;
 		margin-top: 5rem;
 	}
 	.def-lane {
 		margin-top: 3rem;
+		width: 450px;
+		justify-content: space-evenly;
 	}
 	.mid-lane {
 		margin-top: 3rem;
+		width: 550px;
+		justify-content: space-evenly;
 	}
 	.fwd-lane {
 		margin-top: 4rem;
+		width: 450px;
+		justify-content: space-evenly;
 	}
-	.team-jersey-bg {
-		width: 50px;
-		height: 40px;
-		background-size: cover;
-		background-repeat: no-repeat;
-		position: relative;
+	.subs-lane {
+		margin-top: 4rem;
+		width: 550px;
+		justify-content: space-evenly;
 	}
+
 	.captain-tag {
 		position: absolute;
 		bottom: -3px;
@@ -385,11 +407,14 @@ export var StyledPitchPage = styled.div`
 `;
 export const StyledTeamPlayer = styled.div`
 	display: inline-flex;
-	justify-content: center;
+	justify-content: flex-end;
 	flex-direction: column;
 	align-items: center;
 	cursor: pointer;
 	position: relative;
+	width: 100px;
+	height: 80px;
+	// margin-right: 2rem;
 
 	.player-tag {
 		background: #33175a;
@@ -398,8 +423,16 @@ export const StyledTeamPlayer = styled.div`
 		padding: 0 1rem;
 		font-size: 10px;
 	}
+	.team-jersey-bg {
+		width: 60px;
+		height: 50px;
+		background-size: cover;
+		background-repeat: no-repeat;
+		position: relative;
+	}
 	.points-tag {
 		font-size: 10px;
+		height: 14px;
 		background: radial-gradient(
 				50% 50% at 50% 50%,
 				rgba(255, 255, 255, 0.51) 0%,
