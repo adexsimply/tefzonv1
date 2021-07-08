@@ -121,9 +121,9 @@ class MetadatumController {
 
       return response.status(200).json({
         results:promises,
-        label: `Signup teams Fetching`,
+        label: `Player list `,
         statusCode: 200,
-        message: `Teams fetched successfully`,
+        message: `Player list fetched successfully`,
       })
 
    } catch (error) {
@@ -222,14 +222,14 @@ class MetadatumController {
           
         return response.status(200).json({
           results:responseFromApi,
-          label: `Signup teams Fetching`,
+          label: `Ranking Updated`,
           statusCode: 200,
         })
      } catch (error) {
        console.log("Get fixtures error ",error);
       return response.status(400).json({
         error,
-        label: `Fixtures Fetching`,
+        label: `Rank Update`,
         statusCode: 400,
         message: `We were unable to update`,
       })
