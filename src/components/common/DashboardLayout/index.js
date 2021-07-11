@@ -11,16 +11,8 @@ import "./Layout.scss";
 const DashboardLayout = (props) => {
   const links = [
     {
-      url: "status",
-      name: "Status",
-    },
-    {
       url: "/teams",
       name: "Teams",
-    },
-    {
-      url: "/transfer",
-      name: "Transfer",
     },
     {
       url: "/leagues",

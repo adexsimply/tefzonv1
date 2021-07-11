@@ -1,16 +1,24 @@
-import React from "react";
-import DashboardLayout from "../../components/common/Layout/index";
+import React, { useContext } from "react";
+import DashboardLayout from "../../components/common/DashboardLayout";
 import { Row, Col, Button } from "antd";
+import { getView } from "../../store/localStorage";
+import { CreateTeamContext } from "../../store/CreateTeamContext";
 import { CgArrowLongLeft, CgArrowLongRight } from "react-icons/cg";
+import ViewTeamSidebar from "../../components/ViewTeamSidebar";
+import PitchView from "./PitchView";
+import ListView from "./ListView";
 import "./Gameweek.scss";
 
 const GameweekHistory = () => {
+  const { changeView } = useContext(CreateTeamContext);
+  const view = getView();
+
   return (
     <DashboardLayout>
       <div className="gameweek-history-container">
         <Row justify="center">
           <Col lg={22}>
-            <Row>
+            <Row gutter={20}>
               <Col lg={17}>
                 <div className="team-details">
                   <div className="title">
@@ -78,17 +86,35 @@ const GameweekHistory = () => {
                   <div className="stadium-bg">
                     <Row justify="center">
                       <Col lg={6}>
-                        <Button className="view-btn">Pitch View</Button>
+                        <Button
+                          className={
+                            "view-btn " + (view === "pitch" ? "active" : "")
+                          }
+                          onClick={() => changeView("pitch")}
+                        >
+                          Pitch View
+                        </Button>
                       </Col>
                       <Col lg={6}>
-                        <Button className="view-btn active">List View</Button>
+                        <Button
+                          className={
+                            "view-btn " + (view === "list" ? "active" : "")
+                          }
+                          onClick={() => changeView("list")}
+                        >
+                          List View
+                        </Button>
                       </Col>
                     </Row>
-                    <div className="field-bg"></div>
+                    <div className="field-bg">
+                      {view === "pitch" ? <PitchView /> : <ListView />}
+                    </div>
                   </div>
                 </div>
               </Col>
-              <Col lg={6}></Col>
+              <Col lg={6}>
+                <ViewTeamSidebar />
+              </Col>
             </Row>
           </Col>
         </Row>

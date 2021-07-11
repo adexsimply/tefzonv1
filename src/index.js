@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import AppContextProvider from "./store/AppContext";
-import TeamContextProvider from "./store/TeamContext";
+import CreateTeamContextProvider from "./store/CreateTeamContext";
+import ViewTeamProvider from "./store/TeamContext";
 import "../node_modules/antd/dist/antd.css";
 import "./tailwind.css";
 import "./index.scss";
@@ -10,14 +11,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
-	<React.StrictMode>
-		<AppContextProvider>
-			<TeamContextProvider>
-				<App />
-			</TeamContextProvider>
-		</AppContextProvider>
-	</React.StrictMode>,
-	document.getElementById("root")
+  <React.StrictMode>
+    <AppContextProvider>
+      <ViewTeamProvider>
+        <CreateTeamContextProvider>
+          <App />
+        </CreateTeamContextProvider>
+      </ViewTeamProvider>
+    </AppContextProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
