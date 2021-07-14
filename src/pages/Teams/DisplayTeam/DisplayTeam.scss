@@ -1,155 +1,155 @@
 @import "../../../styles/scss/base/variables";
-.list-display-container {
-  padding: 70px;
-  .title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 2rem;
+.display-team-container {
+  padding-top: 2rem;
+
+  .team-header {
+    p {
+      font-weight: 600;
+      font-size: 24px;
+    }
   }
-  .game-display-container {
-    position: relative;
+  .gameweek-display-container {
     .game-display {
       background: $primary-brand-darker;
-      position: absolute;
-      top: -5px;
-      height: 56px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 16px;
-      font-weight: 600;
+      padding: 1rem 0;
+      text-align: center;
+      font-weight: bold;
+
       .white {
         color: $white;
       }
       .green {
-        color: $green-darker;
-        display: inline-block;
-        margin-left: 0.4rem;
+        color: $tw-green;
+        margin-left: 10px;
       }
     }
-    .green-bg {
-      background: $green-darker;
-      bottom: -16px;
-      height: 60px;
-      width: 93%;
+    .green-band {
+      height: 6px;
+      background: $tw-green;
+      width: 92%;
       margin: auto;
     }
   }
   .info {
+    margin: 2rem 0;
     background: $primary-brand-lighter;
-    padding: 0.5rem;
-    margin: 1rem 0;
-    p {
-      text-align: center;
-    }
+    padding: 0.5rem 0;
+    text-align: center;
   }
-  .players-display-container {
-    .stadium-backdrop {
-      background-repeat: no-repeat;
-      background-size: cover;
-      width: 100%;
-      height: 700px;
-      background-image: url("../../../assets/img/static/pitch-bg.png");
-      padding: 1rem;
-      .view-btn {
+  .stadium-backdrop {
+    width: 100%;
+    height: 750px;
+    background-image: url("../../../assets/img/static/pitch-bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    .view-btn-container {
+      margin-bottom: 3rem;
+      .ant-btn.view-btn {
         width: 50%;
-        height: 50px;
-        border: 0;
-        outline: $primary-brand;
+        height: 45px;
         background: $white;
-        margin: 2rem 0;
-        color: $black;
         font-weight: 600;
-        &:hover {
-          border: 1px solid $primary-brand-darker;
-        }
+        color: $black;
       }
-      .view-btn.active-btn {
+      .ant-btn.view-btn.active-btn {
         background: $primary-brand;
         color: $white;
+        border: none;
       }
-      .list-view {
-        background: $white;
-        max-height: 550px;
-        overflow-y: auto;
-        &::-webkit-scrollbar {
-          width: 6px;
+    }
+    .field-bg {
+      width: 100%;
+      height: 600px;
+      background-image: url("../../../assets/img/stadium.svg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      transform: rotateX(4deg);
+      .player-row {
+        display: flex;
+        margin: auto;
+        .pitch-player {
+          width: 120px;
+          height: 92px;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: center;
+
+          .player-tag {
+            background: #33175a;
+            color: #fff;
+            font-weight: bold;
+            padding: 0 1rem;
+            font-size: 10px;
+          }
+          .points-tag {
+            font-size: 10px;
+            background: radial-gradient(
+                50% 50% at 50% 50%,
+                rgba(255, 255, 255, 0.51) 0%,
+                rgba(255, 255, 255, 0.37) 100%
+              ),
+              #33175a;
+            text-align: center;
+            color: #fff;
+          }
+          .jersey-goalkeeper {
+            fill: #ffd500;
+          }
+          .jersey-defender {
+            fill: #03a9f4;
+          }
+          .jersey-midfielder {
+            fill: #880005;
+          }
+          .jersey-attacker {
+            fill: #054864;
+          }
         }
-        &::-webkit-scrollbar-track {
-          background: $primary-brand-light;
-        }
-        &::-webkit-scrollbar-thumb {
-          background: $tw-yellow;
-        }
+      }
+      .def-row {
+        width: 300px;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .mid-row {
+        width: 450px;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+      }
+      .fwd-row {
+        width: 300px;
+        justify-content: space-between;
+      }
+    }
+    .list-view {
+      margin: 0 1rem;
+      max-height: 600px;
+      overflow-y: auto;
+      background: $white;
+      .player-row {
+        border-bottom: 1px solid rgba(187, 186, 186, 0.5);
       }
     }
   }
-  .list-side-container {
-    background: $primary-brand-darker;
-    padding: 1rem 0.5rem;
-    .player-name {
-      color: $white;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      font-size: 20px;
-    }
-    .player-info {
-      background: $gray-light;
-      position: relative;
-      .team-name {
-        padding: 1.4rem 0.3rem;
-        border-bottom: 1px solid $gray-4;
-        font-size: 16px;
-        font-weight: 600;
-        img {
-          width: 40px;
-        }
+}
+.list-display-container {
+  .players-display-container {
+    .list-view {
+      background: $white;
+      max-height: 550px;
+      overflow-y: auto;
+      .pl &::-webkit-scrollbar {
+        width: 6px;
       }
-      .points-ranking-wrapper {
-        padding: 0.3rem;
-        P {
-          font-size: 20px;
-          font-weight: 600;
-        }
-        border-bottom: 1px solid $gray-4;
+      &::-webkit-scrollbar-track {
+        background: $primary-brand-light;
       }
-      .points {
-        padding: 0.3rem;
-        border-bottom: 1px solid $gray-4;
-        font-size: 14px;
-        justify-content: space-between;
-        color: $primary-dark;
-        .value {
-          font-weight: 600;
-        }
-      }
-      .points.points-btn {
-        justify-content: flex-end;
-        a {
-          border: 0;
-          outline: none;
-          background: transparent;
-          display: flex;
-          align-items: center;
-          padding: 0;
-          font-weight: 600;
-          &:hover {
-            color: $primary-brand;
-          }
-          img {
-            display: inline-block;
-            margin-left: 4px;
-          }
-        }
-      }
-      .band {
-        position: absolute;
-        width: 93%;
-        margin: auto;
-        border-top: 4px solid $green-darker;
-        left: 5%;
-        right: 5%;
+      &::-webkit-scrollbar-thumb {
+        background: $tw-yellow;
       }
     }
   }
