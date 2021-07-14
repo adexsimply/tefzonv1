@@ -48,7 +48,7 @@ class RankingController {
             .fetch()
         
             return response.status(200).json({
-                result: getWeeklyRanking,
+                result: getPlayerWeekRanking,
                 label: `User team Rankings`,
                 statusCode: 200,
                 message: `User Team Rankings Fetched successfully`,
