@@ -11,12 +11,15 @@ const Config = use("Config");
 const Database = use("Database")
 const makeExternalRequestFeature = use("App/Features/MakeExternalRequestFeature")
 const moment = use("moment");
+const WeekSeason  = use("App/Models/WeekSeason");
 
 
 
 class TeamManagementController {
 
     async createTeam({ request , response, auth }){
+        const currentweekSeason  = await WeekSeason.query().where("is_current_week", 1).andWhere("is_current_season",  1).first()
+
         try {
             const user  = auth.current.user
             let {squad_selection,team_name  } = request.all()
@@ -59,6 +62,7 @@ class TeamManagementController {
                     let itemId  = parseInt(item.id)
                     let currentPlayerEndpoint = `${playerEndpoint}?id=${itemId}&season=${yearInt}`
                      const responseFromApi = await new makeExternalRequestFeature({endpoint:`${currentPlayerEndpoint}`}).makeGetRequest()
+                     console.log({responseFromApi});
                      let currentPlayerDetails  =  responseFromApi.results.response[0].player
                     if ( !item.is_captain){
                         item.is_captain = 0
@@ -80,6 +84,7 @@ class TeamManagementController {
                         wing:item.wing,
                         placement:item.placement,
                         is_substitute:item.is_substitute,
+                        week_season_id:currentweekSeason.id,
                         is_captain: item.is_captain 
                     })
                 }
@@ -238,6 +243,8 @@ class TeamManagementController {
             .where("squad_id", userSquad.id)
             .with("player")
             .fetch()
+
+            
         
             if(!viewUserTeam){
                 return response.status(200).json({

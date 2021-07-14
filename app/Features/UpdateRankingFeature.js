@@ -21,59 +21,62 @@ class UpdateRankingFeature {
 
   async updateRankings(){
 
-    async function updatePlayerScores(paramType , playerSquadDetails , playerInfo){
+    async function updatePlayerScores(paramType , playerInfo){
       // get points for goals for player
 
-      console.log({playerSquadDetails});
-      const pointParameters = await PointParams.query().where({
-        param_type: paramType,
-        player_type: playerSquadDetails.wing
-      }).first()
-
-      const currentweekSeason  = await WeekSeason.query().where("is_current_week", 1).andWhere("is_current_season",  1).first()
-      const pointSettings = await PointSetting.query().where("param_id" ,pointParameters.id).first()
-      const pointsForPlayer = pointSettings.points
-    const playerToUpdate =  await PlayerSquad.query()
+     const currentweekSeason  = await WeekSeason.query().where("is_current_week", 1).andWhere("is_current_season",  1).first()
+    //  Get all player in squads with id passed 
+     const playerToUpdate =  await PlayerSquad.query()
         .where({
           player_id:playerInfo[0],
           week_season_id: currentweekSeason.id
-        }).first()
+        }).fetch()
+      
+        if(!playerToUpdate){
+          return{
+            status:"Internal Server Error", 
+            status_code:500, 
+            message: "Player not found"
+          } 
+        }
+        const playersToUpdate = playerToUpdate.toJSON()
+        
+        console.log({playersToUpdate});
+        for (let i = 0; i < playersToUpdate.length; i++) {
+          const currentPlayer = playersToUpdate[i];
+            // get points to be given to player based on thier wing 
+            const pointParameters = await PointParams.query().where({
+              param_type: paramType,
+              player_type: currentPlayer.wing
+            }).first()
+            const pointSettings = await PointSetting.query().where("param_id" ,pointParameters.id).first()
+            const pointsForPlayer = pointSettings.points
 
+          const currentPlayerUpdate = await PlayerSquad.query().where("id",currentPlayer.id).first()
+          
+          currentPlayerUpdate.points_total =   currentPlayerUpdate.points_total + pointsForPlayer
+          const responseFromUpdate = await currentPlayerUpdate.save()
 
-      if(!playerToUpdate){
-        return{
-          status:"Internal Server Error", 
-          status_code:500, 
-          message: "Player not found"
-        } 
-      }
-      else{
-        playerToUpdate.points_total = playerToUpdate.points_total + pointsForPlayer
-        const responseFromUpdate = await  playerToUpdate.save()
-
-        // update squad points 
-        const updateSquadPoints = await League.query().where(
-          { 
-            player_squad_id:playerSquadDetails.squad_id ,
-            week_season_id: currentweekSeason.id
-          }).first()
-
-          if (!updateSquadPoints) {
-            await League.findOrCreate(
+            // update squad points 
+            const updateSquadPoints = await League.query().where(
               { 
-                player_squad_id:playerSquadDetails.squad_id ,
-                week_season_id:  currentweekSeason.id,
-                points_total:pointsForPlayer
-              })
-    
-          } else {
-            updateSquadPoints.points_total =  updateSquadPoints.points_total + pointsForPlayer
-           await updateSquadPoints.save()
-          }
+                player_squad_id:currentPlayer.squad_id ,
+                week_season_id: currentweekSeason.id
+              }).first()
 
-        return responseFromUpdate
-      }
-       
+              if (!updateSquadPoints) {
+                await League.findOrCreate(
+                  { 
+                    player_squad_id:currentPlayer.squad_id ,
+                    week_season_id:  currentweekSeason.id,
+                    points_total:pointsForPlayer
+                  }
+                )
+              } else {
+                updateSquadPoints.points_total =  updateSquadPoints.points_total + pointsForPlayer
+              await updateSquadPoints.save()
+              }
+        } 
     }
 
     try {
@@ -91,10 +94,10 @@ class UpdateRankingFeature {
       let today = "2021-01-12"
 
       const teamEndpoints = [ 
-        `${fixturesBaseUrl}?league=39&season=${currentyear}&date=${today}`,
-        `${fixturesBaseUrl}?league=135&season=${currentyear}&date=${today}`,
-        `${fixturesBaseUrl}?league=61&season=${currentyear}&date=${today}`,
-        `${fixturesBaseUrl}?league=78&season=${currentyear}&date=${today}`,
+        // `${fixturesBaseUrl}?league=39&season=${currentyear}&date=${today}`,
+        // `${fixturesBaseUrl}?league=135&season=${currentyear}&date=${today}`,
+        // `${fixturesBaseUrl}?league=61&season=${currentyear}&date=${today}`,
+        // `${fixturesBaseUrl}?league=78&season=${currentyear}&date=${today}`,
         `${fixturesBaseUrl}?league=140&season=${currentyear}&date=${today}`
         ];        
 
@@ -102,12 +105,14 @@ class UpdateRankingFeature {
       for (let i = 0; i < teamEndpoints.length; i++) {
         const responseFromApi = await new makeExternalRequestFeature(
           {endpoint:teamEndpoints[i]
-         }
+        }
         ).makeGetRequest()
-        let responseTeamObject = responseFromApi.results
-        for(let j = 0 ;j < responseTeamObject.response.length; j++ ){
-            promises.push(responseTeamObject.response[j])
-          }
+        if(responseFromApi.results){
+          let responseTeamObject = responseFromApi.results
+          for(let j = 0 ;j < responseTeamObject.response.length; j++ ){
+              promises.push(responseTeamObject.response[j])
+            }
+        }
       } 
       Promise.all(promises)
 
@@ -124,45 +129,39 @@ class UpdateRankingFeature {
         const responseFromApi = await new makeExternalRequestFeature(
           {endpoint:fixtureEndpoint}
         ).makeGetRequest()
-        
-        let singleFixturePlayers = responseFromApi.results.response[0].players
-          // console.log(singleFixturePlayers[0].player);
-        for(let j = 0 ;j < singleFixturePlayers.length; j++ ){
-          playerFixtureStatistics.push(singleFixturePlayers[j])
+        if(responseFromApi){
+          let singleFixturePlayers = responseFromApi.results.response[0].players
+          console.log({singleFixturePlayers});
+          for(let j = 0 ;j < singleFixturePlayers.length; j++ ){
+            playerFixtureStatistics.push(singleFixturePlayers[j])
           }
+        }
       } 
       console.log("playerFixtureStatistics" , playerFixtureStatistics.length);
+      
       // compare players in system to players in fixtures that day 
       for (let i = 0; i < playerFixtureStatistics.length ; i++) {
           if(getAllPlayerIds.includes(playerFixtureStatistics[i].player.id)){
            console.log("THIS MATCHES" , playerFixtureStatistics[i].player.id); 
             const getPlayerInSystem = await Player.query().where("player_id", playerFixtureStatistics[i].player.id ).pluck("id")
-            const getPlayerDetails = await PlayerSquad.query()
-                  .where({
-                      player_id: getPlayerInSystem[0]
-                  })
-                  .fetch()
-
-                  console.log({getPlayerDetails});
-
-            const  playerDetailsJson = getPlayerDetails.toJSON();
-            const playerSquadDetails = playerDetailsJson[0]
+           
             // check if player scored a goal
             const playerGoalStat =  playerFixtureStatistics[i].statistics["0"].goals
             let paramType;
             if(playerGoalStat.total){ //CHECK THIS LOGIC HERE AGAIN 
                paramType = "Goal";
-               const resultFromUpdate =await updatePlayerScores(paramType, playerSquadDetails,  getPlayerInSystem)
+              //  console.log({getPlayerInSystem});
+               const resultFromUpdate =await updatePlayerScores(paramType,   getPlayerInSystem)
                console.log({resultFromUpdate});
             }
             else if(!playerGoalStat.conceded){
               paramType = "Clean Sheet";
-              const resultFromUpdate =await updatePlayerScores(paramType, playerSquadDetails,  getPlayerInSystem)
+              const resultFromUpdate =await updatePlayerScores(paramType,  getPlayerInSystem)
               console.log({resultFromUpdate});
             }
             else if(playerGoalStat.assists){
               paramType = "Goal Assist";
-              const resultFromUpdate =await updatePlayerScores(paramType, playerSquadDetails,  getPlayerInSystem)
+              const resultFromUpdate =await updatePlayerScores(paramType,  getPlayerInSystem)
               console.log({resultFromUpdate});
             }
           } 
