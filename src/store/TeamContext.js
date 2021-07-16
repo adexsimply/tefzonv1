@@ -18,12 +18,14 @@ const TeamProvider = ({ children }) => {
     setLoadingTeam(true);
     try {
       const teams = await getTeam();
+      console.log(teams);
 
       if (teams.statusCode === 200) {
         setTeamData(teams.result);
         setTeamDetails(teams.result.teamDetails);
         setTeamPlayers(teams.result.players);
-      }
+        console.log({teamData, teamDetails, teamPlayers});
+    }
     } catch (error) {
       if (error) {
         setLoadingTeam(false);

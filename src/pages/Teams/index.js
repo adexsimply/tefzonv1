@@ -31,7 +31,7 @@ const Teams = () => {
         </div>
       );
     } else {
-      if (teamPlayers === null) {
+      if (!teamPlayers) {
         // return errorView();
         return <TeamEmptyState />;
       } else {

@@ -14,6 +14,8 @@ const PitchView = () => {
         teamPlayer.placement === placement && teamPlayer.wing === position
     );
 
+    console.log(matchPlayer);
+
     if (matchPlayer && matchPlayer.length > 0) {
       return (
         <div className="pitch-player ">

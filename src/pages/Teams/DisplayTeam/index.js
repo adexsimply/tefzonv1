@@ -7,9 +7,10 @@ import ViewTeamSidebar from "../../../components/ViewTeamSidebar";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import { Button, Row, Col } from "antd";
 
-const DisplayTeam = ({ teamDetails }) => {
+const DisplayTeam = ({ teamDetails, teamInfo }) => {
   const { changeView } = useContext(CreateTeamContext);
   const view = getView();
+  console.log({ teamDetails, teamInfo })
   return (
     <DashboardLayout>
       <Row justify="center">
@@ -56,13 +57,13 @@ const DisplayTeam = ({ teamDetails }) => {
                     </Button>
                   </Col>
                 </Row>
-                <div className="team-content-container">
+                {/* <div className="team-content-container"> */}
                   {view === "pitch" ? (
                     <DisplayPitchView />
                   ) : (
                     <DisplayListView />
                   )}
-                </div>
+                {/* </div> */}
               </div>
             </Col>
             <Col lg={6}>
