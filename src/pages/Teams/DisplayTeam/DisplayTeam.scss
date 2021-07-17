@@ -65,13 +65,14 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      overflow: hidden;
       .field-bg {
         width: 100%;
-        height: 600px;
-        background-image: url("../../../assets/img/stadium.svg");
+        height: 626px;
+        background-image: url("../../../assets/img/stadium2.svg");
         background-repeat: no-repeat;
         background-position-x: center;
-        background-position-y: 40px;
+        // background-position-y: 80px;
         background-size: cover;
         transform: rotateX(4deg);
         position: relative;
