@@ -3,7 +3,7 @@ import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import { AiOutlineClose } from "react-icons/ai";
 import { formatString } from "../../../helpers/utils";
 import PitchPlayer from "./PitchPlayer";
-import Stadium from "../../../assets/img/stadium.svg";
+import Stadium from "../../../assets/img/stadium2.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
 import styled from "styled-components";
 
@@ -268,8 +268,8 @@ const PitchView = () => {
   return (
     <div className="pitch-view-container">
       <div
-        className="pitch-stadium-bg w-full  bg-no-repeat"
-        style={{ backgroundImage: `url(${Stadium})` }}
+        className="field-bg"
+        // style={{ backgroundImage: `url(${Stadium})`, width: '100%', bac }}
       >
         <div className="relative flex justify-center position-container mx-auto">
           {displaySelectedGoalKeeps("gk_1")}

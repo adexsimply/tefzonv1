@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Input, Button, Spin } from "antd";
 import { loginUser } from "../helpers/api";
-import { saveState } from "../store/localStorage";
+import { saveState, saveUserData } from "../store/localStorage";
 import { openNotification } from "../helpers/notification";
+import { AppContext } from "../store/AppContext";
 
 const LoginForm = (props) => {
+	const { logInSuccess } = useContext(AppContext);
 	const [loading, setLoading] = useState(false);
 
 	const history = useHistory();
@@ -21,8 +23,10 @@ const LoginForm = (props) => {
 					title: "Login User",
 					message: login.message,
 				});
-				saveState(login.result.token);
-				history.replace("/teams");
+        saveState(login.result.token);
+        logInSuccess(login.result);
+        saveUserData(login.result)
+				history.push("/teams");
 			}
 		} catch (error) {
 			if (error) {
