@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/img/logo.svg";
 import { FaBars } from "react-icons/fa";
 import Avatar from "./Avatar";
+import { AppContext } from "../../store/AppContext";
 
 const Header = () => {
+	const { userData } = useContext(AppContext);
+  console.log(userData)
+
   const [toggleNav, setToggleNav] = useState(false);
   const Links = [
     {
@@ -66,9 +70,11 @@ const Header = () => {
       <div className="navbar-collapse flex w-full md:w-auto mt-4 md:mt-0">
         <ul className="flex flex-col md:flex-row items-center w-full">
           {displayNavItems()}
-          <li>
-            <Avatar />
-          </li>
+          {userData.token &&
+            <li>
+              <Avatar />
+            </li>
+          }
         </ul>
       </div>
     </header>

@@ -157,8 +157,8 @@ const DefaultTeam = () => {
               <Row gutter={20}>
                 <Col lg={17}>
                   <div
-                    className="w-full bg-no-repeat bg-cover h-auto pt-2"
-                    style={{ backgroundImage: `url(${StadiumBg})` }}
+                    className="stadium-backdrop"
+                    // style={{ backgroundImage: `url(${StadiumBg})` }}
                   >
                     <div className="controls py-9">
                       <div className="w-1/3 mx-auto">

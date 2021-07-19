@@ -9,10 +9,10 @@ const TeamProvider = ({ children }) => {
   const [teamDetails, setTeamDetails] = useState(null);
   const [teamPlayers, setTeamPlayers] = useState(null);
 
-  useEffect(() => {
-    getTeamData();
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   getTeamData();
+  //   // eslint-disable-next-line
+  // }, []);
 
   const getTeamData = async () => {
     setLoadingTeam(true);
@@ -37,7 +37,7 @@ const TeamProvider = ({ children }) => {
 
   return (
     <TeamContext.Provider
-      value={{ teamData, teamPlayers, teamDetails, loadingTeam }}
+      value={{ teamData, teamPlayers, teamDetails, loadingTeam, getTeamData }}
     >
       {children}
     </TeamContext.Provider>
