@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Menu, Dropdown } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import { BiUser } from "react-icons/bi";
 import { clearState } from "../../store/localStorage";
-// import { AppContext } from "../../store/AppContext";
+import { AppContext } from "../../store/AppContext";
 
 const Avatar = () => {
-	// const { user } = useContext(AppContext);
-	// console.log(user);
+	const { user, resetState } = useContext(AppContext);
+	console.log(user);
 	// get logged in user email and display in dropdown
 	// save user email on login
 	let history = useHistory();
@@ -25,6 +25,7 @@ const Avatar = () => {
 				<p
 					onClick={() => {
 						clearState();
+            resetState();
 						history.replace("/login");
 					}}
 					className="cursor-pointer"
