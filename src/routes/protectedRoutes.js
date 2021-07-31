@@ -8,7 +8,7 @@ export const TeamsRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        !userData.token ? <Component {...props} /> : <Redirect to="/login" />
+        userData.token ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   )
@@ -20,7 +20,7 @@ export const FixturesRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        !userData.token ? <Component {...props} /> : <Redirect to="/login" />
+        userData.token ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   )
@@ -32,7 +32,7 @@ export const GameweekRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        !userData.token ? <Component {...props} /> : <Redirect to="/login" />
+        userData.token ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   )
