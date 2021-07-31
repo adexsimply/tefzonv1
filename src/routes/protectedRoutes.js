@@ -1,30 +1,63 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { loadState } from "../store/localStorage";
+import { AppContext } from "../store/AppContext";
 
-const token = loadState();
+export const TeamsRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        !userData.token ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  )
+};
 
-export const TeamsRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      token ? <Component {...props} /> : <Redirect to="/login" />
-    }
-  />
-);
-export const FixturesRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      token ? <Component {...props} /> : <Redirect to="/login" />
-    }
-  />
-);
-export const GameweekRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      token ? <Component {...props} /> : <Redirect to="/login" />
-    }
-  />
-);
+export const FixturesRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        !userData.token ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  )
+};
+
+export const GameweekRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        !userData.token ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  )
+};
+
+export const LoginRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        !userData.token ? <Component {...props} /> : <Redirect to="/" />
+      }
+    />
+  )
+};
+
+export const RegisterRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        !userData.token ? <Component {...props} /> : <Redirect to="/" />
+      }
+    />
+  )
+};

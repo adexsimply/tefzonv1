@@ -6,8 +6,8 @@ import { clearState } from "../../store/localStorage";
 import { AppContext } from "../../store/AppContext";
 
 const Avatar = () => {
-	const { user, resetState } = useContext(AppContext);
-	console.log(user);
+	const { userData, resetState } = useContext(AppContext);
+	console.log(userData);
 	// get logged in user email and display in dropdown
 	// save user email on login
 	let history = useHistory();

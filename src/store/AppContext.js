@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { loadUserData } from "./localStorage";
+import { clearState, loadUserData } from "./localStorage";
 import { loadState } from "./localStorage";
 export const AppContext = createContext();
 
@@ -31,9 +31,8 @@ const AppContextProvider = ({ children }) => {
   }
 
   const resetState = () => {
-    setLoggedIn(true);
     setUserData(userInitialState)
-    console.log(userData)
+    clearState()
   }
 
   console.log(userData);

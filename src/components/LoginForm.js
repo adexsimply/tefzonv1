@@ -1,16 +1,26 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Input, Button, Spin } from "antd";
 import { loginUser } from "../helpers/api";
 import { saveState, saveUserData } from "../store/localStorage";
 import { openNotification } from "../helpers/notification";
 import { AppContext } from "../store/AppContext";
+// import history from "../helpers/history";
 
 const LoginForm = (props) => {
-	const { logInSuccess } = useContext(AppContext);
+	const { logInSuccess, userData } = useContext(AppContext);
 	const [loading, setLoading] = useState(false);
 
 	const history = useHistory();
+
+  console.log('re rendering')
+  // useEffect(() => {
+  //   if (userData.token) {
+      
+  //     history.push("/teams");
+  //     console.log('pushing teams')
+  //   }
+  // }, [loginOk])
 
 	const handleLoginUser = async (values) => {
 		setLoading(true);
@@ -24,9 +34,9 @@ const LoginForm = (props) => {
 					message: login.message,
 				});
         saveState(login.result.token);
+        saveUserData(login.result);
         logInSuccess(login.result);
-        saveUserData(login.result)
-				history.push("/teams");
+				// history.replace("/");
 			}
 		} catch (error) {
 			if (error) {
@@ -36,7 +46,7 @@ const LoginForm = (props) => {
 					message: error,
 				});
 			}
-		} finally {
+    }finally {
 			setLoading(false);
 		}
 	};

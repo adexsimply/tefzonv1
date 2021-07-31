@@ -9,6 +9,7 @@ export const saveState = (value) => {
 };
 
 export const saveUserData = (value) => {
+  console.log('saveUserData');
 	const serialisedState = JSON.stringify(value);
 	localStorage.setItem(USER_DATA, serialisedState);
 };
@@ -35,8 +36,8 @@ export const loadState = () => {
 
 export const clearState = () => {
   // localStorage.removeItem(STATE);
-  localStorage.clear();
-  console.log(localStorage.length)
+  window.localStorage.clear();
+  console.log(localStorage)
 };
 
 export const saveTeam = (data) => {

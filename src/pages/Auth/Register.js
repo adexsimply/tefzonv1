@@ -63,12 +63,17 @@ const Register = () => {
 					openNotification({
 						type: "error",
 						title: "User Registration",
-						msg: results.message,
+						message: results.message,
 					});
 					setLoading(false);
 				}
 			}
 		} catch (error) {
+      openNotification({
+        type: "error",
+        title: "User Registration",
+        message: error,
+      });
 			console.log(error);
 			setLoading(false);
 		}

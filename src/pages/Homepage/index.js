@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/common/Layout";
 import Soccer from "../../assets/img/soccer.svg";
 import ArrowRight from "../../assets/img/icons/arrow-right-icon.svg";
+import { AppContext } from "../../store/AppContext";
 
 const Homepage = () => {
+	const { userData } = useContext(AppContext);
 	return (
 		<Layout>
 			<div className="landing-page-container flex flex-col lg:flex-row px-4 md:px-12 md:justify-end">
@@ -18,19 +20,28 @@ const Homepage = () => {
 							dance.Listen to the songs at tip of your finger.
 						</p>
 						<div className="mt-4 flex flex-col md:flex-row items-center">
-							<Link
-								className="link-btn-brand w-full md:w-auto justify-center inline-flex items-center text-white bg-primary-brand py-3 px-8 font-semibold rounded-sm"
-								to="/register"
-							>
-								Register
-							</Link>
-							<Link
-								className="link-plain flex md:ml-4  w-full md:w-auto justify-center  items-center py-4 lg:px-1 xl:px-8 text-primary-brand font-semibold"
-								to="/login"
-							>
-								Login to play{" "}
-								<img src={ArrowRight} className="ml-2" alt="arrow right icon" />{" "}
-							</Link>
+              {userData.token ? (
+                <Link
+                  className="link-btn-brand w-full md:w-auto justify-center inline-flex items-center text-white bg-primary-brand py-3 px-8 font-semibold rounded-sm"
+                  to="/teams"
+                >
+                  View your Squad
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    className="link-btn-brand w-full md:w-auto justify-center inline-flex items-center text-white bg-primary-brand py-3 px-8 font-semibold rounded-sm"
+                    to="/register">
+                    Register
+                  </Link>
+                  <Link
+                    className="link-plain flex md:ml-4  w-full md:w-auto justify-center  items-center py-4 lg:px-1 xl:px-8 text-primary-brand font-semibold"
+                    to="/login">
+                    Login to play{" "}
+                    <img src={ArrowRight} className="ml-2" alt="arrow right icon" />{" "}
+                  </Link>
+                </>
+              )}
 						</div>
 					</div>
 				</div>
