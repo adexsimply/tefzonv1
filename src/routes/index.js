@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 
 import Homepage from "../pages/Homepage";
@@ -19,11 +19,8 @@ import ComingSoonPage from "../pages/Error/ComingSoon";
 import NotFoundPage from "../pages/Error/NotFound";
 import GameweekHistoryPage from "../pages/GameweekHistory";
 import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute } from "./protectedRoutes";
-import { AppContext } from "../store/AppContext";
-// import history from "../helpers/history";
 
 const Routes = () => {
-	const { logInSuccess, userData } = useContext(AppContext);
 
   let history = useHistory();
   return (
