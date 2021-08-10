@@ -35,8 +35,6 @@ const AppContextProvider = ({ children }) => {
     clearState()
   }
 
-  console.log(userData);
-
 	// const getUserData = () => {
 	// 	setUser({ loggedIn: true, token: getToken });
 	// };

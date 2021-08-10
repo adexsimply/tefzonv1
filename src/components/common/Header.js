@@ -6,8 +6,7 @@ import Avatar from "./Avatar";
 import { AppContext } from "../../store/AppContext";
 
 const Header = () => {
-	const { userData } = useContext(AppContext);
-  console.log(userData)
+	const { userData } = useContext(AppContext);  
 
   const [toggleNav, setToggleNav] = useState(false);
   const Links = [

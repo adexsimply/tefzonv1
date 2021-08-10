@@ -5,6 +5,7 @@ import { formatString } from "../../../helpers/utils";
 import "./DisplayTeam.scss";
 
 const PitchView = () => {
+  console.log('PitchView in display team');
   const { teamPlayers } = useContext(TeamContext);
 
   console.log(teamPlayers, "===");

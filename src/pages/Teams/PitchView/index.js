@@ -3,32 +3,27 @@ import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import { AiOutlineClose } from "react-icons/ai";
 import { formatString } from "../../../helpers/utils";
 import PitchPlayer from "./PitchPlayer";
-import Stadium from "../../../assets/img/stadium2.svg";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
 import styled from "styled-components";
+import { ITEMTYPE } from "../../../helpers/itemType";
 
 const PitchView = () => {
   const {
     dragStatus,
-    draggedPlayer,
-    currentSelection,
-    setSelectionParams,
-
     updatePlayerParams,
     selectedPitchId,
-    playerParams,
-    updateDragStatus,
     selectedGoalKeepers,
     selectedDef,
     selectedMid,
     selectedFwd,
-    updatePitchId,
-    updateGoalKeeper,
-    updateDefenders,
-    updateMidfielder,
-    updateForwards,
-    removerPlayerFromList,
+    undoPlayerSelection,
+    isPlayerAvailable,
+    resetPlayerFilter,
+    handleStorePlayerDetails,
+    handleDragPlayer,
   } = useContext(CreateTeamContext);
+
+  console.log('PitchView not in display team');
 
   useEffect(() => {
     if (dragStatus === "dragging") {
@@ -38,114 +33,20 @@ const PitchView = () => {
       receivingPlayer.addEventListener("dragover", handleDragPlayer);
       receivingPlayer.addEventListener("drop", handleDrop);
     }
+
     if (dragStatus === "dropped") {
       handleStorePlayerDetails();
       resetPlayerFilter();
     }
+
     // eslint-disable-next-line
   }, [dragStatus, selectedPitchId]);
 
-  const resetPlayerFilter = () => {
-    // reset selected player filter
-    setSelectionParams(null);
+  const handleDrop = (playerParam, role, playerData) => {
+    updatePlayerParams(playerParam, role, playerData);
   };
 
-  const handleGoalKeepers = () => {
-    const newGoalKeeper = { ...draggedPlayer, ...playerParams };
-
-    if (selectedGoalKeepers.length === 0) {
-      updateGoalKeeper(newGoalKeeper);
-    } else {
-      updateGoalKeeper(newGoalKeeper);
-    }
-    updateDragStatus("default");
-    setSelectionParams(null);
-  };
-  const handleDefenders = () => {
-    const newDefender = {
-      id: draggedPlayer.id,
-      wing: draggedPlayer.position,
-      name: draggedPlayer.name,
-      ...playerParams,
-    };
-    console.log(draggedPlayer, newDefender);
-
-    if (selectedDef.length === 0) {
-      updateDefenders(newDefender);
-    } else {
-      updateDefenders(newDefender);
-    }
-    updateDragStatus("default");
-    setSelectionParams(null);
-  };
-  const handleMidfielders = () => {
-    const newMidFielder = { ...draggedPlayer, ...playerParams };
-
-    if (selectedMid.length === 0) {
-      updateMidfielder(newMidFielder);
-    } else {
-      updateMidfielder(newMidFielder);
-    }
-    updateDragStatus("default");
-    setSelectionParams(null);
-  };
-  const handleForwards = () => {
-    const newForward = { ...draggedPlayer, ...playerParams };
-    if (selectedFwd.length === 0) {
-      updateForwards(newForward);
-    } else {
-      updateForwards(newForward);
-    }
-    updateDragStatus("default");
-    setSelectionParams(null);
-  };
-
-  const handleStorePlayerDetails = () => {
-    switch (currentSelection) {
-      case "goalkeeper":
-        handleGoalKeepers();
-        break;
-      case "defender":
-        handleDefenders(draggedPlayer, playerParams);
-        break;
-      case "midfielder":
-        handleMidfielders();
-        break;
-      case "attacker":
-        handleForwards(draggedPlayer, playerParams);
-        break;
-      default:
-        break;
-    }
-  };
-
-  // const handleUndoSelection = (ev, player) => {
-  // ev.stopPropagation();
-  // let blankParentEl = ev.target.closest(".blank");
-  // let badge = blankParentEl.childNodes[0];
-  // let answersPool = document.getElementById("answers_pool");
-  // blankParentEl.removeChild(badge);
-  // answersPool?.appendChild(badge);
-  // };
-  const handleDrop = (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-
-    updateDragStatus("dropped");
-  };
-  const handleDragPlayer = (ev) => {
-    ev.preventDefault();
-    // ev.stopPropagation();
-  };
-  const handlePlayerSelection = (ev, data) => {
-    const targetEL = ev.target;
-    const targetParentEL = targetEL.parentElement;
-
-    updatePitchId(targetParentEL.getAttribute("id"));
-    setSelectionParams(data.position);
-    updatePlayerParams(data);
-  };
-  const undoPlayerSelection = (player) => removerPlayerFromList(player);
+  // const undoPlayerSelection = (player) => removerPlayerFromList(player);
 
   const displaySelectedGoalKeeps = (placement) => {
     const player = selectedGoalKeepers.find(
@@ -171,6 +72,7 @@ const PitchView = () => {
       );
     }
   };
+
   const displayDefenders = (placement) => {
     const player = selectedDef.find(
       (player) => player.playerPlacement === placement
@@ -251,19 +153,6 @@ const PitchView = () => {
       return null;
     }
   };
-  const isPlayerAvailable = (playerPlacement) => {
-    const team = [
-      ...selectedDef,
-      ...selectedFwd,
-      ...selectedGoalKeepers,
-      ...selectedMid,
-    ];
-    const player = team.find(
-      (player) => player.playerPlacement === playerPlacement
-    );
-    if (player) return true;
-    return false;
-  };
 
   return (
     <div className="pitch-view-container">
@@ -278,13 +167,12 @@ const PitchView = () => {
               tagLabel="gk"
               subStatus={false}
               id="gk_1"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "goalkeeper",
-                  is_substitute: false,
-                  playerPlacement: "gk_1",
-                })
-              }
+              dropAccept={ITEMTYPE.players.goalKeeper}
+              onDrop={(item) => handleDrop({
+                position: "goalkeeper",
+                is_substitute: false,
+                playerPlacement: "gk_1",
+              }, ITEMTYPE.players.goalKeeper, item)}
             />
           )}
         </div>
@@ -298,13 +186,12 @@ const PitchView = () => {
               subStatus={false}
               id="def_1"
               playerPlacement="def_1"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "defender",
-                  is_substitute: false,
-                  playerPlacement: "def_1",
-                })
-              }
+              dropAccept={ITEMTYPE.players.defender}
+              onDrop={(item) => handleDrop({
+                position: "defender",
+                is_substitute: false,
+                playerPlacement: "def_1",
+              }, ITEMTYPE.players.defender, item)}
             />
           )}
           {isPlayerAvailable("def_2") ? (
@@ -316,13 +203,12 @@ const PitchView = () => {
               subStatus={false}
               id="def_2"
               playerPlacement="def_2"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "defender",
-                  is_substitute: false,
-                  playerPlacement: "def_2",
-                })
-              }
+              dropAccept={ITEMTYPE.players.defender}
+              onDrop={(item) => handleDrop({
+                position: "defender",
+                is_substitute: false,
+                playerPlacement: "def_2",
+              }, ITEMTYPE.players.defender, item)}
             />
           )}
           {isPlayerAvailable("def_3") ? (
@@ -334,13 +220,12 @@ const PitchView = () => {
               subStatus={false}
               id="def_3"
               playerPlacement="def_1"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "defender",
-                  is_substitute: false,
-                  playerPlacement: "def_3",
-                })
-              }
+              dropAccept={ITEMTYPE.players.defender}
+              onDrop={(item) => handleDrop({
+                position: "defender",
+                is_substitute: false,
+                playerPlacement: "def_3",
+              }, ITEMTYPE.players.defender, item)}
             />
           )}
         </div>
@@ -354,13 +239,12 @@ const PitchView = () => {
               playerPlacement="mid_1"
               id="mid_1"
               subStatus={false}
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "midfielder",
-                  is_substitute: false,
-                  playerPlacement: "mid_1",
-                })
-              }
+              dropAccept={ITEMTYPE.players.midfilder}
+              onDrop={(item) => handleDrop({
+                position: "midfielder",
+                is_substitute: false,
+                playerPlacement: "mid_1",
+              }, ITEMTYPE.players.midfilder, item)}
             />
           )}
           {isPlayerAvailable("mid_2") ? (
@@ -372,13 +256,12 @@ const PitchView = () => {
               playerPlacement="mid_2"
               id="mid_2"
               subStatus={false}
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "midfielder",
-                  is_substitute: false,
-                  playerPlacement: "mid_2",
-                })
-              }
+              dropAccept={ITEMTYPE.players.midfilder}
+              onDrop={(item) => handleDrop({
+                position: "midfielder",
+                is_substitute: false,
+                playerPlacement: "mid_2",
+              }, ITEMTYPE.players.midfilder, item)}
             />
           )}
           {isPlayerAvailable("mid_3") ? (
@@ -390,13 +273,12 @@ const PitchView = () => {
               playerPlacement="mid_3"
               id="mid_3"
               subStatus={false}
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "midfielder",
-                  is_substitute: false,
-                  playerPlacement: "mid_3",
-                })
-              }
+              dropAccept={ITEMTYPE.players.midfilder}
+              onDrop={(item) => handleDrop({
+                position: "midfielder",
+                is_substitute: false,
+                playerPlacement: "mid_3",
+              }, ITEMTYPE.players.midfilder, item)}
             />
           )}
           {isPlayerAvailable("mid_4") ? (
@@ -408,13 +290,12 @@ const PitchView = () => {
               playerPlacement="mid_4"
               id="mid_4"
               subStatus={false}
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "midfielder",
-                  is_substitute: false,
-                  playerPlacement: "mid_4",
-                })
-              }
+              dropAccept={ITEMTYPE.players.midfilder}
+              onDrop={(item) => handleDrop({
+                position: "midfielder",
+                is_substitute: false,
+                playerPlacement: "mid_4",
+              }, ITEMTYPE.players.midfilder, item)}
             />
           )}
         </div>
@@ -428,13 +309,12 @@ const PitchView = () => {
               playerPlacement="fwd_1"
               id="fwd_1"
               subStatus={false}
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "attacker",
-                  is_substitute: false,
-                  playerPlacement: "fwd_1",
-                })
-              }
+              dropAccept={ITEMTYPE.players.forward}
+              onDrop={(item) => handleDrop({
+                position: "attacker",
+                is_substitute: false,
+                playerPlacement: "fwd_1",
+              }, ITEMTYPE.players.forward, item)}
             />
           )}
           {isPlayerAvailable("fwd_2") ? (
@@ -446,13 +326,12 @@ const PitchView = () => {
               playerPlacement="fwd_2"
               id="fwd_2"
               subStatus={false}
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "attacker",
-                  is_substitute: false,
-                  playerPlacement: "fwd_2",
-                })
-              }
+              dropAccept={ITEMTYPE.players.forward}
+              onDrop={(item) => handleDrop({
+                position: "attacker",
+                is_substitute: false,
+                playerPlacement: "fwd_2",
+              }, ITEMTYPE.players.forward, item)}
             />
           )}
           {isPlayerAvailable("fwd_3") ? (
@@ -464,13 +343,12 @@ const PitchView = () => {
               playerPlacement="fwd_3"
               id="fwd_3"
               subStatus={false}
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "attacker",
-                  is_substitute: false,
-                  playerPlacement: "fwd_3",
-                })
-              }
+              dropAccept={ITEMTYPE.players.forward}
+              onDrop={(item) => handleDrop({
+                position: "attacker",
+                is_substitute: false,
+                playerPlacement: "fwd_3",
+              }, ITEMTYPE.players.forward, item)}
             />
           )}
         </div>
@@ -488,13 +366,12 @@ const PitchView = () => {
               tagLabel="gk"
               subStatus={true}
               id="gk_2"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "goalkeeper",
-                  is_substitute: true,
-                  playerPlacement: "gk_2",
-                })
-              }
+              dropAccept={ITEMTYPE.players.goalKeeper}
+              onDrop={(item) => handleDrop({
+                position: "goalkeeper",
+                is_substitute: true,
+                playerPlacement: "gk_2",
+              }, ITEMTYPE.players.goalKeeper, item)}
             />
           )}
           {isPlayerAvailable("mid_5") ? (
@@ -505,13 +382,12 @@ const PitchView = () => {
               tagLabel="mid"
               subStatus={true}
               id="mid_5"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "midfielder",
-                  is_substitute: true,
-                  playerPlacement: "mid_5",
-                })
-              }
+              dropAccept={ITEMTYPE.players.midfilder}
+              onDrop={(item) => handleDrop({
+                position: "midfielder",
+                is_substitute: true,
+                playerPlacement: "mid_5",
+              }, ITEMTYPE.players.midfilder, item)}
             />
           )}
           {isPlayerAvailable("def_4") ? (
@@ -522,13 +398,12 @@ const PitchView = () => {
               tagLabel="def"
               subStatus={true}
               id="def_4"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "defender",
-                  is_substitute: true,
-                  playerPlacement: "def_4",
-                })
-              }
+              dropAccept={ITEMTYPE.players.defender}
+              onDrop={(item) => handleDrop({
+                position: "defender",
+                is_substitute: true,
+                playerPlacement: "def_4",
+              }, ITEMTYPE.players.defender, item)}
             />
           )}
           {isPlayerAvailable("fwd_4") ? (
@@ -539,13 +414,12 @@ const PitchView = () => {
               tagLabel="fwd"
               subStatus={true}
               id="fwd_4"
-              onClick={(ev) =>
-                handlePlayerSelection(ev, {
-                  position: "attacker",
-                  is_substitute: true,
-                  playerPlacement: "fwd_4",
-                })
-              }
+              dropAccept={ITEMTYPE.players.forward}
+              onDrop={(item) => handleDrop({
+                position: "attacker",
+                is_substitute: true,
+                playerPlacement: "fwd_4",
+              }, ITEMTYPE.players.forward, item)}
             />
           )}
         </div>

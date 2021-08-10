@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { Form, Input, Button, Spin } from "antd";
 import { loginUser } from "../helpers/api";
 import { saveState, saveUserData } from "../store/localStorage";
@@ -8,10 +8,10 @@ import { AppContext } from "../store/AppContext";
 // import history from "../helpers/history";
 
 const LoginForm = (props) => {
-	const { logInSuccess, userData } = useContext(AppContext);
+	const { logInSuccess } = useContext(AppContext);
 	const [loading, setLoading] = useState(false);
 
-	const history = useHistory();
+	// const history = useHistory();
 
   console.log('re rendering')
   // useEffect(() => {

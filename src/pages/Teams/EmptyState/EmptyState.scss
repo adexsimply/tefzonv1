@@ -128,3 +128,70 @@
     }
   }
 }
+
+.players-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  min-width: 70px;
+  height: 100%;
+  padding: 2rem 0;
+  .jersey-icon {
+    width: 50px;
+    height: 45px;
+  }
+  .player-container {
+    width: 30%;
+    margin-right: 10px;
+    margin-bottom: 1rem;
+  }
+  .player-container.draggable {
+    width: 30%;
+    margin-right: 10px;
+    margin-bottom: 1rem;
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+  .pitch__player-wrapper {
+    display: flex;
+    align-items: flex-start;
+  }
+  .pitch__player-wrapper .info-icon {
+    margin-right: 10px;
+    display: inline-block;
+  }
+  .player-container .player-tag {
+    background: #33175a;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 10px;
+    padding: 6px 0;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .player-container .points-tag {
+    font-size: 10px;
+    font-weight: 600;
+    background: radial-gradient(
+        50% 50% at 50% 50%,
+        rgba(255, 255, 255, 0.51) 0%,
+        rgba(255, 255, 255, 0.37) 100%
+      ),
+      #33175a;
+    text-align: center;
+    color: #fff;
+  }
+  .player-container .points-tag.position {
+    background: #33175a;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 10px;
+    padding: 6px 0;
+    text-align: center;
+    font-weight: 600;
+  }
+}

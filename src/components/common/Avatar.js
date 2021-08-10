@@ -7,7 +7,6 @@ import { AppContext } from "../../store/AppContext";
 
 const Avatar = () => {
 	const { userData, resetState } = useContext(AppContext);
-	console.log(userData);
 	// get logged in user email and display in dropdown
 	// save user email on login
 	let history = useHistory();

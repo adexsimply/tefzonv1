@@ -41,4 +41,4 @@ const PlayerDisplay = ({
 	);
 };
 
-export default PlayerDisplay;
+export default React.memo(PlayerDisplay);

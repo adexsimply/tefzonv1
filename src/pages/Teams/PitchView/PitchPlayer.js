@@ -1,15 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useDrop } from "react-dnd";
 import PitchPlayerIcon from "../../../assets/img/pitch-jersey.svg";
+import { CreateTeamContext } from "../../../store/CreateTeamContext";
 
 const PitchPlayer = ({
+  pitchData,
 	wrapperClassName = "",
 	tagLabel = "",
 	jersey,
 	className = "",
 	playerPlacement = "",
 	subStatus,
+  dropAccept,
+  onDrop,
 	...rest
 }) => {
+  // const { updatePlayerParams } = useContext(CreateTeamContext);
+  const [{ isOver, canDrop, itemtype }, addToTeamRef] = useDrop({
+    accept: dropAccept,
+    drop: onDrop,
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      // canDrop: !!monitor.canDrop(),
+    }),
+  });
+
 	return (
 		<div
 			className={
@@ -18,6 +33,7 @@ const PitchPlayer = ({
 				" " +
 				className
 			}
+      ref={addToTeamRef}
 			data-position={tagLabel}
 			data-subtitute={subStatus}
 			{...rest}
@@ -36,4 +52,4 @@ const PitchPlayer = ({
 	);
 };
 
-export default PitchPlayer;
+export default React.memo(PitchPlayer);

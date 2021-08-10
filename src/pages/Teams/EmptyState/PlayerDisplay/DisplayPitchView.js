@@ -1,21 +1,56 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Row, Col, Popover } from "antd";
 import { formatString } from "../../../../helpers/utils";
-import { CreateTeamContext } from "../../../../store/CreateTeamContext";
 import styled from "styled-components";
 import InfoCircleIcon from "../../../../assets/img/icons/info-circle-green.svg";
 import TeamJersey from "../../../../assets/img/team-jersey.svg";
+import { useDrag } from "react-dnd";
 
-const DisplayPitchView = ({ playerData, draggable, completePlayerList }) => {
-  const { dragStatus, updateDragStatus, updateDraggedPlayer } =
-    useContext(CreateTeamContext);
+const DisplayPitchView = ({ playerData }) => {
+  // };
 
-  const handleDragPlayer = (ev, player) => {
-    // ev.preventDefault();
-    updateDraggedPlayer(player);
+  const Player = React.memo(({player, players, index}) => {
+    const [{ isDragging }, dragRef] = useDrag({
+      type: player.position,
+      item: () => ({ ...player, index }),
+      // end: (item, monitor) => {
+      //   const dropResult = monitor.getDropResult();
+      //   // if (player && dropResult) {
+      //   //   // handleDropPlayer(player.position, player);
+      //   //   console.log(item);
+      //   // }
+      // },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+    });
 
-    updateDragStatus("dragging");
-  };
+    return (
+      <div ref={dragRef} className="player-container" style={{opacity: isDragging ? 0.5 : 1}} key={player.id}>
+        <div className="pitch__player-wrapper">
+          <div className="info-icon">
+            <Popover
+              content={() => showPopUp(players)}
+              overlayClassName="player-details-popup"
+              title={player.name}
+            >
+              <img src={InfoCircleIcon} alt="info icon" />
+            </Popover>
+          </div>
+          <div
+            className="jersey-icon"
+            style={{ backgroundImage: `url(${TeamJersey})` }}
+          ></div>
+        </div>
+        <div className="player-tag" title={player.name}>
+          {formatString(player.name, 12)}
+        </div>
+        <div className="points-tag">{player.age}</div>
+        <div className="points-tag position">{player.position}</div>
+      </div>
+    )
+  })
+
   const showPopUp = (playerDetails) => {
     const { player } = playerDetails;
     return (
@@ -89,93 +124,17 @@ const DisplayPitchView = ({ playerData, draggable, completePlayerList }) => {
     );
   };
 
-  const showDraggablePlayers = () => {
-    return (
-      <StyledPitchPlayer>
-        {playerData.map((players) => {
-          const { player } = players;
-
-          const foundPlayerMatch = completePlayerList.find(
-            (item) => item.id === player.id
-          );
-          if (foundPlayerMatch) {
-            return null;
-          }
-          return (
-            <div
-              className={
-                "player-container  draggable " +
-                (dragStatus === "dragging" ? "player-drag" : "")
-              }
-              key={player.id}
-              onDragStart={(ev) => handleDragPlayer(ev, player)}
-              draggable
-            >
-              <div className="pitch__player-wrapper">
-                <div className="info-icon">
-                  <Popover
-                    content={() => showPopUp(players)}
-                    overlayClassName="player-details-popup"
-                    title={player.name}
-                  >
-                    <img src={InfoCircleIcon} alt="info icon" />
-                  </Popover>
-                </div>
-                <div
-                  className="jersey-icon"
-                  style={{ backgroundImage: `url(${TeamJersey})` }}
-                ></div>
-              </div>
-              <div className="player-tag" title={player.name}>
-                {formatString(player.name, 12)}
-              </div>
-              <div className="points-tag">{player.age}</div>
-              <div className="points-tag position">{player.position}</div>
-            </div>
-          );
-        })}
-      </StyledPitchPlayer>
-    );
-  };
-
-  const showPlayers = () => {
-    return (
-      <StyledPitchPlayer>
-        {playerData.map((players) => {
-          const { player } = players;
-
-          return (
-            <div className="player-container " key={player.id}>
-              <div className="pitch__player-wrapper">
-                <div className="info-icon">
-                  <Popover
-                    content={() => showPopUp(players)}
-                    overlayClassName="player-details-popup"
-                    title={player.name}
-                  >
-                    <img src={InfoCircleIcon} alt="info icon" />
-                  </Popover>
-                </div>
-                <div
-                  className="jersey-icon"
-                  style={{ backgroundImage: `url(${TeamJersey})` }}
-                ></div>
-              </div>
-              <div className="player-tag" title={player.name}>
-                {formatString(player.name, 12)}
-              </div>
-              <div className="points-tag">{player.age}</div>
-              <div className="points-tag position">{player.position}</div>
-            </div>
-          );
-        })}
-      </StyledPitchPlayer>
-    );
-  };
-
   return (
     <div className="display-players-pitch-view">
-      {draggable ? showDraggablePlayers() : showPlayers()}
+      <div className="players-container">
+        {playerData.map((players, index) => {
+          const { player } = players;
+
+          return (
+            <Player key={`${player.id}${Math.random()}`} player={player} players={players} index={index} onDrop />
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -247,4 +206,4 @@ export var StyledPitchPlayer = styled.div`
   }
 `;
 
-export default DisplayPitchView;
+export default React.memo(DisplayPitchView);
