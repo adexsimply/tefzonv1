@@ -124,7 +124,7 @@ const ListView = (props) => {
     const player = selectedDef.find(
       (player) => player.playerPlacement === placement
     );
-    if (player.is_subtitute) return null;
+    // if (player.is_subtitute) return null;
     return (
       <PlayerList players={player} />
     );
@@ -135,9 +135,7 @@ const ListView = (props) => {
       (player) => player.playerPlacement === placement
     );
 
-    if (player.is_substitute) {
-      return null;
-    }
+    // if (player.is_substitute) return null;
     return (
       <PlayerList players={player} />
     );
@@ -147,7 +145,7 @@ const ListView = (props) => {
     const player = selectedMid.find(
       (player) => player.playerPlacement === placement
     );
-    if (player.is_subtitute) return null;
+    // if (player.is_subtitute) return null;
     return (
       <PlayerList players={player} />
     );
@@ -158,7 +156,7 @@ const ListView = (props) => {
       (player) => player.playerPlacement === placement
     );
     console.log(player)
-    if (player.is_subtitute) return null;
+    // if (player.is_subtitute) return null;
     return (
       <PlayerList players={player} />
     );
@@ -278,7 +276,6 @@ const ListView = (props) => {
           />
         )
       }
-      // return contents;
     })
   };
 
@@ -300,85 +297,72 @@ const ListView = (props) => {
           />
         )
       }
-      // return contents;
     })
   };
 
   const subEmptyState = () => {
     return (
       <>
-        {selectedGoalKeepers.length === 2 ? null : (
-          <Row className="py-2 px-6 player-row">
-            <Col lg={10}>
-              <Button
-                className="border-0 text-black rounded-none p-0 font-medium"
-                onClick={() =>
-                  setSelectionParams({ type: "sub", selection: "goalkeeper" })
-                }
-              >
-                Select GK
-              </Button>
-            </Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-          </Row>
-        )}
-        {selectedDef.length === 4 ? null : (
-          <Row className="py-2 px-6 player-row">
-            <Col lg={10}>
-              <Button
-                className="border-0 text-black rounded-none p-0 font-medium"
-                onClick={() =>
-                  setSelectionParams({ type: "sub", selection: "defender" })
-                }
-              >
-                Select Defender
-              </Button>
-            </Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-          </Row>
-        )}
-        {selectedMid.length === 5 ? null : (
-          <Row className="py-2 px-6 player-row">
-            <Col lg={10}>
-              <Button
-                className="border-0 text-black rounded-none p-0 font-medium"
-                onClick={() =>
-                  setSelectionParams({ type: "sub", selection: "midfielder" })
-                }
-              >
-                Select Midfielder
-              </Button>
-            </Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-          </Row>
-        )}
-        {selectedFwd.length === 4 ? null : (
-          <Row className="py-2 px-6 player-row">
-            <Col lg={10}>
-              <Button
-                className="border-0 text-black rounded-none p-0 font-medium"
-                onClick={() =>
-                  setSelectionParams({ type: "sub", selection: "attacker" })
-                }
-              >
-                Select Forward
-              </Button>
-            </Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-            <Col lg={3}></Col>
-          </Row>
-        )}
+        {isPlayerAvailable('gk_2') ?
+          displayGkPlayer('gk_2') :
+          (
+            <PlayerListEmpty
+              key={'gk_2'}
+              title={'Drag and drop a goalkeeper'}
+              dropAccept={ITEMTYPE.players.goalKeeper}
+              onDrop={(item) => handleDrop({
+                position: "goalkeeper",
+                is_substitute: true,
+                playerPlacement: 'gk_2',
+              }, ITEMTYPE.players.goalKeeper, item)}
+            />
+          )
+        }
+        {isPlayerAvailable('def_4') ?
+          displayDefender('def_4') :
+          (
+            <PlayerListEmpty
+              key={'def_4'}
+              title={'Drag and drop a Defender'}
+              dropAccept={ITEMTYPE.players.defender}
+              onDrop={(item) => handleDrop({
+                position: "defender",
+                is_substitute: true,
+                playerPlacement: 'def_4',
+              }, ITEMTYPE.players.defender, item)}
+            />
+          )
+        }
+        {isPlayerAvailable('mid_5') ?
+          displayMidfielder('mid_5') :
+          (
+            <PlayerListEmpty
+              key={'mid_5'}
+              title={'Drag and drop a Midfielder'}
+              dropAccept={ITEMTYPE.players.midfilder}
+              onDrop={(item) => handleDrop({
+                position: "midfielder",
+                is_substitute: true,
+                playerPlacement: 'mid_5',
+              }, ITEMTYPE.players.midfilder, item)}
+            />
+          )
+        }
+        {isPlayerAvailable('fwd_4') ?
+          displayForward('fwd_4') :
+          (
+            <PlayerListEmpty
+              key={'fwd_4'}
+              title={'Drag and drop a Attacker'}
+              dropAccept={ITEMTYPE.players.forward}
+              onDrop={(item) => handleDrop({
+                position: "attacker",
+                is_substitute: true,
+                playerPlacement: 'fwd_4',
+              }, ITEMTYPE.players.forward, item)}
+            />
+          )
+        }
       </>
     );
   };
@@ -529,7 +513,7 @@ const ListView = (props) => {
             </Row>
           </div>
           <div className="players text-regular">
-            {displaySubs()}
+            {/* {displaySubs()} */}
             {displayEmptyState()}
           </div>
         </div>

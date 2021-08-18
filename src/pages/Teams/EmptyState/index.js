@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import { getPlayers } from "../../../helpers/api";
 import PlayerDisplay from "./PlayerDisplay";
 import DashboardLayout from "../../../components/common/Layout";
-import StadiumBg from "../../../assets/img/backdrop.svg";
+// import StadiumBg from "../../../assets/img/backdrop.svg";
 import ListView from "../ListView";
 import PitchView from "../PitchView";
 import "../Teams.scss";
