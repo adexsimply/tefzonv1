@@ -3,6 +3,9 @@ import { Row, Col, Button, Popover } from "antd";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import Jersey from "../../../assets/img/jersey.svg";
 import InfoCircleIcon from "../../../assets/img/icons/info-circle-green.svg";
+import { useDrop } from "react-dnd";
+import { ITEMTYPE } from "../../../helpers/itemType";
+import { emptyListMidPlayers, emptyListFwdPlayers, emptyListDefPlayers, emptyListGkPlayers } from "../../../helpers/staticData";
 
 const ListView = (props) => {
   const {
@@ -11,6 +14,9 @@ const ListView = (props) => {
     selectedFwd,
     selectedGoalKeepers,
     selectedMid,
+    isPlayerAvailable,
+    // displayMidfielders,
+    updatePlayerParams,
   } = useContext(CreateTeamContext);
 
   useEffect(() => {
@@ -20,6 +26,85 @@ const ListView = (props) => {
     };
     // eslint-disable-next-line
   }, []);
+
+  const handleDrop = (playerParam, role, playerData) => {
+    updatePlayerParams(playerParam, role, playerData);
+  };
+
+  const PlayerList = ({players, onClick}) => {
+    return (
+      <Row
+        className="py-2 px-6 justify-between player-row"
+        key={players.name}
+      >
+        <Col lg={10}>
+          <div className="flex mr-6">
+            <Popover content={() => showPopUp(players)} title={players.name}>
+              <img src={InfoCircleIcon} alt="info icon" />
+            </Popover>
+
+            <img src={Jersey} className="ml-6" alt="jersey icon" />
+            <div
+              className="border-0 text-black rounded-none p-0 font-medium ml-4"
+              onClick={() => onClick}
+            >
+              <p className="font-light">{players.name}</p>
+              <p>
+                <span className="font-semibold inline-block">JUV</span>
+                <span className="font-light uppercase inline-block ml-4">
+                  {players.position}
+                </span>
+              </p>
+            </div>
+          </div>
+        </Col>
+
+        <Col lg={12}>
+          <Row>
+            <Col
+              lg={8}
+              className="border-l border-secondary-gray-2-border"
+            ></Col>
+            <Col lg={8}></Col>
+            <Col lg={8}></Col>
+          </Row>
+        </Col>
+      </Row>
+    )
+  }
+
+  const PlayerListEmpty = ({title, onClick, dropAccept, onDrop}) => {
+    const [{ isOver, canDrop, itemtype }, addToTeamRef] = useDrop({
+      accept: dropAccept,
+      drop: onDrop,
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+        // canDrop: !!monitor.canDrop(),
+      }),
+    });
+
+    useEffect(() => {
+      if (canDrop && isOver) {
+        console.log('can drop')
+      }
+    }, [canDrop, isOver])
+    return (
+      <Row className="py-2 px-6 player-row" ref={addToTeamRef}>
+          <Col lg={10}>
+            <Button
+              className="border-0 text-black rounded-none p-0 font-medium"
+              onClick={onClick} 
+            >
+              {title}
+            </Button>
+          </Col>
+          <Col lg={3}></Col>
+          <Col lg={3}></Col>
+          <Col lg={3}></Col>
+          <Col lg={3}></Col>
+        </Row>
+    )
+  }
 
   const handleListScroll = useCallback(() => {
     var scroller = window.scrollY;
@@ -35,176 +120,48 @@ const ListView = (props) => {
     );
   };
 
-  const displayGkPlayers = () => {
-    return selectedGoalKeepers.map((players) => {
-      console.log(players);
-      if (players.is_substitute) {
-        return null;
-      }
-      return (
-        <Row
-          className="py-2 px-6 justify-between player-row"
-          key={players.name}
-        >
-          <Col lg={10}>
-            <div className="flex mr-6">
-              <Popover content={() => showPopUp(players)} title={players.name}>
-                <img src={InfoCircleIcon} alt="info icon" />
-              </Popover>
-
-              <img src={Jersey} className="ml-6" alt="jersey icon" />
-              <div
-                className="border-0 text-black rounded-none p-0 font-medium ml-4"
-                onClick={() => setSelectionParams("gk")}
-              >
-                <p className="font-light">{players.name}</p>
-                <p>
-                  <span className="font-semibold inline-block">JUV</span>
-                  <span className="font-light uppercase inline-block ml-4">
-                    {players.position}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </Col>
-
-          <Col lg={12}>
-            <Row>
-              <Col
-                lg={8}
-                className="border-l border-secondary-gray-2-border"
-              ></Col>
-              <Col lg={8}></Col>
-              <Col lg={8}></Col>
-            </Row>
-          </Col>
-        </Row>
-      );
-    });
+  const displayDefender = (placement) => {
+    const player = selectedDef.find(
+      (player) => player.playerPlacement === placement
+    );
+    if (player.is_subtitute) return null;
+    return (
+      <PlayerList players={player} />
+    );
   };
 
-  const displayDefenders = () => {
-    return selectedDef.map((players) => {
-      if (players.is_subtitute) return null;
-      return (
-        <Row
-          className="py-2 px-6 justify-between player-row"
-          key={players.name}
-        >
-          <Col lg={10}>
-            <div className="flex mr-6">
-              <Popover content={() => showPopUp(players)} title={players.name}>
-                <img src={InfoCircleIcon} alt="info icon" />
-              </Popover>
+  const displayGkPlayer = (placement) => {
+    const player = selectedGoalKeepers.find(
+      (player) => player.playerPlacement === placement
+    );
 
-              <img src={Jersey} className="ml-6" alt="jersey icon" />
-              <div className="border-0 text-black rounded-none p-0 font-medium ml-4">
-                <p className="font-light">{players.name}</p>
-                <p>
-                  <span className="font-semibold inline-block">JUV</span>
-                  <span className="font-light uppercase inline-block ml-4">
-                    {players.position}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </Col>
-
-          <Col lg={12}>
-            <Row>
-              <Col
-                lg={8}
-                className="border-l border-secondary-gray-2-border"
-              ></Col>
-              <Col lg={8}></Col>
-              <Col lg={8}></Col>
-            </Row>
-          </Col>
-        </Row>
-      );
-    });
+    if (player.is_substitute) {
+      return null;
+    }
+    return (
+      <PlayerList players={player} />
+    );
   };
 
-  const displayMidfielders = () => {
-    return selectedMid.map((players) => {
-      if (players.is_subtitute) return null;
-      return (
-        <Row
-          className="py-2 px-6 player-row justify-between"
-          key={players.name}
-        >
-          <Col lg={10}>
-            <div className="flex mr-6">
-              <Popover content={() => showPopUp(players)} title={players.name}>
-                <img src={InfoCircleIcon} alt="info icon" />
-              </Popover>
-
-              <img src={Jersey} className="ml-6" alt="jersey icon" />
-              <div className="border-0 text-black rounded-none p-0 font-medium ml-4">
-                <p className="font-light">{players.name}</p>
-                <p>
-                  <span className="font-semibold inline-block">JUV</span>
-                  <span className="font-light uppercase inline-block ml-4">
-                    {players.position}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </Col>
-          <Col lg={12}>
-            <Row>
-              <Col
-                lg={8}
-                className="border-l border-secondary-gray-2-border"
-              ></Col>
-              <Col lg={8}></Col>
-              <Col lg={8}></Col>
-            </Row>
-          </Col>
-        </Row>
-      );
-    });
+  const displayMidfielder = (placement) => {
+    const player = selectedMid.find(
+      (player) => player.playerPlacement === placement
+    );
+    if (player.is_subtitute) return null;
+    return (
+      <PlayerList players={player} />
+    );
   };
 
-  const displayForwards = () => {
-    return selectedFwd.map((players) => {
-      if (players.is_subtitute) return null;
-      return (
-        <Row
-          className="py-2 px-6 player-row justify-between"
-          key={players.name}
-        >
-          <Col lg={10}>
-            <div className="flex mr-6">
-              <Popover content={() => showPopUp(players)} title={players.name}>
-                <img src={InfoCircleIcon} alt="info icon" />
-              </Popover>
-
-              <img src={Jersey} className="ml-6" alt="jersey icon" />
-              <div className="border-0 text-black rounded-none p-0 font-medium ml-4">
-                <p className="font-light">{players.name}</p>
-                <p>
-                  <span className="font-semibold inline-block">JUV</span>
-                  <span className="font-light uppercase inline-block ml-4">
-                    {players.position}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </Col>
-          <Col lg={12}>
-            <Row>
-              <Col
-                lg={8}
-                className="border-l border-secondary-gray-2-border"
-              ></Col>
-              <Col lg={8}></Col>
-              <Col lg={8}></Col>
-            </Row>
-          </Col>
-        </Row>
-      );
-    });
+  const displayForward = (placement) => {
+    const player = selectedFwd.find(
+      (player) => player.playerPlacement === placement
+    );
+    console.log(player)
+    if (player.is_subtitute) return null;
+    return (
+      <PlayerList players={player} />
+    );
   };
 
   const displaySubs = () => {
@@ -261,104 +218,90 @@ const ListView = (props) => {
     });
   };
 
-  const gkEmptyState = () => {
-    let contents = [];
-    for (let i = selectedGoalKeepers.length; i < 1; i++) {
-      contents.push(
-        <Row className="py-2 px-6 player-row">
-          <Col lg={10}>
-            <Button
-              className="border-0 text-black rounded-none p-0 font-medium"
-              onClick={() =>
-                setSelectionParams({ type: "normal", selection: "goalkeeper" })
-              }
-            >
-              Select Goal Keeper
-            </Button>
-          </Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-        </Row>
-      );
-    }
-    return contents;
+  const gkEmptyState = (is_substitute = false) => {
+    return emptyListGkPlayers.map((data, index) => {
+      if (isPlayerAvailable(data.position)) {
+        return displayGkPlayer(data.position)
+      } else {
+        return (
+          <PlayerListEmpty
+            key={data.position}
+            title={'Drag and drop a goalkeeper'}
+            dropAccept={ITEMTYPE.players.goalKeeper}
+            onDrop={(item) => handleDrop({
+              position: "goalkeeper",
+              is_substitute: false,
+              playerPlacement: data.position,
+            }, ITEMTYPE.players.goalKeeper, item)}
+          />
+        )
+      }
+    })
   };
 
-  const midEmptyState = () => {
-    let contents = [];
-    for (let i = selectedMid.length; i < 4; i++) {
-      contents.push(
-        <Row className="py-2 px-6 player-row">
-          <Col lg={10}>
-            <Button
-              className="border-0 text-black rounded-none p-0 font-medium"
-              onClick={() =>
-                setSelectionParams({ type: "normal", selection: "midfielder" })
-              }
-            >
-              Select Midfielder
-            </Button>
-          </Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-        </Row>
-      );
-    }
-    return contents;
-  };
+  const midEmptyState = (is_substitute = false) => {
+    return emptyListMidPlayers.map((data, index) => {
+      if (isPlayerAvailable(data.position)) {
+        return displayMidfielder(data.position)
+      } else {
+        return (
+          <PlayerListEmpty
+            key={data.position}
+            title={'Drag and drop a Midfielder'}
+            dropAccept={ITEMTYPE.players.midfilder}
+            onDrop={(item) => handleDrop({
+              position: "midfielder",
+              is_substitute: false,
+              playerPlacement: data.position,
+            }, ITEMTYPE.players.midfilder, item)}
+          />
+        )
+      }
+    })
+}
 
   const defEmptyState = () => {
-    let contents = [];
-    for (let i = selectedDef.length; i < 3; i++) {
-      contents.push(
-        <Row className="py-2 px-6 player-row">
-          <Col lg={10}>
-            <Button
-              className="border-0 text-black rounded-none p-0 font-medium"
-              onClick={() =>
-                setSelectionParams({ type: "normal", selection: "defender" })
-              }
-            >
-              Select Defender
-            </Button>
-          </Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-        </Row>
-      );
-    }
-    return contents;
+    return emptyListDefPlayers.map((data, index) => {
+      if (isPlayerAvailable(data.position)) {
+        return displayDefender(data.position)
+      } else {
+        return (
+          <PlayerListEmpty
+            key={data.position}
+            title={'Drag and drop a Defender'}
+            dropAccept={ITEMTYPE.players.defender}
+            onDrop={(item) => handleDrop({
+              position: "defender",
+              is_substitute: false,
+              playerPlacement: data.position,
+            }, ITEMTYPE.players.defender, item)}
+          />
+        )
+      }
+      // return contents;
+    })
   };
 
   const fwdEmptyState = () => {
-    let contents = [];
-    for (let i = selectedFwd.length; i < 3; i++) {
-      contents.push(
-        <Row className="py-2 px-6 player-row">
-          <Col lg={10}>
-            <Button
-              className="border-0 text-black rounded-none p-0 font-medium"
-              onClick={() =>
-                setSelectionParams({ type: "normal", selection: "attacker" })
-              }
-            >
-              Select Forward
-            </Button>
-          </Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-          <Col lg={3}></Col>
-        </Row>
-      );
-    }
-    return contents;
+    return emptyListFwdPlayers.map((data, index) => {
+      if (isPlayerAvailable(data.position)) {
+        return displayForward(data.position)
+      } else {
+        return (
+          <PlayerListEmpty
+            key={data.position}
+            title={'Drag and drop an Attacker'}
+            dropAccept={ITEMTYPE.players.forward}
+            onDrop={(item) => handleDrop({
+              position: "attacker",
+              is_substitute: false,
+              playerPlacement: data.position,
+            }, ITEMTYPE.players.forward, item)}
+          />
+        )
+      }
+      // return contents;
+    })
   };
 
   const subEmptyState = () => {
@@ -482,7 +425,6 @@ const ListView = (props) => {
           </div>
           <div className="players text-regular">
             {displayEmptyState("goalkeeper")}
-            {displayGkPlayers()}
           </div>
         </div>
         {/* DEFENDERS */}
@@ -509,7 +451,6 @@ const ListView = (props) => {
           </div>
           <div className="players text-regular">
             {displayEmptyState("defender")}
-            {displayDefenders()}
           </div>
         </div>
         {/* MID FIELDERS */}
@@ -536,7 +477,6 @@ const ListView = (props) => {
           </div>
           <div className="players text-regular">
             {displayEmptyState("midfielder")}
-            {displayMidfielders()}
           </div>
         </div>
         {/* FORWARDS */}
@@ -564,7 +504,6 @@ const ListView = (props) => {
           </div>
           <div className="players text-regular">
             {displayEmptyState("attacker")}
-            {displayForwards()}
           </div>
         </div>
         {/* substitutes */}

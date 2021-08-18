@@ -19,6 +19,7 @@ const DefaultTeam = () => {
   const [floatCard, setFloatCard] = useState("top");
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [playerData, setPlayerData] = useState(null);
+  const [filteredPlayerData, setFilteredPlayerData] = useState(null);
 
   const {
     currentSelection,
@@ -55,12 +56,45 @@ const DefaultTeam = () => {
     try {
       const results = await getPlayers();
       setPlayerData(results.results);
+      setFilteredPlayerData(results.results);
     } catch (error) {
       message.error(error);
     } finally {
       setLoadingPlayers(false);
     }
   };
+
+  const filterPlayerData = (type, value) => {
+    setFilteredPlayerData([]);
+    if (type === 'reset') {
+      setFilteredPlayerData(playerData);
+    }
+
+    if (type === 'position') {
+      let result = playerData.filter(filterWithPosition);
+      function filterWithPosition(player) {
+        return player.player.position === value
+      }
+      setFilteredPlayerData(result);
+      console.log(result)
+    }
+
+    if (type === 'name') {
+      let result = playerData.filter(filterWithPosition);
+      function filterWithPosition(player) {
+        return player.player.name.includes(value)
+      }
+      setFilteredPlayerData(result);
+    }
+  }
+
+  const handleTextFilter = ((e) => {
+    if (e.target.value !== '') {
+      filterPlayerData('name', e.target.value);
+    } else {
+      filterPlayerData('reset');
+    }
+  })
 
   const displayPlayers = () => {
     if (loadingPlayers === true) {
@@ -76,8 +110,8 @@ const DefaultTeam = () => {
             return (
               <PlayerDisplay
                 view={view}
-                playerData={playerData}
-                selectedList={selectedPlayersArr}
+                playerData={filteredPlayerData}
+                // selectedList={selectedPlayersArr}
                 selectable={false}
                 draggable={false}
               />
@@ -91,7 +125,7 @@ const DefaultTeam = () => {
               return (
                 <PlayerDisplay
                   view={view}
-                  playerData={filteredPlayers}
+                  playerData={filteredPlayerData}
                   selectedList={selectedPlayersArr}
                   selectable={true}
                   draggable={true}
@@ -201,6 +235,7 @@ const DefaultTeam = () => {
                       <Input
                         className="white-search-input h-12"
                         placeholder="Search"
+                        onChange={handleTextFilter}
                         prefix={<AiOutlineSearch />}
                       />
                       <Button
@@ -212,13 +247,36 @@ const DefaultTeam = () => {
                     </div>
                     <div className="player-positions-filters">
                       <div className="flex items-center justify-between mt-6">
-                        <Button className="bg-white h-10 border-0 px-4 py-2">
+                        <Button
+                          className="bg-white h-10 border-0 px-4 py-2"
+                          onClick={() => filterPlayerData('reset')}
+                        >
                           ALL
                         </Button>
-                        <div className="bg-white px-4 py-2">GK</div>
-                        <div className="bg-white px-4 py-2">DEF</div>
-                        <div className="bg-white px-4 py-2">MID</div>
-                        <div className="bg-white px-4 py-2">FWD</div>
+                        <Button
+                          className="bg-white h-10 border-0 px-4 py-2"
+                          onClick={() => filterPlayerData('position', 'Goalkeeper')}
+                        >
+                          GK
+                        </Button>
+                        <Button
+                          className="bg-white h-10 border-0 px-4 py-2"
+                          onClick={() => filterPlayerData('position', 'Defender')}
+                        >
+                          DEF
+                        </Button>
+                        <Button
+                          className="bg-white h-10 border-0 px-4 py-2"
+                          onClick={() => filterPlayerData('position', 'Midfielder')}
+                        >
+                          MID
+                        </Button>
+                        <Button
+                          className="bg-white h-10 border-0 px-4 py-2"
+                          onClick={() => filterPlayerData('position', 'Attacker')}
+                        >
+                          FWD
+                        </Button>
                       </div>
                     </div>
                     <div className="mt-6">

@@ -37,7 +37,7 @@ const PlayerDisplay = ({
 	};
 
 	return (
-		<div className="display-players-container">{handlePlayerDisplay()}</div>
+		<div className="display-players-container">{handleListView()}</div>
 	);
 };
 
