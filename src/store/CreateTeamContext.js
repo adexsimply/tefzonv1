@@ -145,6 +145,7 @@ const TeamContextProvider = (props) => {
           break;
       }
     }
+    // eslint-disable-next-line
   }, [playerParams, role, playerData])
   
   const updatePlayerParams = (playerParam, role, playerData) => {

@@ -22,6 +22,7 @@ const AppContextProvider = ({ children }) => {
     const savedUserData = loadUserData();
     setUserToken(getToken);
     setUserData({...userData, token: getToken, userToken: getToken, userData: savedUserData});
+    // eslint-disable-next-line
   }, [])
 
   const logInSuccess = (data) => {

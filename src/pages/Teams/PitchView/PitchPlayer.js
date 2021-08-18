@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useDrop } from "react-dnd";
 import PitchPlayerIcon from "../../../assets/img/pitch-jersey.svg";
-import { CreateTeamContext } from "../../../store/CreateTeamContext";
 
 const PitchPlayer = ({
   pitchData,
@@ -15,7 +14,7 @@ const PitchPlayer = ({
   onDrop,
 	...rest
 }) => {
-  // const { updatePlayerParams } = useContext(CreateTeamContext);
+    // eslint-disable-next-line
   const [{ isOver, canDrop, itemtype }, addToTeamRef] = useDrop({
     accept: dropAccept,
     drop: onDrop,

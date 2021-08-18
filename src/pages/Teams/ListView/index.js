@@ -9,7 +9,6 @@ import { emptyListMidPlayers, emptyListFwdPlayers, emptyListDefPlayers, emptyLis
 
 const ListView = (props) => {
   const {
-    setSelectionParams,
     selectedDef,
     selectedFwd,
     selectedGoalKeepers,
@@ -74,7 +73,7 @@ const ListView = (props) => {
   }
 
   const PlayerListEmpty = ({title, onClick, dropAccept, onDrop}) => {
-    const [{ isOver, canDrop, itemtype }, addToTeamRef] = useDrop({
+    const [{ isOver, canDrop }, addToTeamRef] = useDrop({
       accept: dropAccept,
       drop: onDrop,
       collect: (monitor) => ({

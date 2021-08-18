@@ -1,5 +1,5 @@
 import React from "react";
-import PitchView from "./DisplayPitchView";
+// import PitchView from "./DisplayPitchView";
 import ListView from "./DisplayListView";
 
 const PlayerDisplay = ({
@@ -19,22 +19,22 @@ const PlayerDisplay = ({
 		);
 	};
 
-	const handlePitchView = () => {
-		return (
-			<PitchView
-				draggable={draggable}
-				playerData={playerData}
-				completePlayerList={selectedList}
-			/>
-		);
-	};
+	// const handlePitchView = () => {
+	// 	return (
+	// 		<PitchView
+	// 			draggable={draggable}
+	// 			playerData={playerData}
+	// 			completePlayerList={selectedList}
+	// 		/>
+	// 	);
+	// };
 
-	const handlePlayerDisplay = () => {
-		if (view === "list") {
-			return handleListView();
-		}
-		return handlePitchView();
-	};
+	// const handlePlayerDisplay = () => {
+	// 	if (view === "list") {
+	// 		return handleListView();
+	// 	}
+	// 	return handlePitchView();
+	// };
 
 	return (
 		<div className="display-players-container">{handleListView()}</div>
