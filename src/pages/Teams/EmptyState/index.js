@@ -12,6 +12,7 @@ import ListView from "../ListView";
 import PitchView from "../PitchView";
 import "../Teams.scss";
 import "./EmptyState.scss";
+import { playersEmptyList } from "../../../helpers/staticData";
 
 const { Option } = Select;
 
@@ -24,7 +25,6 @@ const DefaultTeam = () => {
 
   const {
     currentSelection,
-    resetSelectionParams,
     selectedDef,
     selectedFwd,
     selectedGoalKeepers,
@@ -32,6 +32,10 @@ const DefaultTeam = () => {
     statusMessage,
     view,
     changeView,
+    updateGoalKeeper,
+    updateDefenders,
+    updateMidfielder,
+    updateForwards,
   } = useContext(CreateTeamContext);
 
   const history = useHistory();
@@ -68,6 +72,7 @@ const DefaultTeam = () => {
   const filterPlayerData = (type, value) => {
     let result;
     setFilteredPlayerData([]);
+    
     if (type === 'reset') {
       setFilteredPlayerData(playerData);
       return;
@@ -87,6 +92,85 @@ const DefaultTeam = () => {
       }
     }
     setFilteredPlayerData(result);
+  }
+
+  const randomPlayer = (data) => {
+    let random = Math.floor(Math.random() * data.length);
+    return data[random];
+  }
+
+  const autoCompleteTeam = () => {
+    let goalkeepers = playerData.filter((player) => {
+      return player.player.position === 'Goalkeeper'
+    });
+    console.log(goalkeepers);
+
+    let defenders = playerData.filter((player) => {
+      return player.player.position === 'Defender'
+    });
+    console.log(defenders);
+
+    let midfielders = playerData.filter((player) => {
+      return player.player.position === 'Midfielder'
+    });
+    console.log(midfielders);
+
+    let forwards = playerData.filter((player) => {
+      return player.player.position === 'Attacker'
+    });
+    console.log(forwards);
+
+    for (let i = 0; i < playersEmptyList.length; i++) {
+      let player;
+      let indexedEmptyList = playersEmptyList[i];
+      switch (indexedEmptyList.position) {
+        case 'goalkeeper':
+          player = randomPlayer(goalkeepers);
+          updateGoalKeeper({ ...player.player, ...indexedEmptyList });
+          console.log({ ...player.player, ...indexedEmptyList })
+          break;
+        case 'defender':
+          player = randomPlayer(defenders);
+          updateDefenders({ ...player.player, ...indexedEmptyList });
+          console.log({ ...player.player, ...indexedEmptyList })
+          break;
+        case 'midfielder':
+          player = randomPlayer(midfielders)
+          updateMidfielder({ ...player.player, ...indexedEmptyList });
+          console.log({ ...player.player, ...indexedEmptyList })
+          break;
+        case 'attacker':
+          player = randomPlayer(forwards)
+          updateForwards({ ...player.player, ...indexedEmptyList });
+          console.log({ ...player.player, ...indexedEmptyList })
+          break;
+        default:
+          break;
+      }
+    }
+
+    // let selectedPlayers = playersEmptyList.map((item, index) => {
+    //   let player;
+    //   switch (item.position) {
+    //     case 'goalkeeper':
+    //       player = randomPlayer(goalkeepers)
+    //       break;
+    //     case 'defender':
+    //       player = randomPlayer(defenders)
+    //       break;
+    //     case 'midfielder':
+    //       player = randomPlayer(midfielders)
+    //       break;
+    //     case 'attacker':
+    //       player = randomPlayer(forwards)
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    //   return (
+
+    //   )
+    // })
   }
 
   const handleTextFilter = (e) => {
@@ -188,7 +272,10 @@ const DefaultTeam = () => {
                 <span className="text-2xl">({completeTeam.length}/15)</span>
               </h2>
               <div className="inline-flex items-center">
-                <Button className="  font-medium text-base green-outline-btn bg-transparent mr-8 h-12 rounded-sm">
+                <Button
+                  className="  font-medium text-base green-outline-btn bg-transparent mr-8 h-12 rounded-sm"
+                  onClick={() => autoCompleteTeam()}
+                >
                   Auto Complete
                 </Button>
                 <p className="text-white">Clear team</p>
