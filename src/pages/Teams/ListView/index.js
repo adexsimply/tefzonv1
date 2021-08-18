@@ -162,60 +162,6 @@ const ListView = (props) => {
     );
   };
 
-  const displaySubs = () => {
-    const subsArr = [
-      ...selectedDef,
-      ...selectedFwd,
-      ...selectedGoalKeepers,
-      ...selectedMid,
-    ];
-
-    return subsArr.map((players) => {
-      // eslint-disable-line
-      console.log(players);
-      if (players.is_substitute) {
-        return (
-          <Row
-            className="py-2 px-6 player-row justify-between"
-            key={players.name}
-          >
-            <Col lg={10}>
-              <div className="flex mr-6">
-                <Popover
-                  content={() => showPopUp(players)}
-                  title={players.name}
-                >
-                  <img src={InfoCircleIcon} alt="info icon" />
-                </Popover>
-
-                <img src={Jersey} className="ml-6" alt="jersey icon" />
-                <div className="border-0 text-black rounded-none p-0 font-medium ml-4">
-                  <p className="font-light">{players.name}</p>
-                  <p>
-                    <span className="font-semibold inline-block">JUV</span>
-                    <span className="font-light uppercase inline-block ml-4">
-                      {players.position}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </Col>
-            <Col lg={12}>
-              <Row>
-                <Col
-                  lg={8}
-                  className="border-l border-secondary-gray-2-border"
-                ></Col>
-                <Col lg={8}></Col>
-                <Col lg={8}></Col>
-              </Row>
-            </Col>
-          </Row>
-        );
-      }
-    });
-  };
-
   const gkEmptyState = (is_substitute = false) => {
     return emptyListGkPlayers.map((data, index) => {
       if (isPlayerAvailable(data.position)) {
