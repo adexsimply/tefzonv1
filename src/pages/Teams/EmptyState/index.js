@@ -19,6 +19,7 @@ const DefaultTeam = () => {
   const [floatCard, setFloatCard] = useState("top");
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [playerData, setPlayerData] = useState(null);
+  const [searchName, setSearchName] = useState(null);
   const [filteredPlayerData, setFilteredPlayerData] = useState(null);
 
   const {
@@ -65,36 +66,42 @@ const DefaultTeam = () => {
   };
 
   const filterPlayerData = (type, value) => {
+    let result;
     setFilteredPlayerData([]);
     if (type === 'reset') {
       setFilteredPlayerData(playerData);
+      return;
     }
 
     if (type === 'position') {
-      let result = playerData.filter(filterWithPosition);
+      result = playerData.filter(filterWithPosition);
       function filterWithPosition(player) {
         return player.player.position === value
       }
-      setFilteredPlayerData(result);
-      console.log(result)
     }
 
     if (type === 'name') {
-      let result = playerData.filter(filterWithPosition);
+      result = playerData.filter(filterWithPosition);
       function filterWithPosition(player) {
         return player.player.name.includes(value)
       }
-      setFilteredPlayerData(result);
     }
+    setFilteredPlayerData(result);
   }
 
-  const handleTextFilter = ((e) => {
+  const handleTextFilter = (e) => {
+    setSearchName(e.target.value);
     if (e.target.value !== '') {
       filterPlayerData('name', e.target.value);
     } else {
       filterPlayerData('reset');
     }
-  })
+  }
+
+  const handleSearchReset = () => {
+    setSearchName(null);
+    filterPlayerData('reset');
+  }
 
   const displayPlayers = () => {
     if (loadingPlayers === true) {
@@ -236,11 +243,12 @@ const DefaultTeam = () => {
                         className="white-search-input h-12"
                         placeholder="Search"
                         onChange={handleTextFilter}
+                        value={searchName}
                         prefix={<AiOutlineSearch />}
                       />
                       <Button
                         className="ml-4 brand-outline-btn bg-transparent h-11 rounded-none"
-                        onClick={() => resetSelectionParams()}
+                        onClick={() => handleSearchReset()}
                       >
                         Reset
                       </Button>
