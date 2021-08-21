@@ -83,7 +83,10 @@ const PitchView = () => {
           className=" pitch-player "
           style={{ marginRight: "2rem" }}
         >
-          <button className="close-btn">
+          <button
+            className="close-btn"
+            onClick={() => undoPlayerSelection(player)}
+          >
             <AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
           </button>
           <img src={TeamJersey} alt="" />
@@ -112,7 +115,10 @@ const PitchView = () => {
           className=" pitch-player "
           style={{ marginRight: "2rem" }}
         >
-          <button className="close-btn">
+          <button
+            className="close-btn"
+            onClick={() => undoPlayerSelection(player)}
+          >
             <AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
           </button>
           <img src={TeamJersey} alt="" />
@@ -138,7 +144,10 @@ const PitchView = () => {
           className=" pitch-player "
           style={{ marginRight: "2rem" }}
         >
-          <button className="close-btn">
+          <button
+            className="close-btn"
+            onClick={() => undoPlayerSelection(player)}
+          >
             <AiOutlineClose style={{ color: "#FF4B26", fontWeight: 600 }} />
           </button>
           <img src={TeamJersey} alt="" />

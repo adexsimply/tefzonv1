@@ -8,14 +8,13 @@ const PitchView = () => {
   console.log('PitchView in display team');
   const { teamPlayers } = useContext(TeamContext);
 
-  console.log(teamPlayers, "===");
   const displayPlayers = (placement, position) => {
     const matchPlayer = teamPlayers?.filter(
       (teamPlayer) =>
         teamPlayer.placement === placement && teamPlayer.wing === position
     );
 
-    console.log(matchPlayer);
+    // console.log(matchPlayer);
 
     if (matchPlayer && matchPlayer.length > 0) {
       return (
@@ -44,21 +43,21 @@ const PitchView = () => {
   return (
     <div className="pitch-view-container">
       <div className="field-bg">
-        <div className="player-row gk-row">
-          {displayPlayers("goalkeeper", "gk_1")}
+        <div className="player-row relative flex justify-center position-container mx-auto mt-10">
+          {displayPlayers("gk_1", "goalkeeper")}
         </div>
-        <div className="player-row def-row">
+        <div className="player-row def-row mt-10">
           {displayPlayers("def_1", "defender")}
           {displayPlayers("def_2", "defender")}
           {displayPlayers("def_3", "defender")}
         </div>
-        <div className="player-row mid-row">
+        <div className="player-row mid-row mt-10">
           {displayPlayers("mid_1", "midfielder")}
           {displayPlayers("mid_2", "midfielder")}
           {displayPlayers("mid_3", "midfielder")}
           {displayPlayers("mid_4", "midfielder")}
         </div>
-        <div className="player-row fwd-row">
+        <div className="player-row fwd-row mt-10">
           {displayPlayers("fwd_1", "attacker")}
           {displayPlayers("fwd_2", "attacker")}
           {displayPlayers("fwd_3", "attacker")}
