@@ -18,7 +18,8 @@ import FixturesPage from "../pages/Fixtures";
 import ComingSoonPage from "../pages/Error/ComingSoon";
 import NotFoundPage from "../pages/Error/NotFound";
 import GameweekHistoryPage from "../pages/GameweekHistory";
-import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute } from "./protectedRoutes";
+import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute, SubAndTransferRoute } from "./protectedRoutes";
+import SubAndTransfer from "../pages/subAndTransfer/SubAndTransfer";
 
 const Routes = () => {
 
@@ -73,6 +74,7 @@ const Routes = () => {
         <Route path="/contact" component={ComingSoonPage} />
         {/* <Route path="/teams" exact key="teams" component={TeamsPage} /> */}
         <TeamsRoute exact key="teams" path="/teams" component={TeamsPage} />
+        <SubAndTransferRoute exact key="subAndTransfer" path="/subAndTransfer" component={SubAndTransfer} />
         <FixturesRoute
           exact
           key="fixtures"

@@ -15,6 +15,10 @@ const DashboardLayout = (props) => {
       name: "Teams",
     },
     {
+      url: "/subAndTransfer",
+      name: "Sub And Transfer",
+    },
+    {
       url: "/leagues",
       name: "Leagues",
     },

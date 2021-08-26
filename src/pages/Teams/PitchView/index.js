@@ -170,8 +170,9 @@ const PitchView = () => {
         // style={{ backgroundImage: `url(${Stadium})`, width: '100%', bac }}
       >
         <div className="relative flex justify-center position-container mx-auto">
-          {displaySelectedGoalKeeps("gk_1")}
-          {selectedGoalKeepers.length === 0 && (
+          {isPlayerAvailable("gk_1") ? (
+            displaySelectedGoalKeeps("gk_1")
+          ) : (
             <PitchPlayer
               tagLabel="gk"
               subStatus={false}
@@ -185,7 +186,7 @@ const PitchView = () => {
             />
           )}
         </div>
-        <div className="relative flex justify-center mt-10 position-container mx-auto">
+        <div className="relative flex justify-center mt-9 position-container mx-auto">
           {isPlayerAvailable("def_1") ? (
             displayDefenders("def_1")
           ) : (
@@ -238,7 +239,7 @@ const PitchView = () => {
             />
           )}
         </div>
-        <div className="relative flex justify-center mt-12 position-container mx-auto">
+        <div className="relative flex justify-center mt-10 position-container mx-auto">
           {isPlayerAvailable("mid_1") ? (
             displayMidfielders("mid_1")
           ) : (
@@ -308,7 +309,7 @@ const PitchView = () => {
             />
           )}
         </div>
-        <div className="relative flex justify-center mt-14 position-container mx-auto">
+        <div className="relative flex justify-center mt-12 position-container mx-auto">
           {isPlayerAvailable("fwd_1") ? (
             displayForward("fwd_1")
           ) : (
@@ -361,12 +362,11 @@ const PitchView = () => {
             />
           )}
         </div>
-
-        <div className="text-center mt-20">
+        <div className="text-center mt-10">
           <h3 className="f-oswald text-xl font-bold">Subs</h3>
           <div className="border-b-2 border-primary-dark"></div>
         </div>
-        <div className="relative flex justify-center mt-8 position-container mx-auto">
+        <div className="relative flex justify-center mt-8 position-container pb-3 mx-auto">
           {isPlayerAvailable("gk_2") ? (
             displaySelectedGoalKeeps("gk_2")
           ) : (

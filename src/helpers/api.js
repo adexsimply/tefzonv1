@@ -189,3 +189,19 @@ export const getFixtures = () => {
 		}
 	});
 };
+
+export const editTeam = (teamData) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const team = await makeApiCall({
+				url: "/editTeam",
+				method: "put",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: teamData,
+			});
+			return resolve(team);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};

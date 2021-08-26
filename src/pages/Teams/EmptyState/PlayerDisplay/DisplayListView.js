@@ -5,17 +5,91 @@ import { formatString } from "../../../../helpers/utils";
 import InfoCircleIcon from "../../../../assets/img/icons/info-circle-green.svg";
 import { useDrag } from "react-dnd";
 
-const DisplayListView = ({ playerData, selectable }) => {
+const DisplayListView = ({ playerData, selectable, dark }) => {
   const { handlePlayerSelection, removerPlayerFromList } = useContext(CreateTeamContext);
+
+  // const popMe = (playerDetails) => {
+  //   return (
+  //     <div>
+  //       <p>{playerDetails.name}</p>
+  //     </div>
+  //   );
+  // };
+
+  const saveSelection = (player) => handlePlayerSelection(player);
+  const undoPlayerSelection = (player) => removerPlayerFromList(player);
+
   const popMe = (playerDetails) => {
     return (
       <div>
-        <p>{playerDetails.name}</p>
+        <Row justify="center" className="player-photo">
+          <Col lg={12}>
+            <img src={playerDetails.photo} alt={playerDetails.name} />
+          </Col>
+        </Row>
+        <Row className="player-detail-info-row">
+          <Col lg={8}>
+            <p>
+              <strong>First Name</strong>
+            </p>
+          </Col>
+          <Col lg={16}>
+            <p>{playerDetails.firstname}</p>
+          </Col>
+        </Row>
+        <Row className="player-detail-info-row">
+          <Col lg={8}>
+            <p>
+              <strong>Last Name</strong>
+            </p>
+          </Col>
+          <Col lg={16}>
+            <p>{playerDetails.lastname}</p>
+          </Col>
+        </Row>
+        <Row className="player-detail-info-row">
+          <Col lg={8}>
+            <p>
+              <strong>Known Name</strong>
+            </p>
+          </Col>
+          <Col lg={16}>
+            <p>{playerDetails.name}</p>
+          </Col>
+        </Row>
+        <Row className="player-detail-info-row">
+          <Col lg={8}>
+            <p>
+              <strong>Height</strong>
+            </p>
+          </Col>
+          <Col lg={16}>
+            <p>{playerDetails.height}</p>
+          </Col>
+        </Row>
+        <Row className="player-detail-info-row">
+          <Col lg={8}>
+            <p>
+              <strong>Nationality</strong>
+            </p>
+          </Col>
+          <Col lg={16}>
+            <p>{playerDetails.nationality}</p>
+          </Col>
+        </Row>
+        <Row className="player-detail-info-row">
+          <Col lg={8}>
+            <p>
+              <strong>Position</strong>
+            </p>
+          </Col>
+          <Col lg={16}>
+            <p>{playerDetails.position}</p>
+          </Col>
+        </Row>
       </div>
     );
   };
-  const saveSelection = (player) => handlePlayerSelection(player);
-  const undoPlayerSelection = (player) => removerPlayerFromList(player);
 
   const handleSelectPlayer = (player, ev) => {
     if (ev.target.checked) {
@@ -43,18 +117,18 @@ const DisplayListView = ({ playerData, selectable }) => {
     });
     return (
       <Row
-          ref={dragRef}
-          className="items-center border-b border-secondary-gray-2 pb-2 pt-2 "
-          justify="space-bewteen"
-          key={id}
+        ref={dragRef}
+        className="items-center border-b border-secondary-gray-2 pb-2 pt-2 "
+        justify="space-bewteen"
+        key={id}
+      >
+        <Col
+          lg={2}
+          className="h-12 border-r border-secondary-gray-2 flex items-center"
         >
-          <Col
-            lg={2}
-            className="h-12 border-r border-secondary-gray-2 flex items-center"
-          >
-            <Popover content={() => popMe(player)} title={name}>
-              <img src={InfoCircleIcon} alt="info Icon" />
-            </Popover>
+          <Popover content={() => popMe(player)} title={name}>
+            <img src={InfoCircleIcon} alt="info Icon" />
+          </Popover>
           </Col>
           <Col
             lg={4}
@@ -68,10 +142,10 @@ const DisplayListView = ({ playerData, selectable }) => {
           </Col>
           <Col lg={14} className="border-r border-secondary-gray-2-border h-12">
             <div className="pl-2">
-              <span className="text-white font-bold text-regular ">
+              <span className={`${dark ? 'text-black' : 'text-white'} font-bold text-regular `}>
                 {formatString(name, 20)}
               </span>
-              <p className="text-white">
+              <p className={`${dark ? 'text-black' : 'text-white'} whitespace-nowrap`}>
                 <span className="font-bold uppercase inline-block mr-4 text-xsmall">
                   {league}
                 </span>
@@ -82,7 +156,7 @@ const DisplayListView = ({ playerData, selectable }) => {
             </div>
           </Col>
           <Col lg={3} className="pl-2 h-12 flex items-center">
-            <p className="text-white text-base text-center font-bold">{age}</p>
+            <p className={`${dark ? 'text-black' : 'text-white'} text-base text-center font-bold`}>{age}</p>
           </Col>
         </Row>
     )

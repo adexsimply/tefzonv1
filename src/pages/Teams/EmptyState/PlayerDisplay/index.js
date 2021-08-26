@@ -3,6 +3,7 @@ import React from "react";
 import ListView from "./DisplayListView";
 
 const PlayerDisplay = ({
+  dark,
 	draggable,
 	selectable,
 	playerData,
@@ -11,7 +12,8 @@ const PlayerDisplay = ({
 }) => {
 	const handleListView = () => {
 		return (
-			<ListView
+      <ListView
+        dark={dark}
 				playerData={playerData}
 				selectable={selectable}
 				completePlayerList={selectedList}

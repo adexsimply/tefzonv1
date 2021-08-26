@@ -344,6 +344,10 @@ const TeamContextProvider = (props) => {
         handleDropPlayer,
         handleDrop,
         handleDragPlayer,
+        setSelectedGoalKeepers,
+        setSelectedMid,
+        setSelectedDef,
+        setSelectedFwd,
       }}
     >
       {props.children}

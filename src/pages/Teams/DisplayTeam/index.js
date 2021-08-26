@@ -77,7 +77,7 @@ const DisplayTeam = ({ teamDetails, teamInfo }) => {
                       <p className="sub-tag">1</p>
                     </div>
                     <div className="player">
-                      {displayPlayers("mid_4", "midfielder")}
+                      {displayPlayers("mid_5", "midfielder")}
                       <p className="sub-tag">2</p>
                     </div>
                     <div className="player">

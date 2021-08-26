@@ -14,6 +14,18 @@ export const TeamsRoute = ({ component: Component, ...rest }) => {
   )
 };
 
+export const SubAndTransferRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        userData.token ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  )
+};
+
 export const FixturesRoute = ({ component: Component, ...rest }) => {
 	const { userData } = useContext(AppContext);
   return (

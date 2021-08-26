@@ -18,13 +18,13 @@ const ListView = (props) => {
     updatePlayerParams,
   } = useContext(CreateTeamContext);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleListScroll);
-    return () => {
-      window.removeEventListener("scroll", () => console.log("unmounted"));
-    };
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleListScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", () => console.log("unmounted"));
+  //   };
+  //   // eslint-disable-next-line
+  // }, []);
 
   const handleDrop = (playerParam, role, playerData) => {
     updatePlayerParams(playerParam, role, playerData);
@@ -105,11 +105,11 @@ const ListView = (props) => {
     )
   }
 
-  const handleListScroll = useCallback(() => {
-    var scroller = window.scrollY;
-    props.handleScroll(scroller);
-    // eslint-disable-next-line
-  }, []);
+  // const handleListScroll = useCallback(() => {
+  //   var scroller = window.scrollY;
+  //   props.handleScroll(scroller);
+  //   // eslint-disable-next-line
+  // }, []);
 
   const showPopUp = (playerDetail) => {
     return (

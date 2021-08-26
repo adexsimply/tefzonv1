@@ -15,13 +15,13 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 ReactDOM.render(
   <React.StrictMode>
     <AppContextProvider>
-      <ViewTeamProvider>
-        <CreateTeamContextProvider>
+      <CreateTeamContextProvider>
+        <ViewTeamProvider>
           <DndProvider backend={HTML5Backend}>
             <App />
           </DndProvider>
-        </CreateTeamContextProvider>
-      </ViewTeamProvider>
+        </ViewTeamProvider>
+      </CreateTeamContextProvider>
     </AppContextProvider>
   </React.StrictMode>,
   document.getElementById("root")

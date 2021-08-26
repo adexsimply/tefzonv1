@@ -88,7 +88,7 @@ const DefaultTeam = () => {
     if (type === 'name') {
       result = playerData.filter(filterWithPosition);
       function filterWithPosition(player) {
-        return player.player.name.includes(value)
+        return player.player.name.toLowerCase() === value
       }
     }
     setFilteredPlayerData(result);
