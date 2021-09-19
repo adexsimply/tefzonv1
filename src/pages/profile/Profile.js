@@ -10,7 +10,7 @@ import PitchView from '../Teams/PitchView';
 import { editTeam } from '../../helpers/api';
 import { useHistory } from 'react-router-dom';
 
-function SubAndTransfer() {
+function Profile() {
 	const [status, setStatus] = React.useState({ type: "", msg: "" });
   const [loading, setLoading] = React.useState(false);
   
@@ -185,4 +185,4 @@ function SubAndTransfer() {
   );
 }
 
-export default SubAndTransfer;
+export default Profile;

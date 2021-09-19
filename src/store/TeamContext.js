@@ -60,7 +60,7 @@ const TeamProvider = ({ children }) => {
         selectedGoalKeepers.push({
           id: item.player.player_id,
           name: item.player.player_name,
-          position: capitalizeFirstLetter(item.wing),
+          position: item.wing,
           photo:  item.player.player_image,
           is_susbtitute: item.is_substitute === 1 ? true : false,
           is_captain: item.is_captain === 1 ? true : false,
@@ -72,7 +72,7 @@ const TeamProvider = ({ children }) => {
         selectedDef.push({
           id: item.player.player_id,
           name: item.player.player_name,
-          position: capitalizeFirstLetter(item.wing),
+          position: item.wing,
           photo:  item.player.player_image,
           is_susbtitute: item.is_substitute === 1 ? true : false,
           is_captain: item.is_captain === 1 ? true : false,
@@ -84,7 +84,7 @@ const TeamProvider = ({ children }) => {
         selectedFwd.push({
           id: item.player.player_id,
           name: item.player.player_name,
-          position: capitalizeFirstLetter(item.wing),
+          position: item.wing,
           photo:  item.player.player_image,
           is_susbtitute: item.is_substitute === 1 ? true : false,
           is_captain: item.is_captain === 1 ? true : false,
@@ -96,7 +96,7 @@ const TeamProvider = ({ children }) => {
         selectedMid.push({
           id: item.player.player_id,
           name: item.player.player_name,
-          position: capitalizeFirstLetter(item.wing),
+          position: item.wing,
           photo:  item.player.player_image,
           is_susbtitute: item.is_substitute === 1 ? true : false,
           is_captain: item.is_captain === 1 ? true : false,

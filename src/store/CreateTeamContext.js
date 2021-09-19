@@ -72,6 +72,8 @@ const TeamContextProvider = (props) => {
 
   const removerPlayerFromList = (player) => {
     const { position } = player;
+    console.log(player.id)
+    console.log(position)
 
     switch (position) {
       case "goalkeeper":
@@ -85,6 +87,7 @@ const TeamContextProvider = (props) => {
       case "midfielder":
         const filteredMd = selectedMid.filter((mid) => mid.id !== player.id);
         if (filteredMd) {
+          console.log(filteredMd)
           setSelectedMid(filteredMd);
         }
         break;
