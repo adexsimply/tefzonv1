@@ -86,9 +86,9 @@ const StepOne = (props) => {
 									{ required: true, message: "please enter your password" },
 								]}
 							>
-								
-				<Input.Password type="password" className="h-11" />
+								<AntInput />
 							</Form.Item>
+							<Input.Password />
 						</Col>
 						<Col xs={24} md={12}>
 							<Form.Item
