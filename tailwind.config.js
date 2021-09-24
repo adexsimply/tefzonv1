@@ -35,7 +35,8 @@ module.exports = {
 			},
 			width: {
 				"37p": "37%",
-				"85p": "85%",
+        "85p": "85%",
+        "side-bar-width": "458px"
 			},
 			height: {
 				"700px": "700px",
@@ -44,7 +45,10 @@ module.exports = {
 				"860px": "860px",
 				"825px": "825px",
 				"775px": "775px",
-			},
+      },
+      backgroundImage: {
+        'wallet-overlay': "url('src/assets/img/cardOverlay.svg')",
+       }
 		},
 	},
 	variants: {

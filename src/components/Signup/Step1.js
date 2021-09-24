@@ -18,6 +18,7 @@ const StepOne = (props) => {
 	const getCountryList = async () => {
 		try {
 			const results = await getCountries();
+			console.log(results);
 			if (results) {
 				setCountryList(results.result.countries);
 			}

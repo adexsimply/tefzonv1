@@ -18,8 +18,9 @@ import FixturesPage from "../pages/Fixtures";
 import ComingSoonPage from "../pages/Error/ComingSoon";
 import NotFoundPage from "../pages/Error/NotFound";
 import GameweekHistoryPage from "../pages/GameweekHistory";
-import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute, SubAndTransferRoute } from "./protectedRoutes";
+import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute, SubAndTransferRoute, WalletRoute, DashboardRoute } from "./protectedRoutes";
 import SubAndTransfer from "../pages/subAndTransfer/SubAndTransfer";
+import Wallet from "../pages/Wallet/Wallet";
 
 const Routes = () => {
 
@@ -60,12 +61,6 @@ const Routes = () => {
           key="confirm"
           component={ConfirmPage}
         />
-        <Route
-          path="/dashboard"
-          exact
-          key="dashboard"
-          component={DashboardPage}
-        />
         <Route path="/prizes" component={ComingSoonPage} />
         <Route path="/status" component={ComingSoonPage} />
         <Route path="/scout" component={ComingSoonPage} />
@@ -75,11 +70,18 @@ const Routes = () => {
         {/* <Route path="/teams" exact key="teams" component={TeamsPage} /> */}
         <TeamsRoute exact key="teams" path="/teams" component={TeamsPage} />
         <SubAndTransferRoute exact key="subAndTransfer" path="/subAndTransfer" component={SubAndTransfer} />
+        <WalletRoute exact key="wallet" path="/wallet" component={Wallet} />
         <FixturesRoute
           exact
           key="fixtures"
           path="/fixtures"
           component={FixturesPage}
+        />
+        <DashboardRoute
+          exact
+          key="Dashboard"
+          path="/dashboard"
+          component={DashboardPage}
         />
         <Route
           path="/teams/list-select-captain"

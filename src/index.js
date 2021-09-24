@@ -11,15 +11,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { DndProvider } from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
+import ModalContextProvider from "./store/ModalContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <AppContextProvider>
       <CreateTeamContextProvider>
         <ViewTeamProvider>
-          <DndProvider backend={HTML5Backend}>
-            <App />
-          </DndProvider>
+          <ModalContextProvider>
+            <DndProvider backend={HTML5Backend}>
+              <App />
+            </DndProvider>
+          </ModalContextProvider>
         </ViewTeamProvider>
       </CreateTeamContextProvider>
     </AppContextProvider>

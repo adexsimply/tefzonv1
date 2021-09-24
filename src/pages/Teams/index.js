@@ -3,13 +3,14 @@ import { TeamContext } from "../../store/TeamContext";
 import TeamEmptyState from "./EmptyState";
 import DisplayTeam from "./DisplayTeam";
 import { AiOutlineLoading } from "react-icons/ai";
+import { FaTruckLoading } from "react-icons/fa";
 import "./Teams.scss";
 
 const Teams = () => {
   const { getTeamData, teamDetails, teamPlayers, loadingTeam } = useContext(TeamContext);
 
   useEffect(() => {
-    getTeamData();
+    // getTeamData();
     // eslint-disable-next-line
   }, []);
 
@@ -31,14 +32,15 @@ const Teams = () => {
   const handleDisplayTeams = () => {
     if (loadingTeam) {
       return (
-        <div>
-          <AiOutlineLoading />
+        <div className={'flex items-center justify-center w-screen h-screen'}>
+          <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
         </div>
       );
     } else {
       if (!teamPlayers) {
         // return errorView();
-        return <TeamEmptyState />;
+        return <DisplayTeam teamInfo={teamPlayers} teamDetails={teamDetails} />;
+        // return <TeamEmptyState />;
       } else {
         return <DisplayTeam teamInfo={teamPlayers} teamDetails={teamDetails} />;
       }

@@ -23,7 +23,7 @@ const Homepage = () => {
               {userData.token ? (
                 <Link
                   className="link-btn-brand w-full md:w-auto justify-center inline-flex items-center text-white bg-primary-brand py-3 px-8 font-semibold rounded-sm"
-                  to="/teams"
+                  to="/dashboard"
                 >
                   View your Squad
                 </Link>

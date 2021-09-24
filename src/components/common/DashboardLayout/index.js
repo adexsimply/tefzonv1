@@ -11,33 +11,41 @@ import "./Layout.scss";
 const DashboardLayout = (props) => {
   const links = [
     {
+      url: "/dashboard",
+      name: "Dashboard",
+    },
+    {
       url: "/teams",
       name: "Teams",
     },
-    {
-      url: "/subAndTransfer",
-      name: "Sub And Transfer",
-    },
+    // {
+    //   url: "/subAndTransfer",
+    //   name: "Sub And Transfer",
+    // },
     {
       url: "/leagues",
       name: "Leagues",
     },
     {
-      url: "/fixtures",
-      name: "Fixtures",
+      url: "/wallet",
+      name: "Wallet",
     },
-    {
-      url: "/stats",
-      name: "Stats",
-    },
-    {
-      url: "/prizes",
-      name: "Prizes",
-    },
-    {
-      url: "/help",
-      name: "Help",
-    },
+    // {
+    //   url: "/fixtures",
+    //   name: "Fixtures",
+    // },
+    // {
+    //   url: "/stats",
+    //   name: "Stats",
+    // },
+    // {
+    //   url: "/prizes",
+    //   name: "Prizes",
+    // },
+    // {
+    //   url: "/help",
+    //   name: "Help",
+    // },
   ];
   const matchRoute = window.location.pathname.split("/")[1];
 

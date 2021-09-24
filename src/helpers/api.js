@@ -1,9 +1,9 @@
 import axios from "axios";
 import { loadState } from "../store/localStorage";
 
-// export const baseURL = "http://127.0.0.1:3333";
+export const baseURL = "http://127.0.0.1:3001";
 export const baseURLOLD = "http://157.230.179.121:3333";
-export const baseURL = process.env.REACT_APP_API_DEV_URL;
+// export const baseURL = process.env.REACT_APP_API_DEV_URL;
 // "https://api.tefzon.com";
 
 export const getToken = () => {
