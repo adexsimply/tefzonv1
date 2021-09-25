@@ -18,11 +18,12 @@ import FixturesPage from "../pages/Fixtures";
 import ComingSoonPage from "../pages/Error/ComingSoon";
 import NotFoundPage from "../pages/Error/NotFound";
 import GameweekHistoryPage from "../pages/GameweekHistory";
-import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute, SubAndTransferRoute, WalletRoute, DashboardRoute, LeaguesRoute, JoinLeagueRoute } from "./protectedRoutes";
+import { AuthProtectedRoute, ProtectedRoute } from "./protectedRoutes";
 import SubAndTransfer from "../pages/subAndTransfer/SubAndTransfer";
 import Wallet from "../pages/Wallet/Wallet";
 import Leagues from "../pages/Leagues/Leagues";
 import JoinLeague from "../pages/Leagues/JoinLeague";
+import LeagueInfo from "../pages/Leagues/LeagueInfo";
 
 const Routes = () => {
 
@@ -32,13 +33,13 @@ const Routes = () => {
       <Switch>
         <Route path="/" exact key="home" component={Homepage} />
         {/* <Route path="/register" exact key="register" component={RegisterPage} /> */}
-        <LoginRoute
+        <AuthProtectedRoute
           exact
           key="signin"
           path="/login"
           component={SigninPage}
         />
-        <RegisterRoute
+        <AuthProtectedRoute
           exact
           key="register"
           path="/register"
@@ -70,18 +71,19 @@ const Routes = () => {
         <Route path="/help" component={ComingSoonPage} />
         <Route path="/contact" component={ComingSoonPage} />
         {/* <Route path="/teams" exact key="teams" component={TeamsPage} /> */}
-        <TeamsRoute exact key="teams" path="/teams" component={TeamsPage} />
-        <SubAndTransferRoute exact key="subAndTransfer" path="/subAndTransfer" component={SubAndTransfer} />
-        <WalletRoute exact key="wallet" path="/wallet" component={Wallet} />
-        <LeaguesRoute exact key="leagues" path="/leagues" component={Leagues} />
-        <JoinLeagueRoute exact key="join-league" path="/join-league" component={JoinLeague} />
-        <FixturesRoute
+        <ProtectedRoute exact key="teams" path="/teams" component={TeamsPage} />
+        <ProtectedRoute exact key="subAndTransfer" path="/subAndTransfer" component={SubAndTransfer} />
+        <ProtectedRoute exact key="wallet" path="/wallet" component={Wallet} />
+        <ProtectedRoute exact key="leagues" path="/leagues" component={Leagues} />
+        <ProtectedRoute exact key="join-league" path="/leagues/join-league" component={JoinLeague} />
+        <ProtectedRoute exact key="league-info" path="/leagues/league-info" component={LeagueInfo} />
+        <ProtectedRoute
           exact
           key="fixtures"
           path="/fixtures"
           component={FixturesPage}
         />
-        <DashboardRoute
+        <ProtectedRoute
           exact
           key="Dashboard"
           path="/dashboard"
@@ -117,7 +119,7 @@ const Routes = () => {
           key="teams"
           component={ConfirmTeamPage}
         />
-        <GameweekRoute
+        <ProtectedRoute
           path="/teams/gameweek-history"
           exact
           key="gameweek-history"

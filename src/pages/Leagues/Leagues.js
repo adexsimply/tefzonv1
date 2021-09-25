@@ -1,20 +1,25 @@
 import React, { useContext } from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Button, Row, Col, Input, Form } from "antd";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import SectionContainer from '../../components/SectionContainer';
 import LeagueItemList from '../../components/LeagueItemList';
 import LeagueListHeader from '../../components/LeagueListHeader';
 // import Form from 'antd/lib/form/Form';
 
 function Leagues() {
+  const history = useHistory();
+
+  const handleLeagueClick = () => {
+    history.push('/leagues/league-info')
+  }
 
   return (
     <DashboardLayout>
-      <Row justify="center" className='py-4'>
+      <Row justify="center" className='py-4 pb-10'>
         <Col lg={22}>
           <div className="mt-4">
-            <p className="text-4xl font-bold">Leagues</p>
+            <p className="text-3xl font-bold">Leagues</p>
           </div>
           <Row gutter={24} className="display-team-container">
             <Col lg={16}>
@@ -29,7 +34,7 @@ function Leagues() {
                       </Link>
                     </Col>
                     <Col span={12}>
-                      <Link to="/join-league">
+                      <Link to="/leagues/join-league">
                         <Button className='w-full h-14 bg-primary-brand-darker rounded'>
                           <p className='text-white font-bold'>Join Existing League</p>
                         </Button>
@@ -46,6 +51,7 @@ function Leagues() {
                     <LeagueItemList
                       claassName={'mt-3'}
                       LeagueName={'League0001'} currentRank={'-'} lastRank={'-'}
+                      onClick={() => handleLeagueClick()}
                     />
                     <LeagueItemList
                       claassName={'mt-3'}

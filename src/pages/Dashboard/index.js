@@ -11,7 +11,7 @@ const DashboardPage = () => {
 			<Row justify="center" className='py-4'>
         <Col lg={22}>
           <div className="mt-4">
-            <p className="text-4xl font-bold">Explore</p>
+            <p className="text-3xl font-bold">Explore</p>
           </div>
           <Row gutter={24} className="display-team-container">
             <Col lg={12}>
