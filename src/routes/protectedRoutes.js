@@ -14,6 +14,30 @@ export const WalletRoute = ({ component: Component, ...rest }) => {
   )
 };
 
+export const LeaguesRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        userData.token ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  )
+};
+
+export const JoinLeagueRoute = ({ component: Component, ...rest }) => {
+	const { userData } = useContext(AppContext);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        userData.token ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  )
+};
+
 export const DashboardRoute = ({ component: Component, ...rest }) => {
 	const { userData } = useContext(AppContext);
   return (

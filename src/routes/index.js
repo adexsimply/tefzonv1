@@ -18,9 +18,11 @@ import FixturesPage from "../pages/Fixtures";
 import ComingSoonPage from "../pages/Error/ComingSoon";
 import NotFoundPage from "../pages/Error/NotFound";
 import GameweekHistoryPage from "../pages/GameweekHistory";
-import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute, SubAndTransferRoute, WalletRoute, DashboardRoute } from "./protectedRoutes";
+import { TeamsRoute, FixturesRoute, GameweekRoute, LoginRoute, RegisterRoute, SubAndTransferRoute, WalletRoute, DashboardRoute, LeaguesRoute, JoinLeagueRoute } from "./protectedRoutes";
 import SubAndTransfer from "../pages/subAndTransfer/SubAndTransfer";
 import Wallet from "../pages/Wallet/Wallet";
+import Leagues from "../pages/Leagues/Leagues";
+import JoinLeague from "../pages/Leagues/JoinLeague";
 
 const Routes = () => {
 
@@ -71,6 +73,8 @@ const Routes = () => {
         <TeamsRoute exact key="teams" path="/teams" component={TeamsPage} />
         <SubAndTransferRoute exact key="subAndTransfer" path="/subAndTransfer" component={SubAndTransfer} />
         <WalletRoute exact key="wallet" path="/wallet" component={Wallet} />
+        <LeaguesRoute exact key="leagues" path="/leagues" component={Leagues} />
+        <JoinLeagueRoute exact key="join-league" path="/join-league" component={JoinLeague} />
         <FixturesRoute
           exact
           key="fixtures"
