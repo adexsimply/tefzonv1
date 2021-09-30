@@ -205,3 +205,50 @@ export const editTeam = (teamData) => {
 		}
 	});
 };
+
+export const getWalletData = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const walletData = await makeApiCall({
+				url: "/wallet_data",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(walletData);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const fundWallet = (data) => {
+  return new Promise(async (resolve, reject) => {
+		try {
+			const fundWalletResponse = await makeApiCall({
+				url: "/payment/paystack/initiate_card_transaction",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: data,
+			});
+			return resolve(fundWalletResponse);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+}
+
+export const verifyFundWallet = (data) => {
+  return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/payment/paystack/verify_transaction",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: data,
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+}

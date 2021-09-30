@@ -39,7 +39,16 @@ const AppContextProvider = ({ children }) => {
 	// const getUserData = () => {
 	// 	setUser({ loggedIn: true, token: getToken });
 	// };
-	return <AppContext.Provider value={{ user, loggedIn, userData, userToken, logInSuccess, resetState }}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{
+    user,
+    loggedIn,
+    userData,
+    userToken,
+    logInSuccess,
+    resetState,
+    setUserToken,
+    setUserData,
+  }}>{children}</AppContext.Provider>;
 };
 
 export default AppContextProvider;

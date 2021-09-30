@@ -59,3 +59,22 @@ export const getView = () => {
 	if (viewState) return viewState;
 	return null;
 };
+
+
+export const saveFundData = (value) => {
+	const serialisedState = JSON.stringify(value);
+	localStorage.setItem('FUND_DATA', serialisedState);
+};
+
+export const getFundData = () => {
+	const serialisedState = localStorage.getItem('FUND_DATA');
+	if (serialisedState) {
+		return JSON.parse(serialisedState);
+	} else {
+		return null;
+	}
+};
+
+export const clearFundData = () => {
+  localStorage.removeItem('FUND_DATA');
+};

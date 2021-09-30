@@ -1,6 +1,4 @@
 import React, { createContext, useState } from "react";
-import { clearState, loadUserData } from "./localStorage";
-import { loadState } from "./localStorage";
 
 export const ModalContext = createContext()
 
