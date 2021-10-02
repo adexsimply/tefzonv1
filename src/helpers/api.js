@@ -268,6 +268,21 @@ export const getTefzonLeagues = () => {
 	});
 };
 
+export const getLeagueInfo = (leagueId) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/league${leagueId}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
 export const getRealLeagues = () => {
 	return new Promise(async (resolve, reject) => {
 		try {
