@@ -1,7 +1,3 @@
-const teamPagePoint = [
-  {}
-]
-
 export const transactions = [
   {
     id: 'kdmsod9f8u9wecs',

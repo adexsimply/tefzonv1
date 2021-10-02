@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect } from "react";
 import { Row, Col, Button, Popover } from "antd";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import Jersey from "../../../assets/img/jersey.svg";

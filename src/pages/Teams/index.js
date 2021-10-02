@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import { TeamContext } from "../../store/TeamContext";
-import TeamEmptyState from "./EmptyState";
+// import TeamEmptyState from "./EmptyState";
 import DisplayTeam from "./DisplayTeam";
 import { AiOutlineLoading } from "react-icons/ai";
-import { FaTruckLoading } from "react-icons/fa";
+// import { FaTruckLoading } from "react-icons/fa";
 import "./Teams.scss";
 
 const Teams = () => {
-  const { getTeamData, teamDetails, teamPlayers, loadingTeam } = useContext(TeamContext);
+  const { teamDetails, teamPlayers, loadingTeam } = useContext(TeamContext);
 
   useEffect(() => {
     // getTeamData();

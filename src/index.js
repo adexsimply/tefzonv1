@@ -12,6 +12,8 @@ import reportWebVitals from "./reportWebVitals";
 import { DndProvider } from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import ModalContextProvider from "./store/ModalContext";
+import WalletContextProvider from "./store/WalletContext";
+import LeagueContextProvider from "./store/LeagueContext";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,7 +22,11 @@ ReactDOM.render(
         <ViewTeamProvider>
           <ModalContextProvider>
             <DndProvider backend={HTML5Backend}>
-              <App />
+              <WalletContextProvider>
+                <LeagueContextProvider>
+                  <App />
+                </LeagueContextProvider>
+              </WalletContextProvider>
             </DndProvider>
           </ModalContextProvider>
         </ViewTeamProvider>

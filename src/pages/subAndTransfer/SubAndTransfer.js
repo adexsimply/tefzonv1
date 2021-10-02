@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Button, Row, Col } from "antd";
 import GameWeekDetails from '../../components/GameWeekDetails';
-import Info from '../../components/Info';
 import SubTeamSideBar from '../../components/SubTeamSideBar';
 import { CreateTeamContext } from '../../store/CreateTeamContext';
 import ListView from '../Teams/ListView';
@@ -11,6 +10,7 @@ import { editTeam } from '../../helpers/api';
 import { useHistory } from 'react-router-dom';
 
 function SubAndTransfer() {
+  // eslint-disable-next-line
 	const [status, setStatus] = React.useState({ type: "", msg: "" });
   const [loading, setLoading] = React.useState(false);
   

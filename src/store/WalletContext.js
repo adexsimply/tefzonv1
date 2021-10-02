@@ -1,34 +1,23 @@
 import React, { createContext, useState } from "react";
-import { loadState } from "./localStorage";
+// import { loadState } from "./localStorage";
 
 export const WalletContext = createContext();
 
+const initialWalletData = {
+  wallet_balance: 0,
+  currency: 'NGN',
+  transaction_history: [],
+  cards: []
+}
+
 const WalletContextProvider = ({ children }) => {
-  const [userToken, setUserToken] = useState(null);
-	const [loggedIn, setLoggedIn] = useState(false);
+	const [walletData, setWalletData] = useState(initialWalletData);
   // const [userData, setUserData] = useState(null);
-  
-  React.useEffect(() => {
-	  const getToken = loadState();
-    setUserToken(getToken);
-    // eslint-disable-next-line
-  }, [])
-
-  const logInSuccess = (data) => {
-    console.log('logInSuccess');
-    setLoggedIn(true);
-  }
-
-	// const getUserData = () => {
-	// 	setUser({ loggedIn: true, token: getToken });
-	// };
 
   return (
     <WalletContext.Provider value={{
-      loggedIn,
-      userToken,
-      logInSuccess,
-      setUserToken,
+      walletData,
+      setWalletData
     }}>
       {children}
     </WalletContext.Provider>

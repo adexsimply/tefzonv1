@@ -1,11 +1,38 @@
 import React, { useContext } from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Button, Row, Col, Input, Form } from "antd";
-import { Link } from 'react-router-dom';
-import { liveLeagues } from '../../helpers/mockData';
-// import Form from 'antd/lib/form/Form';
+import { useHistory } from 'react-router-dom';
+import {getTefzonLeagues} from '../../helpers/api'
+import { LeagueContext } from '../../store/LeagueContext';
+import { openNotification } from '../../helpers/notification';
 
 function JoinLeague() {
+  const {
+    tefzonLeagues,
+    setTefzonLeagues,
+    setSingleLeagueData,
+  } = useContext(LeagueContext);
+
+  const history = useHistory();
+
+  React.useEffect(() => {
+    getTefzonLeagues()
+    .then((response) => {
+      setTefzonLeagues(response.getAllSystemVirtualLeagues)
+    })
+    .catch((error) => {
+      openNotification({
+        title: 'Error getting leagues',
+        message: 'there was an error while leagues',
+        type: 'error'
+      })
+    })
+  })
+
+  const handleLeagueView = (leagueData) => {
+    setSingleLeagueData(leagueData);
+    history.push('/leagues/league-info');
+  }
 
   return (
     <DashboardLayout>
@@ -73,7 +100,7 @@ function JoinLeague() {
                     <tr className={'bg-gray-300'}>
                       <th className={'w-1/4'}>
                         <div className={'p-2'}>
-                          <p className={'text-xs font-bold text-primary-brand-400'}>Game Week</p>
+                          <p className={'text-xs font-bold text-primary-brand-400'}>S/N</p>
                         </div>
                       </th>
                       <th className={'w-2/4'}>
@@ -88,32 +115,32 @@ function JoinLeague() {
                       </th>
                       <th className={'w-1/4'}>
                         <div className={'p-2'}>
-                          <p className={'text-xs font-bold text-primary-brand-400'}>Total Point</p>
+                          {/* <p className={'text-xs font-bold text-primary-brand-400'}>Total Point</p> */}
                         </div>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {liveLeagues.map((item, index) => {
+                    {tefzonLeagues.map((item, index) => {
                       return (
                         <tr>
                           <td>
                             <div className={'p-2 py-4'}>
-                              <p className={'text-xs font-medium capitalize'}>{item.gameWeek}</p>
+                              <p className={'text-xs font-medium capitalize'}>{index + 1}</p>
                             </div>
                           </td>
                           <td>
                             <div className={'p-2 py-4'}>
-                              <p className={'text-xs font-bold capitalize text-primary-brand-darker'}>{item.name}</p>
+                              <p className={'text-xs font-bold capitalize text-primary-brand-darker'}>{item.league_name}</p>
                             </div>
                           </td>
                           <td>
                             <div className={'p-2 py-4'}>
-                              <p className={'text-xs font-medium capitalize'}>{item.type}</p>
+                              <p className={'text-xs font-medium capitalize'}>{item.league_paid === 1 ? 'Paid' : 'Free'}</p>
                             </div>
                           </td>
                           <td>
-                            <div role={'button'} className={'p-2 py-4'}>
+                            <div role={'button'} className={'p-2 py-4'} onClick={() => handleLeagueView(item)}>
                               <p className={'text-xs font-bold capitalize text-primary-brand-darker'}>Join</p>
                             </div>
                           </td>

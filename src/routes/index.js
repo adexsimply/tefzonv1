@@ -8,7 +8,7 @@ import ForgotPasswordPage from "../pages/Auth/ForgotPassword";
 import ResetPasswordPage from "../pages/Auth/ResetPassword";
 import ConfirmPage from "../pages/Auth/Confirm";
 import DashboardPage from "../pages/Dashboard";
-import TeamsPage from "../pages/Teams";
+// import TeamsPage from "../pages/Teams";
 import ListCaptainPage from "../pages/Teams/ListView/TeamCaptain";
 import PitchCaptainPage from "../pages/Teams/PitchView/TeamCaptain";
 import TeamsNamePage from "../pages/Teams/NameTeam";
@@ -26,6 +26,7 @@ import JoinLeague from "../pages/Leagues/JoinLeague";
 import LeagueInfo from "../pages/Leagues/LeagueInfo";
 import Teams from "../pages/Teams/Teams";
 import VerifyTransaction from "../pages/Wallet/VerifyTransaction";
+import CreateLeague from "../pages/Leagues/CreateLeague";
 
 const Routes = () => {
 
@@ -79,6 +80,7 @@ const Routes = () => {
         <ProtectedRoute exact key="wallet" path="/wallet" component={Wallet} />
         <ProtectedRoute exact key="leagues" path="/leagues" component={Leagues} />
         <ProtectedRoute exact key="join-league" path="/leagues/join-league" component={JoinLeague} />
+        <ProtectedRoute exact key="join-league" path="/leagues/create-league" component={CreateLeague} />
         <ProtectedRoute exact key="league-info" path="/leagues/league-info" component={LeagueInfo} />
         <ProtectedRoute exact key="verify-transaction" path="/wallet/verify-transaction" component={VerifyTransaction} />
         <ProtectedRoute

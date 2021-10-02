@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
-import DashboardLayout from '../../components/common/DashboardLayout';
+import React from 'react';
 import { AiOutlineLoading } from "react-icons/ai";
 import { Row, Col} from "antd";
-import { ModalContext } from '../../store/ModalContext';
 import { useHistory } from 'react-router';
 import { verifyFundWallet } from '../../helpers/api';
 import { openNotification } from '../../helpers/notification';
@@ -38,19 +36,18 @@ function VerifyTransaction() {
           history.replace('/wallet');
         })
     }
+    // eslint-disable-next-line
   }, [])
 
   return (
-    <DashboardLayout>
       <Row justify="center" className='py-4'>
         <Col lg={22}>
           <div className={'w-full flex flex-col items-center justify-center mt-10'}>
             <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
-            <p className={'text-2xl font-bold mt-3'}>Verifying Transaction</p>
+            <p className={'text-lg font-bold mt-3'}>Please waith while we verify your transaction</p>
           </div>
         </Col>
       </Row>
-    </DashboardLayout>
   );
 }
 

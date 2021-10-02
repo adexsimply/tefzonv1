@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { AppContext } from "../store/AppContext";
 import { loadState } from "../store/localStorage";
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {

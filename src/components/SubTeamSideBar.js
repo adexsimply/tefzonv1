@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Input, Select, message } from "antd";
+import { Button, Input, Select, message } from "antd";
 import { AiOutlineSearch } from 'react-icons/ai';
 import { CreateTeamContext } from '../store/CreateTeamContext';
 import PlayerDisplay from "../pages/Teams/EmptyState/PlayerDisplay";
 import { getPlayers } from '../helpers/api';
 
 function SubTeamSideBar() {
-  const [floatCard, setFloatCard] = useState("top");
-  const [loadingPlayers, setLoadingPlayers] = useState(false);
+  // const [floatCard, setFloatCard] = useState("top");
+  // const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [playerData, setPlayerData] = useState(null);
   const [searchName, setSearchName] = useState(null);
   const [filteredPlayerData, setFilteredPlayerData] = useState(null);
 
   const {
     currentSelection,
-    selectedDef,
-    selectedFwd,
-    selectedGoalKeepers,
-    selectedMid,
-    statusMessage,
+    // selectedDef,
+    // selectedFwd,
+    // selectedGoalKeepers,
+    // selectedMid,
+    // statusMessage,
     view,
-    changeView,
-    updateGoalKeeper,
-    updateDefenders,
-    updateMidfielder,
-    updateForwards,
+    // changeView,
+    // updateGoalKeeper,
+    // updateDefenders,
+    // updateMidfielder,
+    // updateForwards,
   } = React.useContext(CreateTeamContext);
 
   const { Option } = Select;
@@ -34,16 +34,17 @@ function SubTeamSideBar() {
   }, []);
 
   const getPlayerList = async () => {
-    setLoadingPlayers(true);
+    // setLoadingPlayers(true);
     try {
       const results = await getPlayers();
       setPlayerData(results.results);
       setFilteredPlayerData(results.results);
     } catch (error) {
       message.error(error);
-    } finally {
-      setLoadingPlayers(false);
-    }
+    } 
+    // finally {
+    //   setLoadingPlayers(false);
+    // }
   };
 
   const displayPlayers = () => {

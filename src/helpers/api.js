@@ -252,3 +252,49 @@ export const verifyFundWallet = (data) => {
 		}
 	});
 }
+
+export const getTefzonLeagues = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/SystemVirtualLeagues",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getRealLeagues = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/SystemRealLeagues",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const createUserTeam = (data) => {
+  return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/createLeague",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: data,
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+}

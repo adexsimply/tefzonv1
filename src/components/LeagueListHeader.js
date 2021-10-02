@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Button, Row, Col, Input, Form } from "antd";
+import React from 'react';
+import { Row, Col } from "antd";
 
 function LeagueListHeader({LeagueName, currentRank, lastRank, settings, className}) {
 

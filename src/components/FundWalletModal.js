@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { Button, Row, Col, Input, Form } from "antd";
+import { Button, Input, Form } from "antd";
 import { AiOutlineLoading } from "react-icons/ai";
 import { ModalContext } from '../store/ModalContext';
 import { fundWallet } from '../helpers/api';
@@ -31,7 +31,7 @@ Modal.setAppElement('#root');
 
 function FundWalletModal({children}) {
   const [loading, setLoading] = React.useState(false);
-  const [transactionData, setTransactionData] = React.useState(false);
+  // const [transactionData, setTransactionData] = React.useState(false);
   
   const {
     fundModalIsOpen,
@@ -44,7 +44,7 @@ function FundWalletModal({children}) {
     fundWallet(values)
       .then((response) => {
         console.log(response.data);
-        setTransactionData(response.data);
+        // setTransactionData(response.data);
         window.location.assign(response.data.authorization_url)
         setLoading(false);
       })
