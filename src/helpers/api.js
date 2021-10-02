@@ -27,7 +27,7 @@ const makeApiCall = (axiosConfigObj) => {
 			.catch((err) => {
 				const { response, request, message } = err;
 				let error = response
-					? response.data.message
+					? response.data
 					: request
 					? "Network error, please try again later"
 					: message;

@@ -10,8 +10,10 @@ function CreateLeague() {
   const [loading, setLoading] = React.useState(false);
   const [disableAmount, setDisableAmount] = React.useState(true);
   const [realLeagues, setRealLeagues] = React.useState([]);
+  const [startDate, setStartDate] = React.useState('0000-00-00');
+  const [endDate, setEndDate] = React.useState('0000-00-00');
 
-	const dateFormat = "DD-MM-YYYY";
+	const dateFormat = "YYYY-MM-DD";
   const { Option } = Select;
 
   React.useEffect(() => {
@@ -26,16 +28,25 @@ function CreateLeague() {
         type: 'error',
       })
     })
-  })
+  }, [])
 
 	// function onChange(date, dateString) {
 	// 	setDob(dateString);
 	// }
 
+  const onChangeStartDate = (date, dateString) => {
+    setStartDate(dateString)
+  }
+
+  const onChangeEndDate = (date, dateString) => {
+    setEndDate(dateString)
+  }
+
   const handleCreateLeague = (values) => {
+    const leagueData = {...values, league_start_date: startDate, league_end_date: endDate}
     setLoading(true)
-    console.log(values)
-    createUserTeam(values)
+    console.log(leagueData)
+    createUserTeam(leagueData)
     .then((response) => {
       console.log(response);
       openNotification({
@@ -46,11 +57,15 @@ function CreateLeague() {
     })
     .catch(error => {
       setLoading(false)
+      console.log(error)
       openNotification({
         title: 'Error creating League',
-        message: 'We encounter an error while trying to create league',
+        message: error.errorMessages,
         type: 'error'
       })
+    })
+    .finally(() => {
+      setLoading(false)
     })
   }
 
@@ -133,7 +148,7 @@ function CreateLeague() {
                       >
                         <DatePicker
                           className="w-full h-14 border border-gray-400"
-                          // onChange={onChange}
+                          onChange={onChangeStartDate}
                           format={dateFormat}
                         />
                       </Form.Item>
@@ -151,7 +166,7 @@ function CreateLeague() {
                       >
                         <DatePicker
                           className="w-full h-14 border border-gray-400"
-                          // onChange={onChange}
+                          onChange={onChangeEndDate}
                           format={dateFormat}
                         />
                       </Form.Item>
