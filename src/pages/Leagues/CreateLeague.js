@@ -4,6 +4,7 @@ import { Button, Row, Col, Input, DatePicker, Select, Form } from "antd";
 import { createUserTeam, getRealLeagues } from '../../helpers/api';
 import { openNotification } from '../../helpers/notification';
 import { AiOutlineLoading } from "react-icons/ai";
+import { useHistory } from 'react-router';
 // import Form from 'antd/lib/form/Form';
 
 function CreateLeague() {
@@ -15,6 +16,7 @@ function CreateLeague() {
 
 	const dateFormat = "YYYY-MM-DD";
   const { Option } = Select;
+  const history = useHistory();
 
   React.useEffect(() => {
     getRealLeagues()
@@ -54,6 +56,7 @@ function CreateLeague() {
         message: 'Your league has been created successsfullly',
         type: 'success'
       })
+      history.replace('/leagues')
     })
     .catch(error => {
       setLoading(false)
@@ -233,7 +236,7 @@ function CreateLeague() {
                             defaultValue={'Select an option'}
                             >
                               {realLeagues.map((item, index) => (
-                                <Option className={'w-full h-14 border-transparent'} value={item.id}>{item.league_name}</Option>
+                                <Option key={item.id} className={'w-full h-14 border-transparent'} value={item.id}>{item.league_name}</Option>
                               ))}
                           </Select>
                       </Form.Item>

@@ -1,15 +1,17 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 // import { Link, useHistory } from 'react-router-dom';
 import { AiOutlineLoading } from "react-icons/ai";
 import { LeagueContext } from '../../store/LeagueContext';
 import { openNotification } from '../../helpers/notification';
 import { getLeagueInfo } from '../../helpers/api';
 import { longDate } from '../../helpers/utils';
+import FixtureDisplay from '../Fixtures/FixtureDisplay';
 
 function LeagueInfo() {
   const [loadingPage, setLoadingPage] = React.useState(true);
+  const [loadingJoinBtn, setLoadingJoinBtn] = React.useState(false);
 
   const {
     leagueInfo,
@@ -38,6 +40,11 @@ function LeagueInfo() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const handleJoinLeague = () => {
+    console.log('Join league clicked');
+    setLoadingJoinBtn(true);
+  }
+
   if (loadingPage) {
     return (
       <div className={'flex items-center justify-center w-screen h-screen'}>
@@ -50,22 +57,46 @@ function LeagueInfo() {
     <DashboardLayout>
       <Row justify="center" className='py-4'>
         <Col lg={22}>
-          <div className="mt-5">
-            <p className="text-3xl font-bold">
-              {leagueInfo.leagueDetails ? leagueInfo.leagueDetails.league_name : 'League Name'}
-            </p>
-            <p className="text-sm font-bold mt-2">
-              <span className="white">League Date: </span>
-              <span className="green">{longDate(leagueInfo.leagueDetails.league_start_date)} -</span>
-              <span className="green"> {longDate(leagueInfo.leagueDetails.league_end_date)}</span>
-            </p>
-          </div>
-          <Row gutter={24} className="display-team-container">
+          <Row gutter={24} className="display-team-container mt-5">
             <Col lg={16}>
+              <div>
+                <p className="text-3xl font-bold">
+                  {leagueInfo.leagueDetails ? leagueInfo.leagueDetails.league_name : 'League Name'}
+                </p>
+                <p className="text-sm font-bold mt-2 text-gray-500">
+                  <span className="white">League Date: </span>
+                  <span className="green">{longDate(leagueInfo.leagueDetails.league_start_date)} -</span>
+                  <span className="green"> {longDate(leagueInfo.leagueDetails.league_end_date)}</span>
+                </p>
+              </div>
+              <div className={'mt-3'}>
+                <Row gutter={8}>
+                  <Col>
+                    <div className={'rounded-md bg-gray-300'}>
+                      <p className={'px-2 py-1 gray-red-900 text-xs'}>{leagueInfo.leagueDetails.league_type}</p>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className={'rounded-md bg-gray-300'}>
+                      <p className={'px-2 py-1 text-gray-900 text-xs'}>{leagueInfo.leagueDetails.league_status}</p>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className={'rounded-md bg-gray-300'}>
+                      <p className={'px-2 py-1 text-gray-900 text-xs'}>{leagueInfo.leagueDetails.league_winner_type}</p>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className={'rounded-md bg-gray-300'}>
+                      <p className={'px-2 py-1 text-gray-900 text-xs'}>{leagueInfo.leagueDetails.league_paid === 1 ? 'paid' : 'free'}</p>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
               <div className="gameweek-display-container mt-10">
                 <div className="game-display">
                   <p>
-                    <span className="white">Day: </span>
+                    <span className="white">Today's Date: </span>
                     <span className="green">{longDate(new Date())}</span>
                   </p>
                 </div>
@@ -132,9 +163,46 @@ function LeagueInfo() {
                     })}
                   </tbody>
                 </table>
+                {leagueInfo.leagueParticipant.length < 1 && (
+                  <div className={'w-full text-center mt-5'}>
+                    <p className='text-gray-400 text-sm font-medium'>No participant yet</p>
+                  </div>
+                )}
+              </div>
+              <div className="gameweek-display-container mt-14">
+                <div className="game-display">
+                  <p>
+                    {/* <span className="white">Today's Date: </span> */}
+                    <span className="white">League Fixtures</span>
+                  </p>
+                </div>
+                <div className="green-band"></div>
+              </div>
+              <div>
+                {leagueInfo.leagueFxixture.map((fixtureInfo) => {
+                  const { teams, fixture, goals, score, league } = fixtureInfo;
+                  return (
+                    <FixtureDisplay
+                      fixture={fixture}
+                      teams={teams}
+                      goals={goals}
+                      league={league}
+                      score={score}
+                    />
+                  );
+                })}
               </div>
             </Col>
             <Col lg={8}>
+              <Button className='w-full h-14 bg-primary-brand-darker rounded' onClick={handleJoinLeague}>
+                {loadingJoinBtn ?
+                  <div className={'w-full flex items-center justify-center'}>
+                    <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
+                  </div>
+                  :
+                    <p className='text-white font-bold'>Join League</p>
+                }
+              </Button>
             </Col>
           </Row>
         </Col>
