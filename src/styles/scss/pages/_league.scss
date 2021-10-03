@@ -46,3 +46,26 @@
       + div {
         margin-top: -15px;
   }
+
+  .gameweek-display-container {
+    .game-display {
+      background: $primary-brand-darker;
+      padding: 0.7rem 0;
+      text-align: center;
+      font-weight: bold;
+
+      .white {
+        color: $white;
+      }
+      .green {
+        color: $tw-green;
+        margin-left: 10px;
+      }
+    }
+    .green-band {
+      height: 6px;
+      background: $tw-green;
+      width: 92%;
+      margin: auto;
+    }
+  }

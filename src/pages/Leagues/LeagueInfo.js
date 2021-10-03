@@ -54,20 +54,24 @@ function LeagueInfo() {
             <p className="text-3xl font-bold">
               {leagueInfo.leagueDetails ? leagueInfo.leagueDetails.league_name : 'League Name'}
             </p>
+            <p className="text-sm font-bold mt-2">
+              <span className="white">League Date: </span>
+              <span className="green">{longDate(leagueInfo.leagueDetails.league_start_date)} -</span>
+              <span className="green"> {longDate(leagueInfo.leagueDetails.league_end_date)}</span>
+            </p>
           </div>
           <Row gutter={24} className="display-team-container">
             <Col lg={16}>
-              <div className="gameweek-display-container">
+              <div className="gameweek-display-container mt-10">
                 <div className="game-display">
                   <p>
-                    <span className="white">League date: </span>
-                    <span className="green">{longDate(leagueInfo.leagueDetails.league_start_date)} -</span>
-                    <span className="green"> {longDate(leagueInfo.leagueDetails.league_end_date)}</span>
+                    <span className="white">Day: </span>
+                    <span className="green">{longDate(new Date())}</span>
                   </p>
                 </div>
                 <div className="green-band"></div>
               </div>
-              <div className={'w-full mt-5'}>
+              <div className={'w-full mt-10'}>
                 <table className={'table-fixed w-full'}>
                   <thead>
                     <tr className={'bg-gray-300'}>
