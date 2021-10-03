@@ -31,7 +31,7 @@ function JoinLeague() {
 
   const handleLeagueView = (leagueData) => {
     setSingleLeagueData(leagueData);
-    history.push('/leagues/league-info');
+    history.push(`/leagues/league-info?leagueId=${leagueData.id}`);
   }
 
   return (

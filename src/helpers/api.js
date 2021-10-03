@@ -272,7 +272,7 @@ export const getLeagueInfo = (leagueId) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const response = await makeApiCall({
-				url: `/league${leagueId}`,
+				url: `/league/${leagueId}`,
 				method: "get",
 				headers: { Authorization: `Bearer ${getToken()}` },
 			});

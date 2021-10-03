@@ -14,7 +14,6 @@ function VerifyTransaction() {
     const urlParams = new URLSearchParams(queryString);
     let reference = urlParams.get('reference');
     
-    console.log(reference)
     if (reference) {
       let data = {reference, save_card: 'no'}
       verifyFundWallet(data)

@@ -1,25 +1,68 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Row, Col } from "antd";
-import { teams } from '../../helpers/mockData';
-// import Form from 'antd/lib/form/Form';
+// import { Link, useHistory } from 'react-router-dom';
+import { AiOutlineLoading } from "react-icons/ai";
+import { LeagueContext } from '../../store/LeagueContext';
+import { openNotification } from '../../helpers/notification';
+import { getLeagueInfo } from '../../helpers/api';
+import { longDate } from '../../helpers/utils';
 
 function LeagueInfo() {
+  const [loadingPage, setLoadingPage] = React.useState(true);
+
+  const {
+    leagueInfo,
+    setLeagueInfo,
+  } = React.useContext(LeagueContext);
+
+  React.useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let leagueId = urlParams.get('leagueId');
+
+    console.log(leagueId)
+    getLeagueInfo(leagueId)
+    .then((response) => {
+      console.log(response);
+      setLeagueInfo(response);
+    })
+    .catch((error) => {
+      openNotification({
+        title: 'Error getting leagues',
+        message: 'There was an error while trying to get league info',
+        type: 'error'
+      })
+    })
+    .finally(() => setLoadingPage(false))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (loadingPage) {
+    return (
+      <div className={'flex items-center justify-center w-screen h-screen'}>
+          <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
+        </div>
+    )
+  }
 
   return (
     <DashboardLayout>
       <Row justify="center" className='py-4'>
         <Col lg={22}>
           <div className="mt-5">
-            <p className="text-3xl font-bold">League Name - Creator Name</p>
+            <p className="text-3xl font-bold">
+              {leagueInfo.leagueDetails ? leagueInfo.leagueDetails.league_name : 'League Name'}
+            </p>
           </div>
           <Row gutter={24} className="display-team-container">
             <Col lg={16}>
               <div className="gameweek-display-container">
                 <div className="game-display">
                   <p>
-                    <span className="white">Gameweek 1:</span>
-                    <span className="green">Sat 25 Sep</span>
+                    <span className="white">League date: </span>
+                    <span className="green">{longDate(leagueInfo.leagueDetails.league_start_date)} -</span>
+                    <span className="green"> {longDate(leagueInfo.leagueDetails.league_end_date)}</span>
                   </p>
                 </div>
                 <div className="green-band"></div>
@@ -51,7 +94,12 @@ function LeagueInfo() {
                     </tr>
                   </thead>
                   <tbody>
-                    {teams.map((item, index) => {
+                    {/* {leagueInfo.leagueParticipant.length < 1 && (
+                      <div className={'w-full'}>
+                        <p>No participant yet</p>
+                      </div>
+                    )} */}
+                    {leagueInfo.leagueParticipant.map((item, index, array) => {
                       return (
                         <tr>
                           <td>
