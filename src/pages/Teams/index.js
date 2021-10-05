@@ -1,16 +1,16 @@
 import React, { useContext, useEffect } from "react";
 import { TeamContext } from "../../store/TeamContext";
-// import TeamEmptyState from "./EmptyState";
+import TeamEmptyState from "./EmptyState";
 import DisplayTeam from "./DisplayTeam";
 import { AiOutlineLoading } from "react-icons/ai";
 // import { FaTruckLoading } from "react-icons/fa";
 import "./Teams.scss";
 
 const Teams = () => {
-  const { teamDetails, teamPlayers, loadingTeam } = useContext(TeamContext);
+  const { teamDetails, getTeamData, teamPlayers, loadingTeam } = useContext(TeamContext);
 
   useEffect(() => {
-    // getTeamData();
+    getTeamData();
     // eslint-disable-next-line
   }, []);
 
@@ -39,8 +39,8 @@ const Teams = () => {
     } else {
       if (!teamPlayers) {
         // return errorView();
-        return <DisplayTeam teamInfo={teamPlayers} teamDetails={teamDetails} />;
-        // return <TeamEmptyState />;
+        // return <DisplayTeam teamInfo={teamPlayers} teamDetails={teamDetails} />;
+        return <TeamEmptyState />;
       } else {
         return <DisplayTeam teamInfo={teamPlayers} teamDetails={teamDetails} />;
       }

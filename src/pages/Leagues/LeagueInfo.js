@@ -1,6 +1,6 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, Form, Select } from "antd";
 // import { Link, useHistory } from 'react-router-dom';
 import { AiOutlineLoading } from "react-icons/ai";
 import { LeagueContext } from '../../store/LeagueContext';
@@ -12,6 +12,8 @@ import FixtureDisplay from '../Fixtures/FixtureDisplay';
 function LeagueInfo() {
   const [loadingPage, setLoadingPage] = React.useState(true);
   const [loadingJoinBtn, setLoadingJoinBtn] = React.useState(false);
+
+  const { Option } = Select;
 
   const {
     leagueInfo,
@@ -194,15 +196,29 @@ function LeagueInfo() {
               </div>
             </Col>
             <Col lg={8}>
-              <Button className='w-full h-14 bg-primary-brand-darker rounded' onClick={handleJoinLeague}>
-                {loadingJoinBtn ?
-                  <div className={'w-full flex items-center justify-center'}>
-                    <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
-                  </div>
-                  :
-                    <p className='text-white font-bold'>Join League</p>
-                }
-              </Button>
+              <Form layout='vertical' requiredMark={false} >
+                <Form.Item
+                  name="allowed_league_id"
+                  label={'League'}
+                  rules={[{ required: true, message: "Please select league"}]}>
+                    <Select
+                      defaultValue={'Select an option'}
+                      >
+                        <Option className={'w-full h-14 border-transparent'} value={'item.id'}>Team name</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item>
+                  <Button className='w-full h-14 bg-primary-brand-darker rounded' onClick={handleJoinLeague}>
+                    {loadingJoinBtn ?
+                      <div className={'w-full flex items-center justify-center'}>
+                        <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
+                      </div>
+                      :
+                        <p className='text-white font-bold'>Join League</p>
+                    }
+                  </Button>
+                </Form.Item>
+              </Form>
             </Col>
           </Row>
         </Col>

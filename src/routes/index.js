@@ -8,7 +8,8 @@ import ForgotPasswordPage from "../pages/Auth/ForgotPassword";
 import ResetPasswordPage from "../pages/Auth/ResetPassword";
 import ConfirmPage from "../pages/Auth/Confirm";
 import DashboardPage from "../pages/Dashboard";
-// import TeamsPage from "../pages/Teams";
+import TeamsPage from "../pages/Teams";
+import EmptyState from "../pages/Teams/EmptyState";
 import ListCaptainPage from "../pages/Teams/ListView/TeamCaptain";
 import PitchCaptainPage from "../pages/Teams/PitchView/TeamCaptain";
 import TeamsNamePage from "../pages/Teams/NameTeam";
@@ -114,6 +115,12 @@ const Routes = () => {
           component={TeamsNamePage}
         />
         <Route
+          path="/teams/create-team"
+          exact
+          key="create-team"
+          component={EmptyState}
+        />
+        <Route
           path="/teams/list-save-team"
           exact
           key="teams"
@@ -130,6 +137,12 @@ const Routes = () => {
           exact
           key="gameweek-history"
           component={GameweekHistoryPage}
+        />
+        <ProtectedRoute
+          path="/teams/teams"
+          exact
+          key="team-page"
+          component={TeamsPage}
         />
 
         <Route path="*" component={NotFoundPage} />
