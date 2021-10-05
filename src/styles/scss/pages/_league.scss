@@ -1,0 +1,115 @@
+
+  .ant-select-selection-selected-value {
+    border-radius: 0px 8px 8px 0px;
+    height: 53px;
+  }
+
+  .ant-select-selection{
+    height: 56px;
+      .ant-select-selection--single {
+      height: 53px;
+    }
+  }
+
+  .ant-select-selector {
+    height: 56px !important;
+  }
+
+  .ant-select-selection.ant-select-selection--single
+    > div
+    > div
+    > div
+    > div
+    + div {
+    margin-top: -5px;
+    padding: 4px 5px 5px 14px !important;
+  }
+
+  .ant-select-selection.ant-select-selection--single > div > div > div > div {
+    margin-top: -20px;
+  }
+
+  .ant-select-selection.ant-select-selection--single[aria-expanded="true"]
+    > div
+    > div
+    > div
+    > div {
+      margin-top: -10px;
+  }
+
+  /*style for when the menu is expanded: show shipment description above icon and name*/ 
+  .ant-select-selection.ant-select-selection--single[aria-expanded="true"]
+      > div
+      > div
+      > div
+      > div
+      + div {
+        margin-top: -15px;
+  }
+
+  .gameweek-display-container {
+    .game-display {
+      background: $primary-brand-darker;
+      padding: 0.7rem 0;
+      text-align: center;
+      font-weight: bold;
+
+      .white {
+        color: $white;
+      }
+      .green {
+        color: $tw-green;
+        margin-left: 10px;
+      }
+    }
+    .green-band {
+      height: 6px;
+      background: $tw-green;
+      width: 92%;
+      margin: auto;
+    }
+  }
+
+  .fixture-display-container {
+		margin-top: 2rem;
+		.heading--panel {
+			background: $gray-2;
+			padding: 8px;
+			color: $dark;
+			font-size: 14px;
+			font-weight: 700;
+		}
+		.fixture {
+			border-bottom: 1px solid $gray-4;
+			padding: 1rem 0;
+			p {
+				font-weight: 600;
+				color: $primary-dark;
+				font-size: 16px;
+			}
+			.time-stamp {
+				border: 1px solid $gray-3;
+				width: 90px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin: auto;
+				height: 40px;
+				background: $white;
+			}
+			.fixture-logo {
+				width: 50px;
+				height: 50px;
+			}
+			.left-section {
+				p {
+					margin-right: 1rem;
+				}
+			}
+			.right-section {
+				p {
+					margin-left: 1rem;
+				}
+			}
+		}
+	}

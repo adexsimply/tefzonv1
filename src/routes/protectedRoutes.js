@@ -1,26 +1,28 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { AppContext } from "../store/AppContext";
+import { loadState } from "../store/localStorage";
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
-	const { userData } = useContext(AppContext);
+  // const { userData } = useContext(AppContext);
+  const getToken = loadState();
   return (
     <Route
       {...rest}
       render={(props) =>
-        userData.token ? <Component {...props} /> : <Redirect to="/login" />
+        getToken ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   )
 };
 
 export const AuthProtectedRoute = ({ component: Component, ...rest }) => {
-	const { userData } = useContext(AppContext);
+	// const { userData } = useContext(AppContext);
+  const getToken = loadState();
   return (
     <Route
       {...rest}
       render={(props) =>
-        !userData.token ? <Component {...props} /> : <Redirect to="/dashboard" />
+        !getToken ? <Component {...props} /> : <Redirect to="/dashboard" />
       }
     />
   )

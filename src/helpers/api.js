@@ -28,7 +28,7 @@ const makeApiCall = (axiosConfigObj) => {
 			.catch((err) => {
 				const { response, request, message } = err;
 				let error = response
-					? response.data.message
+					? response.data
 					: request
 					? "Network error, please try again later"
 					: message;
@@ -206,3 +206,111 @@ export const editTeam = (teamData) => {
 		}
 	});
 };
+
+export const getWalletData = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const walletData = await makeApiCall({
+				url: "/wallet_data",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(walletData);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const fundWallet = (data) => {
+  return new Promise(async (resolve, reject) => {
+		try {
+			const fundWalletResponse = await makeApiCall({
+				url: "/payment/paystack/initiate_card_transaction",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: data,
+			});
+			return resolve(fundWalletResponse);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+}
+
+export const verifyFundWallet = (data) => {
+  return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/payment/paystack/verify_transaction",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: data,
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+}
+
+export const getTefzonLeagues = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/SystemVirtualLeagues",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getLeagueInfo = (leagueId) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/league/${leagueId}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getRealLeagues = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/SystemRealLeagues",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const createUserTeam = (data) => {
+  return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/createLeague",
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: data,
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+}

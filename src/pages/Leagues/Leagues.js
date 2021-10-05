@@ -1,14 +1,36 @@
 import React, { useContext } from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
-import { Button, Row, Col, Input, Form } from "antd";
+import { Button, Row, Col } from "antd";
 import { Link, useHistory } from 'react-router-dom';
 import SectionContainer from '../../components/SectionContainer';
 import LeagueItemList from '../../components/LeagueItemList';
 import LeagueListHeader from '../../components/LeagueListHeader';
+import {getTefzonLeagues} from '../../helpers/api'
+import { LeagueContext } from '../../store/LeagueContext';
+import { openNotification } from '../../helpers/notification';
 // import Form from 'antd/lib/form/Form';
 
 function Leagues() {
+  const {
+    // tefzonLeagues,
+    setTefzonLeagues,
+  } = useContext(LeagueContext);
+
   const history = useHistory();
+
+  React.useEffect(() => {
+    getTefzonLeagues()
+    .then((response) => {
+      setTefzonLeagues(response.getAllSystemVirtualLeagues)
+    })
+    .catch((error) => {
+      openNotification({
+        title: 'Error getting leagues',
+        message: 'there was an error while leagues',
+        type: 'error'
+      })
+    })
+  })
 
   const handleLeagueClick = () => {
     history.push('/leagues/league-info')
@@ -27,7 +49,7 @@ function Leagues() {
                 <SectionContainer>
                   <Row align={'middle'} gutter={15} className={'px-3'}>
                     <Col span={12}>
-                      <Link to="/join-league">
+                      <Link to="/leagues/create-league">
                         <Button className='w-full h-14 bg-primary-brand-darker rounded'>
                           <p className='text-white font-bold'>Create New League</p>
                         </Button>

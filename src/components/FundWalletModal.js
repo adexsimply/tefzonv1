@@ -1,7 +1,9 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { Button, Row, Col, Input, Form } from "antd";
+import { Button, Input, Form } from "antd";
+import { AiOutlineLoading } from "react-icons/ai";
 import { ModalContext } from '../store/ModalContext';
+import { fundWallet } from '../helpers/api';
 
 const customStyles = {
   overlay: {
@@ -28,10 +30,29 @@ const customStyles = {
 Modal.setAppElement('#root');
 
 function FundWalletModal({children}) {
+  const [loading, setLoading] = React.useState(false);
+  // const [transactionData, setTransactionData] = React.useState(false);
+  
   const {
     fundModalIsOpen,
     closeFundModal,
   } = React.useContext(ModalContext);
+
+  const handleFundWallet = (values) => {
+    setLoading(true)
+    console.log(values);
+    fundWallet(values)
+      .then((response) => {
+        console.log(response.data);
+        // setTransactionData(response.data);
+        window.location.assign(response.data.authorization_url)
+        setLoading(false);
+      })
+      .catch(error => {
+        console.log(error)
+        setLoading(false);
+      })
+  }
 
   return (
       <Modal
@@ -42,41 +63,30 @@ function FundWalletModal({children}) {
       >
         {/* <button onClick={() => closeFundModal()}>close</button> */}
         {/* {children} */}
-        <p className={'text-sm text-primary-brand-darker font-bold text-center'}>Enter your debit card details to add money to your wallet</p>
-        <Form layout='vertical' className={'mt-2'} requiredMark={false}>
+        <p className={'text-sm text-primary-brand-darker font-bold text-center'}>Enter the amount you want to add to your tefzon wallet</p>
+        <p className={'text-xs text-center'}>You will be redirected to paystack to make your payment.</p>
+        <Form layout='vertical' className={'mt-2'} onFinish={handleFundWallet} requiredMark={false}>
           <Form.Item
-            name="cardNumber"
-            label="Enter Your Card Number"
+            name="amount"
+            label="Amount"
             rules={[
-              { required: true, message: "Card number is important" },
-              {type: 'integer', min: 16},
+              { required: true, message: "" },
+              {min: 3, message: 'The minimum amount is 100 '},
             ]}
             >
-              <Input className={'w-full'} />
+              <Input className={'w-full'} type={'number'} />
           </Form.Item>
-          <Row gutter={20} >
-            <Col span={12}>
-              <Form.Item
-                name="cardNumber"
-                label="Expiry Date"
-                rules={[{ required: true, message: "Card number is important" }]}
-              >
-                <Input className={'w-ful'} />
-              </Form.Item>
-            </Col>
-            <Col  span={12}>
-              <Form.Item
-                name="cardNumber"
-                label="CVV"
-                rules={[{ required: true, message: "Card number is important" }]}
-              >
-                <Input className={'w-ful'} />
-              </Form.Item>
-            </Col>
-          </Row>
           <div>
-            <Button className='w-full h-14 bg-primary-brand-darker rounded'>
-              <p className='text-white font-bold'>Fund wallet</p>
+            <Button
+              htmlType="submit"
+              className='w-full h-14 bg-primary-brand-darker rounded'>
+              {loading ?
+                <div className={'w-full flex items-center justify-center'}>
+                  <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
+                </div>
+                :
+                  <p className='text-white font-bold'>Fund wallet</p>
+              }
             </Button>
           </div>
         </Form>

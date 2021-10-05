@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { Button, Row, Col, Input, Form, Select } from "antd";
+import { Button, Input, Form, Select } from "antd";
 import { ModalContext } from '../store/ModalContext';
 
 const customStyles = {
