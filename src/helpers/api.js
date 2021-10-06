@@ -1,7 +1,8 @@
 import axios from "axios";
 import { loadState } from "../store/localStorage";
 
-export const baseURL = "https://api.tefzon.com";
+export const baseURL = "https://tefzon-api.amaofaith.com";
+// export const baseURL = "https://api.tefzon.com";
 // export const baseURL = "http://127.0.0.1:5000";
 export const baseURLOLD = "http://157.230.179.121:3333";
 // export const baseURL = process.env.REACT_APP_API_DEV_URL;
