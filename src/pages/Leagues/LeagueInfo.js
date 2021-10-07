@@ -241,9 +241,7 @@ function LeagueInfo() {
                   name="team_id"
                   label={'Select Team'}
                   rules={[{ required: true, message: "Please select team"}]}>
-                    <Select
-                      defaultValue={'Select an option'}
-                      >
+                    <Select>
                         {userTeams.map((item, value) => (
                           <Option key={item.team_name} className={'w-full h-14 border-transparent'} value={item.id}>{item.team_name}</Option>
                         ))}
