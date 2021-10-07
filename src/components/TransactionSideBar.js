@@ -18,6 +18,9 @@ function TransactionSideBar ({ transactions }) {
             <TransactionListView transaction={item} />
           );
         })}
+        {transactions.length < 1 && (
+          <p className={'text-gray-500 text-sm font-bold'}>No transactions yet</p>
+        )}
       </div>
     </div>
 	);

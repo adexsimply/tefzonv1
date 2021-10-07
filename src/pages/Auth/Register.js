@@ -44,6 +44,7 @@ const Register = () => {
 		setProgressStatus({ ...progressStatus, step2: "done" });
 		setCurrentStep(currentStep + 1);
 	};
+
 	const handleUserRegistration = async (userData) => {
 		try {
 			const results = await registerUser(userData);
@@ -72,12 +73,13 @@ const Register = () => {
       openNotification({
         type: "error",
         title: "User Registration",
-        message: error,
+        message: error.message,
       });
 			console.log(error);
 			setLoading(false);
 		}
 	};
+
 	// submit all completed forms
 	const handleSubmit = () => {
 		setLoading(true);
@@ -91,6 +93,7 @@ const Register = () => {
 			country_id,
 			gender_id,
 		} = userCredentials;
+
 		const payload = {
 			first_name,
 			last_name,
@@ -102,6 +105,7 @@ const Register = () => {
 			gender_id,
 			team_id: teamId,
 		};
+		
 		console.log(payload, "payload");
 		handleUserRegistration(payload);
 		// history.replace("/register/confirm-user");

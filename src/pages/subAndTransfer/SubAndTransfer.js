@@ -69,7 +69,7 @@ function SubAndTransfer() {
       console.log(error);
       setStatus({
         type: "error",
-        msg: error,
+        msg: error.message,
       });
       setLoading(false);
     }

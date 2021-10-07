@@ -1,18 +1,36 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Row, Col, Button } from "antd";
-import { AiOutlineLoading } from "react-icons/ai";
 import FundWalletModal from '../../components/FundWalletModal';
 import WithdrawModal from '../../components/WithdrawModal';
 import TeamCards from '../../components/TeamCards';
 import { Link } from 'react-router-dom';
+import { getAllUserTeam } from '../../helpers/api';
+import { openNotification } from '../../helpers/notification';
+import { TeamContext } from '../../store/TeamContext';
 
 function Teams() {
-  const [loadingCreateBtn, setLoadingCreateBtn] = React.useState(false);
+  const {
+    userTeams,
+    setUserTeams,
+  } = React.useContext(TeamContext);
 
   React.useEffect(() => {
-    setLoadingCreateBtn(false);
+    getAllUserTeam()
+    .then((response) => {
+      setUserTeams(response.result);
+    })
+    .catch(error => {
+      openNotification({
+        title: 'Network Issue',
+        message: 'We are experiencing network issue',
+        type: 'error'
+      });
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  
+
   return (
     <DashboardLayout>
       <Row justify="center" className='py-4'>
@@ -25,19 +43,21 @@ function Teams() {
                 </p>
               </div>
               <div className={'my-5'}>
-                <TeamCards />
+                <Row gutter={10}>
+                  {userTeams.map((item, index) => (
+                    <Col lg={8} className={'mt-5'}>
+                      <Link to={`/teams/view-team?teamId=${item.id}`}>
+                        <TeamCards key={item.team_name} teamName={item.team_name} />
+                      </Link>
+                    </Col>
+                  ))}
+                </Row>
               </div>
             </Col>
             <Col lg={8}>
               <Link to="/teams/create-team">
                 <Button className='w-full mx-4 h-14 bg-primary-brand-darker rounded'>
-                  {loadingCreateBtn ?
-                    <div className={'w-full flex items-center justify-center'}>
-                      <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
-                    </div>
-                    :
-                      <p className='text-white font-bold'>Create New Team</p>
-                  }
+                  <p className='text-white font-bold'>Create New Team</p>
                 </Button>
               </Link>
             </Col>

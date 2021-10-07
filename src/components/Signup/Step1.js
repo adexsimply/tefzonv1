@@ -23,7 +23,7 @@ const StepOne = (props) => {
 				setCountryList(results.result.countries);
 			}
 		} catch (error) {
-			message.error(error);
+			message.error(error.message);
 		}
 	};
 	const handleSubmit = (values) => {

@@ -5,15 +5,21 @@ import { Row, Col, Button, Form, Select } from "antd";
 import { AiOutlineLoading } from "react-icons/ai";
 import { LeagueContext } from '../../store/LeagueContext';
 import { openNotification } from '../../helpers/notification';
-import { getLeagueInfo } from '../../helpers/api';
+import { getAllUserTeam, getLeagueInfo, joinLeague } from '../../helpers/api';
 import { longDate } from '../../helpers/utils';
 import FixtureDisplay from '../Fixtures/FixtureDisplay';
+import { TeamContext } from '../../store/TeamContext';
 
 function LeagueInfo() {
   const [loadingPage, setLoadingPage] = React.useState(true);
   const [loadingJoinBtn, setLoadingJoinBtn] = React.useState(false);
 
   const { Option } = Select;
+
+  const {
+    userTeams,
+    setUserTeams,
+  } = React.useContext(TeamContext);
 
   const {
     leagueInfo,
@@ -25,7 +31,6 @@ function LeagueInfo() {
     const urlParams = new URLSearchParams(queryString);
     let leagueId = urlParams.get('leagueId');
 
-    console.log(leagueId)
     getLeagueInfo(leagueId)
     .then((response) => {
       console.log(response);
@@ -42,9 +47,43 @@ function LeagueInfo() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleJoinLeague = () => {
-    console.log('Join league clicked');
+  React.useEffect(() => {
+    getAllUserTeam()
+    .then((response) => {
+      setUserTeams(response.result);
+    })
+    .catch(error => {
+      openNotification({
+        title: 'Network Issue',
+        message: 'We are experiencing network issue',
+        type: 'error'
+      });
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleJoinLeague = (values) => {
+    // let data = {...values, league_id: leagueInfo?.leagueDetails.id}
+    // console.log({...values, league_id: leagueInfo?.leagueDetails.id});
     setLoadingJoinBtn(true);
+    joinLeague({...values, league_id: leagueInfo?.leagueDetails.id})
+    .then((response) => {
+      openNotification({
+        title: 'Successfull',
+        message: 'You have successfully join the league',
+        type: 'success',
+      })
+    })
+  .catch(error => {
+    openNotification({
+      title: 'Error',
+      message: error.message,
+      type: 'error',
+    })
+  })
+  .finally(() => {
+    setLoadingJoinBtn(false)
+  })
   }
 
   if (loadingPage) {
@@ -138,7 +177,7 @@ function LeagueInfo() {
                     )} */}
                     {leagueInfo.leagueParticipant.map((item, index, array) => {
                       return (
-                        <tr>
+                        <tr key={item.teamName}>
                           <td>
                             <div className={'p-2'}>
                               <p className={'text-xs font-medium text-primary-brand-400'}>1</p>
@@ -185,6 +224,7 @@ function LeagueInfo() {
                   const { teams, fixture, goals, score, league } = fixtureInfo;
                   return (
                     <FixtureDisplay
+                      key={`${teams.home.name}${teams.away.name}`}
                       fixture={fixture}
                       teams={teams}
                       goals={goals}
@@ -196,19 +236,21 @@ function LeagueInfo() {
               </div>
             </Col>
             <Col lg={8}>
-              <Form layout='vertical' requiredMark={false} >
+              <Form layout='vertical' requiredMark={false} onFinish={handleJoinLeague} >
                 <Form.Item
-                  name="allowed_league_id"
-                  label={'League'}
-                  rules={[{ required: true, message: "Please select league"}]}>
+                  name="team_id"
+                  label={'Select Team'}
+                  rules={[{ required: true, message: "Please select team"}]}>
                     <Select
                       defaultValue={'Select an option'}
                       >
-                        <Option className={'w-full h-14 border-transparent'} value={'item.id'}>Team name</Option>
+                        {userTeams.map((item, value) => (
+                          <Option key={item.team_name} className={'w-full h-14 border-transparent'} value={item.id}>{item.team_name}</Option>
+                        ))}
                     </Select>
                 </Form.Item>
                 <Form.Item>
-                  <Button className='w-full h-14 bg-primary-brand-darker rounded' onClick={handleJoinLeague}>
+                  <Button htmlType="submit" className='w-full h-14 bg-primary-brand-darker rounded'>
                     {loadingJoinBtn ?
                       <div className={'w-full flex items-center justify-center'}>
                         <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />

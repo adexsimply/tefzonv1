@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Button, Row, Col } from "antd";
 import GameWeekDetails from '../../components/GameWeekDetails';
-import Info from '../../components/Info';
+// import Info from '../../components/Info';
 import SubTeamSideBar from '../../components/SubTeamSideBar';
 import { CreateTeamContext } from '../../store/CreateTeamContext';
 import ListView from '../Teams/ListView';
@@ -66,10 +66,10 @@ function Profile() {
         history.replace("/teams");
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       setStatus({
         type: "error",
-        msg: error,
+        msg: error.message,
       });
       setLoading(false);
     }

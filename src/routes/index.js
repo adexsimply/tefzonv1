@@ -10,6 +10,7 @@ import ConfirmPage from "../pages/Auth/Confirm";
 import DashboardPage from "../pages/Dashboard";
 import TeamsPage from "../pages/Teams";
 import EmptyState from "../pages/Teams/EmptyState";
+import DisplayTeam from "../pages/Teams/DisplayTeam";
 import ListCaptainPage from "../pages/Teams/ListView/TeamCaptain";
 import PitchCaptainPage from "../pages/Teams/PitchView/TeamCaptain";
 import TeamsNamePage from "../pages/Teams/NameTeam";
@@ -77,6 +78,18 @@ const Routes = () => {
         {/* <Route path="/teams" exact key="teams" component={TeamsPage} /> */}
         {/* <ProtectedRoute exact key="teams" path="/teams" component={TeamsPage} /> */}
         <ProtectedRoute exact key="teams" path="/teams" component={Teams} />
+        <ProtectedRoute
+          path="/teams/create-team"
+          exact
+          key="create-team"
+          component={EmptyState}
+        />
+        <ProtectedRoute
+          path="/teams/view-team"
+          exact
+          key="view-team"
+          component={DisplayTeam}
+        />
         <ProtectedRoute exact key="subAndTransfer" path="/subAndTransfer" component={SubAndTransfer} />
         <ProtectedRoute exact key="wallet" path="/wallet" component={Wallet} />
         <ProtectedRoute exact key="leagues" path="/leagues" component={Leagues} />
@@ -96,37 +109,31 @@ const Routes = () => {
           path="/dashboard"
           component={DashboardPage}
         />
-        <Route
+        <ProtectedRoute
           path="/teams/list-select-captain"
           exact
           key="teams"
           component={ListCaptainPage}
         />
-        <Route
+        <ProtectedRoute
           path="/teams/pitch-select-captain"
           exact
           key="pitch-captain"
           component={PitchCaptainPage}
         />
-        <Route
+        <ProtectedRoute
           path="/teams/team-name"
           exact
           key="teams"
           component={TeamsNamePage}
         />
-        <Route
-          path="/teams/create-team"
-          exact
-          key="create-team"
-          component={EmptyState}
-        />
-        <Route
+        <ProtectedRoute
           path="/teams/list-save-team"
           exact
           key="teams"
           component={ListSaveTeamPage}
         />
-        <Route
+        <ProtectedRoute
           path="/teams/pitch-confirm-team"
           exact
           key="teams"

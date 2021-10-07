@@ -63,7 +63,7 @@ const DefaultTeam = () => {
       setPlayerData(results.results);
       setFilteredPlayerData(results.results);
     } catch (error) {
-      message.error(error);
+      message.error(error.message);
     } finally {
       setLoadingPlayers(false);
     }

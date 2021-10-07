@@ -9,6 +9,7 @@ import PitchPlayer from "../PitchView/PitchPlayer";
 import TeamJersey from "../../../assets/img/team-jersey.svg";
 import DashboardLayout from "../../../components/common/Layout";
 import PitchBg from "../../../assets/img/static/pitch-bg.png";
+import { openNotification } from "../../../helpers/notification";
 
 const SaveTeam = () => {
 	const [status, setStatus] = useState({ type: "", msg: "" });
@@ -40,6 +41,11 @@ const SaveTeam = () => {
 					type: "success",
 					msg: results.result.msg,
 				});
+				openNotification({
+					title: 'Team Created',
+					message: 'Your team has been created successfuly',
+					type: 'success'
+				})
 				setLoading(false);
 				resetTeam();
 				history.replace("/teams");
@@ -48,7 +54,7 @@ const SaveTeam = () => {
 			console.log(error);
 			setStatus({
 				type: "error",
-				msg: error,
+				msg: error.message,
 			});
 			setLoading(false);
 		}

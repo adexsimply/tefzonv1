@@ -30,7 +30,7 @@ const StepTwo = (props) => {
 				setLoading(false);
 			}
 		} catch (error) {
-			message.error(error);
+			message.error(error.message);
 			setLoading(false);
 		}
 	};

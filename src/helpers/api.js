@@ -127,11 +127,11 @@ export const getClubs = () => {
 	});
 };
 
-export const getTeam = () => {
+export const getTeam = (teamId) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const team = await makeApiCall({
-				url: "/viewUserTeam",
+				url: `/viewUserTeam/${teamId}`,
 				method: "get",
 				headers: {
 					Authorization: `Bearer ${getToken()}`,
@@ -215,6 +215,36 @@ export const getWalletData = () => {
 				headers: { Authorization: `Bearer ${getToken()}` },
 			});
 			return resolve(walletData);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getBanks = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/payment/paystack/get_banks",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const resolveAccount = (data) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/payment/paystack/resolve_account_number?account_number=${data.account_number}&bank_code=${data.bank_code}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
 		} catch (error) {
 			return reject(error);
 		}
@@ -313,3 +343,35 @@ export const createUserTeam = (data) => {
 		}
 	});
 }
+
+export const getAllUserTeam = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: "/getAllUserTeams",
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const joinLeague = (joinData) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/joinLeague/${joinData.league_id}/${joinData.team_id}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+// /joinLeague/:league_id/:team_id

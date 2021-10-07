@@ -16,7 +16,7 @@ const FixtureDisplay = ({ fixture, teams, goals }) => {
 				<p className="text-center">{longDate(fixture.date)}</p>
 			</div>
 			<Row justify={'space-between'} className="fixture">
-				<Col lg={10} className="flex justify-end items-center left-section">
+				<Col lg={10} md={10} sm={10} className="flex justify-end items-center left-section">
 					<p>{teams.home.name}</p>
 					<img
 						src={teams.home.logo}
@@ -24,7 +24,7 @@ const FixtureDisplay = ({ fixture, teams, goals }) => {
 						alt={teams.home.name}
 					/>
 				</Col>
-				<Col lg={4} className="w-full flex items-center justify-center">
+				<Col lg={4} md={4} sm={4} className="w-full flex items-center justify-center">
 					{fixture.status.elapsed > 0 ? (
 						<Row gutter={3}>
 							<Col>
@@ -42,7 +42,7 @@ const FixtureDisplay = ({ fixture, teams, goals }) => {
 						<div className="time-stamp">{formatTimeStamp(fixture.timestamp)}</div>
 					)}
 				</Col>
-				<Col lg={10} className="flex justify-start items-center right-section">
+				<Col lg={10}  md={10} sm={10} className="flex justify-start items-center right-section">
 					<img
 						className="fixture-logo"
 						src={teams.away.logo}

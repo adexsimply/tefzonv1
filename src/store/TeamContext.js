@@ -8,9 +8,11 @@ export const TeamContext = createContext();
 
 const TeamProvider = ({ children }) => {
   const [teamData, setTeamData] = useState(null);
-  const [loadingTeam, setLoadingTeam] = useState(false);
-  const [teamDetails, setTeamDetails] = useState(null);
+  const [loadingTeam, setLoadingTeam] = useState(true);
+  const [teamDetails, setTeamDetails] = useState([]);
   const [teamPlayers, setTeamPlayers] = useState(null);
+  const [userTeams, setUserTeams] = useState([]);
+  const [viewTeamPageLoading, setViewTeamPageLoading] = React.useState(true);
 
   const {
     setSelectedGoalKeepers,
@@ -24,10 +26,10 @@ const TeamProvider = ({ children }) => {
   //   // eslint-disable-next-line
   // }, []);
 
-  const getTeamData = async () => {
+  const getTeamData = async (teamId) => {
     setLoadingTeam(true);
     try {
-      const teams = await getTeam();
+      const teams = await getTeam(teamId);
       console.log(teams);
 
       if (teams.statusCode === 200) {
@@ -35,7 +37,7 @@ const TeamProvider = ({ children }) => {
         setTeamDetails(teams.result.teamDetails);
         setTeamPlayers(teams.result.players);
         setDataToSelectionForm(teams.result.players)
-        console.log({teamData, teamDetails, teamPlayers});
+        // console.log({teamData, teamDetails, teamPlayers});
     }
     } catch (error) {
       if (error) {
@@ -149,7 +151,18 @@ const TeamProvider = ({ children }) => {
 
   return (
     <TeamContext.Provider
-      value={{ teamData, teamPlayers, teamDetails, loadingTeam, getTeamData, displayPlayers }}
+      value={{
+        teamData,
+        teamPlayers,
+        teamDetails,
+        loadingTeam,
+        getTeamData,
+        displayPlayers,
+        userTeams,
+        setUserTeams,
+        viewTeamPageLoading,
+        setViewTeamPageLoading,
+      }}
     >
       {children}
     </TeamContext.Provider>

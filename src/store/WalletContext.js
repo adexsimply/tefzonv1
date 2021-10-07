@@ -12,12 +12,15 @@ const initialWalletData = {
 
 const WalletContextProvider = ({ children }) => {
 	const [walletData, setWalletData] = useState(initialWalletData);
+	const [banks, setBanks] = useState([]);
   // const [userData, setUserData] = useState(null);
 
   return (
     <WalletContext.Provider value={{
       walletData,
-      setWalletData
+      setWalletData,
+      banks,
+      setBanks,
     }}>
       {children}
     </WalletContext.Provider>

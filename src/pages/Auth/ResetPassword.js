@@ -27,7 +27,7 @@ const ResetPassword = ({ match }) => {
 			console.log(error, "ppp");
 			setStatus({
 				type: "error",
-				msg: error,
+				msg: error.message,
 			});
 
 			setSubmitting(false);

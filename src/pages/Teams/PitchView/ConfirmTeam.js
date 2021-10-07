@@ -12,6 +12,7 @@ import PitchBg from "../../../assets/img/static/pitch-bg.png";
 import styled from "styled-components";
 import Alert from "../../../components/common/Alert";
 import CaptainIcon from "../../../assets/img/icons/captain.svg";
+import { openNotification } from "../../../helpers/notification";
 
 const ConfirmTeam = () => {
   const { getTeamName } = useContext(CreateTeamContext);
@@ -75,6 +76,11 @@ const ConfirmTeam = () => {
           type: "success",
           msg: results.result.msg,
         });
+				openNotification({
+					title: 'Team Created',
+					message: 'Your team has been created successfuly',
+					type: 'success'
+				})
         setLoading(false);
         resetTeam();
         history.replace("/teams");
@@ -83,7 +89,7 @@ const ConfirmTeam = () => {
       console.log(error);
       setReqStatus({
         type: "error",
-        msg: error,
+        msg: error.message,
       });
       setLoading(false);
     }

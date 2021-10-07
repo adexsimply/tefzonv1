@@ -43,7 +43,7 @@ const LoginForm = (props) => {
 				openNotification({
 					type: "error",
 					title: "Login User",
-					message: error,
+					message: error.message,
 				});
 			}
     }finally {

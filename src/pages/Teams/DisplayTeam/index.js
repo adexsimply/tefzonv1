@@ -1,16 +1,42 @@
 import React, { useContext } from "react";
+import { Button, Row, Col } from "antd";
+import { AiOutlineLoading } from "react-icons/ai";
 import DashboardLayout from "../../../components/common/DashboardLayout";
 import DisplayPitchView from "./PitchView";
 import DisplayListView from "./ListView";
 import ViewTeamSidebar from "../../../components/ViewTeamSidebar";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
-import { Button, Row, Col } from "antd";
 import { TeamContext } from "../../../store/TeamContext";
+import { useHistory } from "react-router-dom";
+import { longDate } from "../../../helpers/utils";
 
-const DisplayTeam = ({ teamDetails, teamInfo }) => {
+const DisplayTeam = ({ teamInfo }) => {
   const { changeView, view } = useContext(CreateTeamContext);
-  const { displayPlayers } = useContext(TeamContext);
-  console.log({ teamDetails, teamInfo })
+  const { displayPlayers, getTeamData, loadingTeam, teamDetails } = useContext(TeamContext);
+
+  const history = useHistory();
+
+  React.useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const teamId = urlParams.get('teamId');
+
+    if(teamId) {
+      getTeamData(teamId);
+    } else {
+      history.replace('/teams')
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  if(loadingTeam) {
+    return (
+      <div className={'flex items-center justify-center w-screen h-screen'}>
+        <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
+      </div>
+    )
+  }
+  
   return (
     <DashboardLayout>
       <Row justify="center">
@@ -18,25 +44,25 @@ const DisplayTeam = ({ teamDetails, teamInfo }) => {
           <Row gutter={24} className="display-team-container">
             <Col lg={18}>
               <div className="team-header">
-                <p className="title">Pick Team - {teamDetails?.team_name}</p>
+                <p className="title">{teamDetails?.team_name}</p>
               </div>
               <div className="gameweek-display-container">
                 <div className="game-display">
                   <p>
-                    <span className="white">Gameweek 27:</span>
-                    <span className="green">Sat 6 Mar 12:00</span>
+                    {/* <span className="white">Gameweek 27:</span> */}
+                    <span className="green">{ longDate(new Date()) }</span>
                   </p>
                 </div>
                 <div className="green-band"></div>
               </div>
-              <div className="info">
+              {/* <div className="info">
                 <p>
                   To change your captain use the menu which appears when
                   clicking on a player's shirt.
                 </p>
-              </div>
+              </div> */}
 
-              <div className="stadium-backdrop">
+              <div className="stadium-backdrop mt-10">
                 <Row align="center" className="view-btn-container">
                   <Col lg={8}>
                     <Button
