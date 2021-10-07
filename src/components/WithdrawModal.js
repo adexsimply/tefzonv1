@@ -30,7 +30,7 @@ const customStyles = {
 Modal.setAppElement('#root');
 
 function WithdrawModal({children}) {
-  const [loading, setLoading] = React.useState(false);
+  // const [loading, setLoading] = React.useState(false);
   const [bankCode, setBankCode] = React.useState(null);
   const [accountName, setAccountName] = React.useState(null);
   const [disableAcctNumInput, setDisableAcctNumInput] = React.useState(false);
