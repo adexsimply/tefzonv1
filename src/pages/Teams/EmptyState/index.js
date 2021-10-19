@@ -4,7 +4,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { saveTeam } from "../../../store/localStorage";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import { useHistory } from "react-router-dom";
-import { getPlayers } from "../../../helpers/api";
+import { getLeaguePlayers, getPlayers } from "../../../helpers/api";
 import PlayerDisplay from "./PlayerDisplay";
 import DashboardLayout from "../../../components/common/DashboardLayout";
 // import StadiumBg from "../../../assets/img/backdrop.svg";
@@ -22,6 +22,7 @@ const DefaultTeam = () => {
   const [playerData, setPlayerData] = useState(null);
   const [searchName, setSearchName] = useState(null);
   const [filteredPlayerData, setFilteredPlayerData] = useState(null);
+  const [leagueId, setLeagueId] = React.useState(null);
 
   const {
     currentSelection,
@@ -53,15 +54,32 @@ const DefaultTeam = () => {
   }, [statusMessage]);
 
   useEffect(() => {
-    getPlayerList();
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id);
+
+    getPlayerList(league_Id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getPlayerList = async () => {
+  const getPlayerList = async (league_Id) => {
     setLoadingPlayers(true);
+    let results;
     try {
-      const results = await getPlayers();
-      setPlayerData(results.results);
-      setFilteredPlayerData(results.results);
+      console.log(league_Id)
+      if(league_Id) {
+        results = await getLeaguePlayers(league_Id);
+        setPlayerData(results.leaguePlayers);
+        setFilteredPlayerData(results.leaguePlayers);
+      } else {
+        results = await getPlayers();
+        setPlayerData(results.results);
+        setFilteredPlayerData(results.results);
+      }
+      console.log(results.leaguePlayers);
+      // setPlayerData(results.results);
+      // setFilteredPlayerData(results.results);
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -81,14 +99,14 @@ const DefaultTeam = () => {
     if (type === 'position') {
       result = playerData.filter(filterWithPosition);
       function filterWithPosition(player) {
-        return player.player.position === value
+        return player.position === value
       }
     }
 
     if (type === 'name') {
       result = playerData.filter(filterWithPosition);
       function filterWithPosition(player) {
-        return player.player.name.toLowerCase() === value
+        return player.name.toLowerCase() === value
       }
     }
     setFilteredPlayerData(result);
@@ -257,9 +275,9 @@ const DefaultTeam = () => {
                 onClick={() => {
                   saveTeam(completeTeam);
                   if (view === "list") {
-                    history.replace("/teams/list-select-captain");
+                    history.replace(`/teams/list-select-captain?leagueId=${leagueId}`);
                   } else {
-                    history.replace("/teams/pitch-select-captain");
+                    history.replace(`/teams/pitch-select-captain?leagueId=${leagueId}`);
                   }
                 }}
               >

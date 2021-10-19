@@ -1,23 +1,25 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
-import { Row, Col, Button, Form, Select } from "antd";
+import { Row, Col, Button } from "antd";
 // import { Link, useHistory } from 'react-router-dom';
 import { AiOutlineLoading } from "react-icons/ai";
 import { LeagueContext } from '../../store/LeagueContext';
 import { openNotification } from '../../helpers/notification';
-import { getAllUserTeam, getLeagueInfo, joinLeague } from '../../helpers/api';
+import { getAllUserTeam, getLeagueInfo } from '../../helpers/api';
 import { longDate } from '../../helpers/utils';
 import FixtureDisplay from '../Fixtures/FixtureDisplay';
 import { TeamContext } from '../../store/TeamContext';
+import { Link } from 'react-router-dom';
 
 function LeagueInfo() {
   const [loadingPage, setLoadingPage] = React.useState(true);
-  const [loadingJoinBtn, setLoadingJoinBtn] = React.useState(false);
+  // const [loadingJoinBtn, setLoadingJoinBtn] = React.useState(false);
+  const [leagueId, setLeagueId] = React.useState(null);
 
-  const { Option } = Select;
+  // const { Option } = Select;
 
   const {
-    userTeams,
+    // userTeams,
     setUserTeams,
   } = React.useContext(TeamContext);
 
@@ -29,9 +31,10 @@ function LeagueInfo() {
   React.useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    let leagueId = urlParams.get('leagueId');
+    let league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id);
 
-    getLeagueInfo(leagueId)
+    getLeagueInfo(league_Id)
     .then((response) => {
       console.log(response);
       setLeagueInfo(response);
@@ -62,29 +65,29 @@ function LeagueInfo() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleJoinLeague = (values) => {
-    // let data = {...values, league_id: leagueInfo?.leagueDetails.id}
-    // console.log({...values, league_id: leagueInfo?.leagueDetails.id});
-    setLoadingJoinBtn(true);
-    joinLeague({...values, league_id: leagueInfo?.leagueDetails.id})
-    .then((response) => {
-      openNotification({
-        title: 'Successfull',
-        message: 'You have successfully join the league',
-        type: 'success',
-      })
-    })
-  .catch(error => {
-    openNotification({
-      title: 'Error',
-      message: error.message,
-      type: 'error',
-    })
-  })
-  .finally(() => {
-    setLoadingJoinBtn(false)
-  })
-  }
+  // const handleJoinLeague = (values) => {
+  //   // let data = {...values, league_id: leagueInfo?.leagueDetails.id}
+  //   // console.log({...values, league_id: leagueInfo?.leagueDetails.id});
+  //   setLoadingJoinBtn(true);
+  //   joinLeague({...values, league_id: leagueInfo?.leagueDetails.id})
+  //   .then((response) => {
+  //     openNotification({
+  //       title: 'Successfull',
+  //       message: 'You have successfully join the league',
+  //       type: 'success',
+  //     })
+  //   })
+  // .catch(error => {
+  //   openNotification({
+  //     title: 'Error',
+  //     message: error.message,
+  //     type: 'error',
+  //   })
+  // })
+  // .finally(() => {
+  //   setLoadingJoinBtn(false)
+  // })
+  // }
 
   if (loadingPage) {
     return (
@@ -236,7 +239,7 @@ function LeagueInfo() {
               </div>
             </Col>
             <Col lg={8}>
-              <Form layout='vertical' requiredMark={false} onFinish={handleJoinLeague} >
+              {/* <Form layout='vertical' requiredMark={false} onFinish={handleJoinLeague} >
                 <Form.Item
                   name="team_id"
                   label={'Select Team'}
@@ -258,7 +261,12 @@ function LeagueInfo() {
                     }
                   </Button>
                 </Form.Item>
-              </Form>
+              </Form> */}
+              <Link to={`/teams/create-team?leagueId=${leagueId}`}>
+                <Button className='w-full mx-4 h-14 bg-primary-brand-darker rounded'>
+                  <p className='text-white font-bold'>Create New Team</p>
+                </Button>
+              </Link>
             </Col>
           </Row>
         </Col>

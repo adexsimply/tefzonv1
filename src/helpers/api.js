@@ -1,9 +1,9 @@
 import axios from "axios";
 import { loadState } from "../store/localStorage";
 
-export const baseURL = "https://tefzon-api.amaofaith.com";
+// export const baseURL = "https://tefzon-api.amaofaith.com";
 // export const baseURL = "https://api.tefzon.com";
-// export const baseURL = "http://127.0.0.1:5000";
+export const baseURL = "http://127.0.0.1:5000";
 export const baseURLOLD = "http://157.230.179.121:3333";
 // export const baseURL = process.env.REACT_APP_API_DEV_URL;
 // "https://api.tefzon.com";
@@ -155,6 +155,21 @@ export const getPlayers = () => {
 				headers: { Authorization: `Bearer ${getToken()}` },
 			});
 			return resolve(player);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getLeaguePlayers = (leagueId) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/leaguePlayers/${leagueId}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
 		} catch (error) {
 			return reject(error);
 		}

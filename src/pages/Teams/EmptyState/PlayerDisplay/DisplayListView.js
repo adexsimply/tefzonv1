@@ -221,7 +221,7 @@ const DisplayListView = ({ playerData, selectable, dark }) => {
 
   const showPlayers = () => {
     return playerData.map((playerInfo) => {
-      const { id, name, photo, age, position, league } = playerInfo.player;
+      const { id, name, photo, age, position, league } = playerInfo;
       return (
         <Players
           key={`${id}-${Math.random()}`}
@@ -231,7 +231,7 @@ const DisplayListView = ({ playerData, selectable, dark }) => {
           age={age}
           position={position}
           league={league}
-          player={playerInfo.player}
+          player={playerInfo}
         />
       );
     });

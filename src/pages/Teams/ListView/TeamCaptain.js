@@ -14,6 +14,7 @@ const TeamCaptain = () => {
 	const [updatedDefenders, setUpdatedDefenders] = useState([]);
 	const [updatedMidfielders, setUpdatedMidfielders] = useState([]);
 	const [updatedForwards, setupdatedForwards] = useState([]);
+  const [leagueId, setLeagueId] = React.useState(null);
 
 	const team = loadTeam();
 	const history = useHistory();
@@ -22,6 +23,14 @@ const TeamCaptain = () => {
 		getInitValues();
 		// eslint-disable-next-line
 	}, []);
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 	const getInitValues = () => {
 		let goalKeepers = team.filter(
@@ -295,7 +304,7 @@ const TeamCaptain = () => {
 	console.log(finalTeam);
 	const updateTeamInfo = () => {
 		saveTeam(finalTeam);
-		history.replace("/teams/team-name");
+		history.replace(`/teams/team-name?leagueId=${leagueId}`);
 	};
 
 	return (

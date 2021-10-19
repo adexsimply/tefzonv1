@@ -17,10 +17,19 @@ const TeamCaptain = () => {
 	const [defenders, setUpdatedDefenders] = useState([]);
 	const [midfielders, setUpdatedMidfielders] = useState([]);
 	const [forwards, setUpdatedForwards] = useState([]);
+  const [leagueId, setLeagueId] = React.useState(null);
 
 	const history = useHistory();
 
 	const team = loadTeam();
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 	useEffect(() => {
 		let gk = team.filter((player) => player.position === "goalkeeper");
@@ -263,7 +272,7 @@ const TeamCaptain = () => {
 
 	const updateTeamInfo = () => {
 		saveTeam(finalTeam);
-		history.replace("/teams/team-name");
+		history.replace(`/teams/team-name?leagueId=${leagueId}`);
 	};
 	return (
 		<DashboardLayout>

@@ -236,7 +236,7 @@ function CreateLeague() {
                             defaultValue={'Select an option'}
                             >
                               {realLeagues.map((item, index) => (
-                                <Option key={item.id} className={'w-full h-14 border-transparent'} value={item.id}>{item.league_name}</Option>
+                                <Option key={item.id} className={'w-full h-14 border-transparent'} value={item.league_id}>{item.league_name} </Option>
                               ))}
                           </Select>
                       </Form.Item>

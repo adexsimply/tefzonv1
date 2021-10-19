@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col, Form, Input } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import { CreateTeamContext } from "../../store/CreateTeamContext";
@@ -7,16 +7,26 @@ import PitchBg from "../../assets/img/static/pitch-bg.png";
 
 const NameTeam = () => {
   const [teamName, setTeamName] = useState("");
+  const [leagueId, setLeagueId] = React.useState(null);
+
   const { view } = useContext(CreateTeamContext);
   const history = useHistory();
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   console.log(view, "view");
   const updateTeamName = () => {
     localStorage.setItem("TEF_NAME", teamName);
     if (view === "list") {
-      history.replace("/teams/list-save-team");
+      history.replace(`/teams/list-save-team?leagueId=${leagueId}`);
     } else {
-      history.replace("/teams/pitch-confirm-team");
+      history.replace(`/teams/pitch-confirm-team?leagueId=${leagueId}`);
     }
   };
 

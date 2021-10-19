@@ -1,8 +1,6 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Row, Col, Button } from "antd";
-import FundWalletModal from '../../components/FundWalletModal';
-import WithdrawModal from '../../components/WithdrawModal';
 import TeamCards from '../../components/TeamCards';
 import { Link } from 'react-router-dom';
 import { getAllUserTeam } from '../../helpers/api';
@@ -64,8 +62,6 @@ function Teams() {
           </Row>
         </Col>
       </Row>
-      <FundWalletModal />
-      <WithdrawModal />
     </DashboardLayout>
   );
 }
