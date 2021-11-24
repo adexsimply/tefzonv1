@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Spin } from "antd";
-import { loginUser } from "../helpers/api";
+import { loginUser, getUserProfile } from "../helpers/api";
 import { saveState, saveUserData } from "../store/localStorage";
 import { openNotification } from "../helpers/notification";
 import { AppContext } from "../store/AppContext";
 // import history from "../helpers/history";
 
 const LoginForm = (props) => {
-	const { logInSuccess } = useContext(AppContext);
+	const { logInSuccess, setUser } = useContext(AppContext);
 	const [loading, setLoading] = useState(false);
 
 	// const history = useHistory();
@@ -34,7 +34,8 @@ const LoginForm = (props) => {
 					message: login.message,
 				});
         saveState(login.result.token);
-        saveUserData(login.result);
+        // saveUserData(login.result);
+				getUser();
         logInSuccess(login.result);
 				// history.replace("/");
 			}
@@ -50,6 +51,21 @@ const LoginForm = (props) => {
 			setLoading(false);
 		}
 	};
+
+	const getUser = async () => {
+		try {
+			const userProfile = await getUserProfile();
+			if (userProfile) {
+				console.log(userProfile.result[0]);
+        saveUserData(userProfile.result[0]);
+				setUser(userProfile.result[0]);
+				// history.replace("/");
+			}
+		} catch (error) {
+			console.log(error);
+    }
+	}
+
 	return (
 		<Form layout="vertical" onFinish={handleLoginUser} hideRequiredMark>
 			<Form.Item

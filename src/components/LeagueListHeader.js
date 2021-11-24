@@ -10,10 +10,10 @@ function LeagueListHeader({LeagueName, currentRank, lastRank, settings, classNam
           <p className={'text-xs font-bold'}>League</p>
         </Col>
         <Col span={5}>
-          <p className={'text-xs font-bold'}>Current Rank</p>
+          <p className={'text-xs font-bold'}>League Type</p>
         </Col>
         <Col span={5}>
-          <p className={'text-xs font-bold'}>Last Rank</p>
+          <p className={'text-xs font-bold'}>Invite Code</p>
         </Col>
         <Col span={5}>
           <p className={'text-xs font-bold'}>Settings</p>

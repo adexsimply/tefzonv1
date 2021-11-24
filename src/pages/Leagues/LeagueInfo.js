@@ -1,18 +1,22 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, Comment, Tooltip, Avatar } from "antd";
 // import { Link, useHistory } from 'react-router-dom';
 import { AiOutlineLoading } from "react-icons/ai";
 import { LeagueContext } from '../../store/LeagueContext';
 import { openNotification } from '../../helpers/notification';
-import { getAllUserTeam, getLeagueInfo } from '../../helpers/api';
+import { checkPlayerTeamInLeague, getAllUserTeam, getLeagueInfo } from '../../helpers/api';
 import { longDate } from '../../helpers/utils';
 import FixtureDisplay from '../Fixtures/FixtureDisplay';
 import { TeamContext } from '../../store/TeamContext';
+import { AppContext } from '../../store/AppContext';
 import { Link } from 'react-router-dom';
+import ViewTeamSidebar from '../../components/ViewTeamSidebar';
+import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
 
 function LeagueInfo() {
   const [loadingPage, setLoadingPage] = React.useState(true);
+  const [loadingUserTeam, setLoadingUserTeam] = React.useState(true)
   // const [loadingJoinBtn, setLoadingJoinBtn] = React.useState(false);
   const [leagueId, setLeagueId] = React.useState(null);
 
@@ -23,9 +27,13 @@ function LeagueInfo() {
     setUserTeams,
   } = React.useContext(TeamContext);
 
+  const {user} = React.useContext(AppContext);
+
   const {
     leagueInfo,
     setLeagueInfo,
+    userTeamInLeague,
+    setUserTeamInLeague
   } = React.useContext(LeagueContext);
 
   React.useEffect(() => {
@@ -33,6 +41,8 @@ function LeagueInfo() {
     const urlParams = new URLSearchParams(queryString);
     let league_Id = urlParams.get('leagueId');
     setLeagueId(league_Id);
+
+    getUserTeamInLeague(league_Id);
 
     getLeagueInfo(league_Id)
     .then((response) => {
@@ -65,6 +75,22 @@ function LeagueInfo() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const getUserTeamInLeague = (league_id) => {
+    checkPlayerTeamInLeague(league_id)
+    .then((response) => {
+      console.log(response.result);
+      setUserTeamInLeague(response.result);
+    })
+    .catch((error) => {
+      console.log(error);
+      setUserTeamInLeague(null);
+    })
+      .finally(() => {
+        setLoadingUserTeam(false)
+      })
+
+  }
+
   // const handleJoinLeague = (values) => {
   //   // let data = {...values, league_id: leagueInfo?.leagueDetails.id}
   //   // console.log({...values, league_id: leagueInfo?.leagueDetails.id});
@@ -88,6 +114,22 @@ function LeagueInfo() {
   //   setLoadingJoinBtn(false)
   // })
   // }
+
+  
+
+  const isUserFound = (data, key) => {
+    let value = data.find(element => element === key);
+    return value === key;
+  }
+
+  const isUser = (idCompare, userId) => {
+    return idCompare === userId;
+  }
+
+  const isUserInLeague = React.useCallback(() => (data = leagueInfo.leagueParticipant, key = user.id) => {
+    let value = data.find(element => element.user.id === key);
+    return value === key;
+  }, [leagueInfo, user])
 
   if (loadingPage) {
     return (
@@ -160,11 +202,11 @@ function LeagueInfo() {
                           <p className={'text-xs font-bold text-primary-brand-400'}>Team and Manager</p>
                         </div>
                       </th>
-                      <th className={'w-1/6'}>
+                      {/* <th className={'w-1/6'}>
                         <div className={'p-2'}>
                           <p className={'text-xs font-bold text-primary-brand-400'}>Game Week</p>
                         </div>
-                      </th>
+                      </th> */}
                       <th className={'w-1/6'}>
                         <div className={'p-2'}>
                           <p className={'text-xs font-bold text-primary-brand-400'}>Total Point</p>
@@ -179,8 +221,9 @@ function LeagueInfo() {
                       </div>
                     )} */}
                     {leagueInfo.leagueParticipant.map((item, index, array) => {
+                      const isUser = item.user.id === user.id;
                       return (
-                        <tr key={item.teamName}>
+                        <tr key={item.squadname?.team_name} className={isUser && 'bg-purple-200'}>
                           <td>
                             <div className={'p-2'}>
                               <p className={'text-xs font-medium text-primary-brand-400'}>1</p>
@@ -188,18 +231,18 @@ function LeagueInfo() {
                           </td>
                           <td>
                             <div className={'p-2'}>
-                              <p className={'text-xs font-bold text-primary-brand-darker'}>{item.teamName}</p>
-                              <p className={'text-xs font-medium'}>{item.manager}</p>
+                              <p className={'text-xs font-bold text-primary-brand-darker'}>{item.squadname?.team_name}</p>
+                              <p className={'text-xs font-medium'}>{item.user?.first_name + ' ' + item.user?.last_name}</p>
                             </div>
                           </td>
-                          <td>
+                          {/* <td>
                             <div className={'p-2'}>
                               <p className={'text-xs font-medium'}>{item.gameweek}</p>
                             </div>
-                          </td>
+                          </td> */}
                           <td>
                             <div className={'p-2'}>
-                              <p className={'text-xs font-medium'}>{item.totalPoint}</p>
+                              <p className={'text-xs font-medium'}>{item.user_points}</p>
                             </div>
                           </td>
                         </tr>
@@ -237,8 +280,35 @@ function LeagueInfo() {
                   );
                 })}
               </div>
+              <div className={'mt-8'}>
+                <div>
+                  <p className="text-3xl font-bold">
+                    Comments
+                  </p>
+                  <p className="text-sm font-bold mt-1 text-gray-500">
+                    <span className="white">League comments from participant</span>
+                  </p>
+                </div>
+                <Comment
+                  // actions={actions}
+                  author={<a>Han Solo</a>}
+                  avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+                  content={
+                    <p>
+                      We supply a series of design principles, practical patterns and high quality design
+                      resources (Sketch and Axure), to help people create their product prototypes beautifully
+                      and efficiently.
+                    </p>
+                  }
+                  // datetime={
+                  //   // <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                  //   //   <span>{moment().fromNow()}</span>
+                  //   // </Tooltip>
+                  // }
+                />
+              </div>
             </Col>
-            <Col lg={8}>
+            <Col lg={8} className={'pl-12'}>
               {/* <Form layout='vertical' requiredMark={false} onFinish={handleJoinLeague} >
                 <Form.Item
                   name="team_id"
@@ -262,11 +332,25 @@ function LeagueInfo() {
                   </Button>
                 </Form.Item>
               </Form> */}
-              <Link to={`/teams/create-team?leagueId=${leagueId}`}>
-                <Button className='w-full mx-4 h-14 bg-primary-brand-darker rounded'>
-                  <p className='text-white font-bold'>Create New Team</p>
-                </Button>
-              </Link>
+              {loadingUserTeam && (
+                <div className={'w-full flex items-center justify-center'}>
+                  <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
+                </div>
+              )}
+              {!userTeamInLeague && 
+                <Link to={`/teams/create-team?leagueId=${leagueId}`}>
+                  <Button className='w-full mx-4 h-14 bg-primary-brand-darker rounded'>
+                    <p className='text-white font-bold'>Create New Team</p>
+                  </Button>
+                </Link>}
+              {userTeamInLeague && isUserInLeague() &&
+                <ViewTeamSidebar
+                  teamName={userTeamInLeague.squadname?.team_name}
+                  totalPlayers={leagueInfo.leagueParticipant?.length}
+                  points={userTeamInLeague.user_points ? userTeamInLeague.user_points : '0'}
+                  rank={userTeamInLeague.user_ranking ? userTeamInLeague.user_ranking : '0'}/>
+              }
+              <p>{isUserInLeague()}</p>
             </Col>
           </Row>
         </Col>

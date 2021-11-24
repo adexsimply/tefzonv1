@@ -34,6 +34,10 @@ function JoinLeague() {
     history.push(`/leagues/league-info?leagueId=${leagueData.id}`);
   }
 
+  const handleJoinPrivateLeague = () => {
+    // {}
+  }
+
   return (
     <DashboardLayout>
       <Row justify="center" className='py-4'>

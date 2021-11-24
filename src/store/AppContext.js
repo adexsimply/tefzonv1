@@ -11,8 +11,9 @@ const userInitialState = {
 };
 
 const AppContextProvider = ({ children }) => {
-  const [user] = useState(userInitialState);
+  // const [user] = useState(userInitialState);
   const [userData, setUserData] = useState(userInitialState);
+  const [user, setUser] = useState({});
   const [userToken, setUserToken] = useState(null);
 	const [loggedIn, setLoggedIn] = useState(false);
   // const [userData, setUserData] = useState(null);
@@ -21,6 +22,7 @@ const AppContextProvider = ({ children }) => {
 	  const getToken = loadState();
     const savedUserData = loadUserData();
     setUserToken(getToken);
+    setUser(savedUserData);
     setUserData({...userData, token: getToken, userToken: getToken, userData: savedUserData});
     // eslint-disable-next-line
   }, [])
@@ -41,6 +43,7 @@ const AppContextProvider = ({ children }) => {
 	// };
   return <AppContext.Provider value={{
     user,
+    setUser,
     loggedIn,
     userData,
     userToken,

@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Button, Row, Col } from "antd";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import { loadTeam } from "../../../store/localStorage";
-import { createTeam } from "../../../helpers/api";
+import { createTeam, joinLeague } from "../../../helpers/api";
 import { useHistory } from "react-router-dom";
 import { formatString } from "../../../helpers/utils";
 import Stadium from "../../../assets/img/stadium.svg";
@@ -13,15 +13,32 @@ import styled from "styled-components";
 import Alert from "../../../components/common/Alert";
 import CaptainIcon from "../../../assets/img/icons/captain.svg";
 import { openNotification } from "../../../helpers/notification";
+import LoadingModal from "../../../components/LoadingModal";
+import { ModalContext } from "../../../store/ModalContext";
 
 const ConfirmTeam = () => {
   const { getTeamName } = useContext(CreateTeamContext);
   const [reqStatus, setReqStatus] = useState({ type: "", msg: "" });
   const [loading, setLoading] = useState(false);
+  const [leagueId, setLeagueId] = React.useState(null);
+  
+  const {
+    loadingModalIsOpen,
+    closeLoadingModal,
+    openLoadingModal,
+  } = React.useContext(ModalContext);
 
   const team = loadTeam();
   const teamName = getTeamName();
   const history = useHistory();
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const displayPlayer = (placement) => {
     const player = team.find((player) => player.playerPlacement === placement);
@@ -54,6 +71,7 @@ const ConfirmTeam = () => {
   };
 
   const handleSaveTeam = async () => {
+    openLoadingModal();
     const payload = [];
     team.forEach((item) => {
       payload.push({
@@ -70,22 +88,33 @@ const ConfirmTeam = () => {
         team_name: teamName,
         squad_selection: payload,
       });
-      console.log(results);
+      console.log(results.result);
       if (results) {
-        setReqStatus({
-          type: "success",
-          msg: results.result.msg,
-        });
+        // setReqStatus({
+        //   type: "success",
+        //   msg: results.result.msg,
+        // });
 				openNotification({
-					title: 'Team Created',
-					message: 'Your team has been created successfuly',
+					title: 'Team Created, proceeding to join league',
+					message: 'Your team has been created successfuly, proceeding to join league with team',
 					type: 'success'
 				})
-        setLoading(false);
-        resetTeam();
-        history.replace("/teams");
+        // setLoading(false);
+        // resetTeam();
+
+        let data = {
+          league_id: leagueId,
+          team_id: results.result.id,
+        }
+        console.log(data)
+        joinLeagueWithTeam(data)
       }
     } catch (error) {
+      openNotification({
+        title: 'Error Creating Team',
+        message: 'We encountered an error while trying to create your team',
+        type: 'error'
+      })
       console.log(error);
       setReqStatus({
         type: "error",
@@ -94,10 +123,30 @@ const ConfirmTeam = () => {
       setLoading(false);
     }
   };
+
+  const joinLeagueWithTeam = (data) => {
+    joinLeague(data)
+    .then((response) => {
+      closeLoadingModal();
+      console.log(response);
+      history.replace(`/leagues/league-info?leagueId=${data.league_id}`);
+    })
+    .catch((error) => {
+      console.log(error);
+      closeLoadingModal();
+      openNotification({
+        title: 'Error Joining League',
+        message: 'We encountered an error while trying to join league',
+        type: 'error'
+      })
+    })
+  }
+
   const resetTeam = () => {
     localStorage.removeItem("TEFZON_TEAM");
     localStorage.removeItem("TEF_NAME");
   };
+
   return (
     <DashboardLayout>
       <StyledTeamPage>
@@ -185,6 +234,7 @@ const ConfirmTeam = () => {
           </Col>
         </Row>
       </StyledTeamPage>
+      <LoadingModal />
     </DashboardLayout>
   );
 };

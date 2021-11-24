@@ -36,7 +36,7 @@ const TeamProvider = ({ children }) => {
         setTeamData(teams.result);
         setTeamDetails(teams.result.teamDetails);
         setTeamPlayers(teams.result.players);
-        setDataToSelectionForm(teams.result.players)
+        // setDataToSelectionForm(teams.result.players)
         // console.log({teamData, teamDetails, teamPlayers});
     }
     } catch (error) {

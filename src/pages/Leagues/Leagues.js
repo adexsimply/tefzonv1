@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext } from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
 import { Button, Row, Col } from "antd";
@@ -8,12 +9,16 @@ import LeagueListHeader from '../../components/LeagueListHeader';
 import {getTefzonLeagues} from '../../helpers/api'
 import { LeagueContext } from '../../store/LeagueContext';
 import { openNotification } from '../../helpers/notification';
+import { AiOutlineLoading } from 'react-icons/ai';
 // import Form from 'antd/lib/form/Form';
 
 function Leagues() {
   const {
     // tefzonLeagues,
     setTefzonLeagues,
+    userCreatedLeagues,
+    userCreatedLeaguesLoading,
+    getUserCreatedLeagues,
   } = useContext(LeagueContext);
 
   const history = useHistory();
@@ -30,7 +35,11 @@ function Leagues() {
         type: 'error'
       })
     })
-  })
+  }, [])
+
+  React.useEffect(() => {
+    getUserCreatedLeagues()
+  }, [])
 
   const handleLeagueClick = () => {
     history.push('/leagues/league-info')
@@ -70,19 +79,23 @@ function Leagues() {
                   </div>
                   <LeagueListHeader />
                   <div>
-                    <LeagueItemList
-                      claassName={'mt-3'}
-                      LeagueName={'League0001'} currentRank={'-'} lastRank={'-'}
-                      onClick={() => handleLeagueClick()}
-                    />
-                    <LeagueItemList
-                      claassName={'mt-3'}
-                      LeagueName={'League0001'} currentRank={'-'} lastRank={'-'}
-                    />
-                    <LeagueItemList
-                      claassName={'mt-3'}
-                      LeagueName={'League0001'} currentRank={'-'} lastRank={'-'}
-                    />
+                    {userCreatedLeaguesLoading && (
+                      <div className={'w-full flex items-center justify-center py-6'}>
+                      <AiOutlineLoading size={30} color={'#8139e6'} className={'animate-spin'} />
+                    </div>
+                    )}
+                    {userCreatedLeagues && !userCreatedLeaguesLoading && (
+                      userCreatedLeagues.map((item) => (
+                        <LeagueItemList
+                          key={item.league_name}
+                          claassName={'mt-3'}
+                          LeagueName={item.league_name}
+                          leagueType={item.league_type}
+                          inviteCode={item.league_invite_code}
+                          onClick={() => handleLeagueClick()}
+                        />
+                      ))
+                    )}
                   </div>
                 </SectionContainer>
                 <SectionContainer className={'mt-4'}>

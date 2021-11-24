@@ -6,15 +6,14 @@ import { Row, Col } from "antd";
 import { CgArrowLongRight } from "react-icons/cg";
 import "./ViewTeam.scss";
 
-const ViewTeamSidebar = () => {
-  const { teamDetails } = useContext(TeamContext);
+const ViewTeamSidebar = ({teamName, totalPlayers, rank, points}) => {
   return (
-    <div className="list-side-container">
+    <div className="list-side-container px-3">
       {/* <p className="player-name">Adebayo Nwachukwu</p> */}
-      <div className="player-info">
-        <Row className="team-name" justify="between">
+      <div className="player-info px-4">
+        <Row className="team-name" justify="space-between" align="middle">
           <Col>
-            <p>{teamDetails?.team_name}</p>
+            <p>{teamName}</p>
           </Col>
           <Col lg={3}>
             <img src={TeamFlag} alt="" />
@@ -25,18 +24,18 @@ const ViewTeamSidebar = () => {
         </Row>
         <Row className="points">
           <Col>
-            <p>Overall Points:</p>
+            <p>Your Points:</p>
           </Col>
           <Col>
-            <p className="value">179</p>
+            <p className="value">{points}</p>
           </Col>
         </Row>
         <Row className="points">
           <Col>
-            <p>Overall Rank:</p>
+            <p>Your Rank:</p>
           </Col>
           <Col>
-            <p className="value">7,593,179</p>
+            <p className="value">{rank}</p>
           </Col>
         </Row>
         <Row className="points">
@@ -44,59 +43,7 @@ const ViewTeamSidebar = () => {
             <p>Total Players:</p>
           </Col>
           <Col>
-            <p className="value">8,793,179</p>
-          </Col>
-        </Row>
-        <Row className="points">
-          <Col>
-            <p>Gameweek Points:</p>
-          </Col>
-          <Col>
-            <p className="value">51</p>
-          </Col>
-        </Row>
-        <Row className="points points-btn">
-          <Col lg={24}>
-            <Link className="" to="/teams/gameweek-history">
-              View Gameweek history <CgArrowLongRight />
-            </Link>
-          </Col>
-        </Row>
-        <div className="band"></div>
-      </div>
-      <div className="player-info mt-2rem">
-        <Row className="team-name">
-          <Col>
-            <p>Admin</p>
-          </Col>
-        </Row>
-
-        <Row className="points points-btn">
-          <Col lg={24}>
-            <Link to="/teams">
-              Team details{" "}
-              <CgArrowLongRight
-                style={{
-                  color: "#8139E6",
-                  fontSize: "1.5rem",
-                  marginLeft: "1rem",
-                }}
-              />
-            </Link>
-          </Col>
-        </Row>
-        <Row className="points points-btn">
-          <Col lg={24}>
-            <Link to="/profile">
-              User profile{" "}
-              <CgArrowLongRight
-                style={{
-                  color: "#8139E6",
-                  fontSize: "1.5rem",
-                  marginLeft: "1rem",
-                }}
-              />
-            </Link>
+            <p className="value">{totalPlayers}</p>
           </Col>
         </Row>
         <div className="band"></div>

@@ -77,6 +77,7 @@ const DefaultTeam = () => {
         setPlayerData(results.results);
         setFilteredPlayerData(results.results);
       }
+      console.log(results);
       console.log(results.leaguePlayers);
       // setPlayerData(results.results);
       // setFilteredPlayerData(results.results);

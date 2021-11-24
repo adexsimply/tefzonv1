@@ -1,9 +1,10 @@
 import axios from "axios";
 import { loadState } from "../store/localStorage";
 
-// export const baseURL = "https://tefzon-api.amaofaith.com";
+export const baseURL = "https://tefzon-api.amaofaith.com";
+// export const baseURL = "http://64.227.5.44";
 // export const baseURL = "https://api.tefzon.com";
-export const baseURL = "http://127.0.0.1:5000";
+// export const baseURL = "http://127.0.0.1:5000";
 export const baseURLOLD = "http://157.230.179.121:3333";
 // export const baseURL = process.env.REACT_APP_API_DEV_URL;
 // "https://api.tefzon.com";
@@ -166,6 +167,21 @@ export const getLeaguePlayers = (leagueId) => {
 		try {
 			const response = await makeApiCall({
 				url: `/leaguePlayers/${leagueId}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getUserProfile = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/viewUserProfile`,
 				method: "get",
 				headers: { Authorization: `Bearer ${getToken()}` },
 			});
@@ -381,6 +397,67 @@ export const joinLeague = (joinData) => {
 		try {
 			const response = await makeApiCall({
 				url: `/joinLeague/${joinData.league_id}/${joinData.team_id}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const joinPrivateLeague = (joinData) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/joinPrivateLeague`,
+				method: "post",
+				headers: { Authorization: `Bearer ${getToken()}` },
+				data: joinData,
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const checkPlayerTeamInLeague = (league_id) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: `/checkPlayerTeamInLeague/${league_id}`,
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getAllUserCreatedLeagues = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: '/allUserCreatedLeagues',
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
+export const getAllUserJoinedLeagues = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: '/allUserJoinedLeagues',
 				method: "get",
 				headers: { Authorization: `Bearer ${getToken()}` },
 			});
