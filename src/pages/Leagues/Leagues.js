@@ -19,6 +19,9 @@ function Leagues() {
     userCreatedLeagues,
     userCreatedLeaguesLoading,
     getUserCreatedLeagues,
+    userJoinedLeagues,
+    userJoinedLeaguesLoading,
+    getUserJoinedLeagues,
   } = useContext(LeagueContext);
 
   const history = useHistory();
@@ -41,8 +44,12 @@ function Leagues() {
     getUserCreatedLeagues()
   }, [])
 
-  const handleLeagueClick = () => {
-    history.push('/leagues/league-info')
+  React.useEffect(() => {
+    getUserJoinedLeagues()
+  }, [])
+
+  const handleLeagueClick = (leagueId) => {
+    history.push(`/leagues/league-info?leagueId=${leagueId}`)
   }
 
   return (
@@ -92,7 +99,7 @@ function Leagues() {
                           LeagueName={item.league_name}
                           leagueType={item.league_type}
                           inviteCode={item.league_invite_code}
-                          onClick={() => handleLeagueClick()}
+                          onClick={() => handleLeagueClick(item.id)}
                         />
                       ))
                     )}
@@ -104,18 +111,24 @@ function Leagues() {
                   </div>
                   <LeagueListHeader />
                   <div>
-                    <LeagueItemList
-                      claassName={'mt-3'}
-                      LeagueName={'League0001'} currentRank={'-'} lastRank={'-'}
-                    />
-                    <LeagueItemList
-                      claassName={'mt-3'}
-                      LeagueName={'League0001'} currentRank={'-'} lastRank={'-'}
-                    />
-                    <LeagueItemList
-                      claassName={'mt-3'}
-                      LeagueName={'League0001'} currentRank={'-'} lastRank={'-'}
-                    />
+                    
+                  {userJoinedLeaguesLoading && (
+                      <div className={'w-full flex items-center justify-center py-6'}>
+                      <AiOutlineLoading size={30} color={'#8139e6'} className={'animate-spin'} />
+                    </div>
+                    )}
+                    {userJoinedLeagues && !userJoinedLeaguesLoading && (
+                      userJoinedLeagues.map((item) => (
+                        <LeagueItemList
+                          key={item.league_name}
+                          claassName={'mt-3'}
+                          LeagueName={item.league_name}
+                          leagueType={item.league_type}
+                          inviteCode={item.league_invite_code}
+                          onClick={() => handleLeagueClick(item.id)}
+                        />
+                      ))
+                    )}
                   </div>
                 </SectionContainer>
               </div>

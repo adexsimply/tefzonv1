@@ -90,7 +90,7 @@ const Routes = () => {
           key="view-team"
           component={DisplayTeam}
         />
-        <ProtectedRoute exact key="subAndTransfer" path="/subAndTransfer" component={SubAndTransfer} />
+        <ProtectedRoute exact key="subAndTransfer" path="/teams/subAndTransfer" component={SubAndTransfer} />
         <ProtectedRoute exact key="wallet" path="/wallet" component={Wallet} />
         <ProtectedRoute exact key="leagues" path="/leagues" component={Leagues} />
         <ProtectedRoute exact key="join-league" path="/leagues/join-league" component={JoinLeague} />

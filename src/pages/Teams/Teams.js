@@ -16,9 +16,12 @@ function Teams() {
   React.useEffect(() => {
     getAllUserTeam()
     .then((response) => {
+      console.log('response');
+      console.log(response);
       setUserTeams(response.result);
     })
     .catch(error => {
+      console.log(error);
       openNotification({
         title: 'Network Issue',
         message: 'We are experiencing network issue',
@@ -46,7 +49,7 @@ function Teams() {
                     console.log(item)
                     return (
                     <Col lg={8} className={'mt-5'}>
-                      <Link to={`/teams/view-team?teamId=${item.id}`}>
+                      <Link to={`/teams/view-team?teamId=${item.id}&leagueId=${item.league.id}`}>
                         <TeamCards key={item.team_name} teamName={item.team_name} />
                       </Link>
                     </Col>

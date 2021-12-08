@@ -7,10 +7,11 @@ import DisplayListView from "./ListView";
 import ViewTeamSidebar from "../../../components/ViewTeamSidebar";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import { TeamContext } from "../../../store/TeamContext";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { longDate } from "../../../helpers/utils";
 
 const DisplayTeam = ({ teamInfo }) => {
+  const [teamId, setTeamId] = React.useState(null)
   const { changeView, view } = useContext(CreateTeamContext);
   const { displayPlayers, getTeamData, loadingTeam, teamDetails } = useContext(TeamContext);
 
@@ -20,6 +21,8 @@ const DisplayTeam = ({ teamInfo }) => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const teamId = urlParams.get('teamId');
+
+    setTeamId(teamId)
 
     if(teamId) {
       getTeamData(teamId);
@@ -115,7 +118,12 @@ const DisplayTeam = ({ teamInfo }) => {
               </div>
             </Col>
             <Col lg={6}>
-              <ViewTeamSidebar />
+              {/* <ViewTeamSidebar /> */}
+              <Link to={`/teams/subAndTransfer?teamId=${teamId}`}>
+                <Button className='w-full mx-4 h-14 bg-primary-brand-darker rounded'>
+                  <p className='text-white font-bold'>Make Substitution</p>
+                </Button>
+              </Link>
             </Col>
           </Row>
         </Col>

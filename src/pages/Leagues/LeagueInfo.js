@@ -300,38 +300,10 @@ function LeagueInfo() {
                       and efficiently.
                     </p>
                   }
-                  // datetime={
-                  //   // <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                  //   //   <span>{moment().fromNow()}</span>
-                  //   // </Tooltip>
-                  // }
                 />
               </div>
             </Col>
             <Col lg={8} className={'pl-12'}>
-              {/* <Form layout='vertical' requiredMark={false} onFinish={handleJoinLeague} >
-                <Form.Item
-                  name="team_id"
-                  label={'Select Team'}
-                  rules={[{ required: true, message: "Please select team"}]}>
-                    <Select>
-                        {userTeams.map((item, value) => (
-                          <Option key={item.team_name} className={'w-full h-14 border-transparent'} value={item.id}>{item.team_name}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item>
-                  <Button htmlType="submit" className='w-full h-14 bg-primary-brand-darker rounded'>
-                    {loadingJoinBtn ?
-                      <div className={'w-full flex items-center justify-center'}>
-                        <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
-                      </div>
-                      :
-                        <p className='text-white font-bold'>Join League</p>
-                    }
-                  </Button>
-                </Form.Item>
-              </Form> */}
               {loadingUserTeam && (
                 <div className={'w-full flex items-center justify-center'}>
                   <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />

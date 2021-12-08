@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { getAllUserCreatedLeagues } from "../helpers/api";
+import { getAllUserCreatedLeagues, getAllUserJoinedLeagues } from "../helpers/api";
 import { openNotification } from "../helpers/notification";
 
 export const LeagueContext = createContext()
@@ -20,6 +20,8 @@ const LeagueContextProvider = ({ children }) => {
   const [userTeamInLeague, setUserTeamInLeague] = useState(null);
   const [userCreatedLeagues, setUserCreatedLeagues] = useState([]);
   const [userCreatedLeaguesLoading, setUserCreatedLeaguesLoading] = useState(true);
+  const [userJoinedLeagues, setUserJoinedLeagues] = useState([]);
+  const [userJoinedLeaguesLoading, setUserJoinedLeaguesLoading] = useState(true);
 
 	// const getUserData = () => {
 	// 	setUser({ loggedIn: true, token: getToken });
@@ -28,7 +30,6 @@ const LeagueContextProvider = ({ children }) => {
   const getUserCreatedLeagues = () => {
     getAllUserCreatedLeagues()
     .then((response) => {
-      console.log(response);
       setUserCreatedLeaguesLoading(false);
       setUserCreatedLeagues(response.getAllSystemRealLeagues)
     })
@@ -41,6 +42,24 @@ const LeagueContextProvider = ({ children }) => {
       })
     })
   }
+
+  const getUserJoinedLeagues = () => {
+    getAllUserJoinedLeagues()
+    .then((response) => {
+      console.log(response);
+      setUserJoinedLeaguesLoading(false);
+      setUserJoinedLeagues(response.getAllSystemRealLeagues)
+    })
+    .catch((error) => {
+      setUserJoinedLeaguesLoading(false);
+      openNotification({
+        title: 'Error getting leagues',
+        message: 'there was an error while leagues',
+        type: 'error'
+      })
+    })
+  }
+
   return <LeagueContext.Provider value={{
     tefzonLeagues,
     setTefzonLeagues,
@@ -54,6 +73,9 @@ const LeagueContextProvider = ({ children }) => {
     userCreatedLeaguesLoading,
     setUserCreatedLeagues,
     getUserCreatedLeagues,
+    userJoinedLeagues,
+    userJoinedLeaguesLoading,
+    getUserJoinedLeagues,
   }}>
     {children}
   </LeagueContext.Provider>;

@@ -9,6 +9,7 @@ export const TeamContext = createContext();
 const TeamProvider = ({ children }) => {
   const [teamData, setTeamData] = useState(null);
   const [loadingTeam, setLoadingTeam] = useState(true);
+  const [loadingTeamToEdit, setLoadingTeamToEdit] = useState(true);
   const [teamDetails, setTeamDetails] = useState([]);
   const [teamPlayers, setTeamPlayers] = useState(null);
   const [userTeams, setUserTeams] = useState([]);
@@ -45,6 +46,25 @@ const TeamProvider = ({ children }) => {
       }
     } finally {
       setLoadingTeam(false);
+    }
+  };
+
+  const getTeamToEdit = async (teamId) => {
+    setLoadingTeamToEdit(true);
+    try {
+      const teams = await getTeam(teamId);
+      console.log(teams);
+
+      if (teams.statusCode === 200) {
+        setDataToSelectionForm(teams.result.players)
+        // console.log({teamData, teamDetails, teamPlayers});
+      }
+      setLoadingTeamToEdit(false);
+    } catch (error) {
+      if (error) {
+      console.log(error);
+        setLoadingTeamToEdit(false);
+      }
     }
   };
 
@@ -162,6 +182,10 @@ const TeamProvider = ({ children }) => {
         setUserTeams,
         viewTeamPageLoading,
         setViewTeamPageLoading,
+        setDataToSelectionForm,
+        getTeamToEdit,
+        loadingTeamToEdit,
+        setLoadingTeamToEdit,
       }}
     >
       {children}

@@ -468,4 +468,19 @@ export const getAllUserJoinedLeagues = () => {
 	});
 };
 
+export const getLeaguesComments = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await makeApiCall({
+				url: '/leagueComment',
+				method: "get",
+				headers: { Authorization: `Bearer ${getToken()}` },
+			});
+			return resolve(response);
+		} catch (error) {
+			return reject(error);
+		}
+	});
+};
+
 // /joinLeague/:league_id/:team_id

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import DashboardLayout from '../../components/common/DashboardLayout';
 import { Button, Row, Col } from "antd";
+import { AiOutlineLoading } from "react-icons/ai";
+import DashboardLayout from '../../components/common/DashboardLayout';
 import GameWeekDetails from '../../components/GameWeekDetails';
 import SubTeamSideBar from '../../components/SubTeamSideBar';
 import { CreateTeamContext } from '../../store/CreateTeamContext';
@@ -8,9 +9,11 @@ import ListView from '../Teams/ListView';
 import PitchView from '../Teams/PitchView';
 import { editTeam } from '../../helpers/api';
 import { useHistory } from 'react-router-dom';
+import { TeamContext } from '../../store/TeamContext';
 
 function SubAndTransfer() {
   // eslint-disable-next-line
+  const [loadingPage, setLoadingPage] = React.useState(true);
 	const [status, setStatus] = React.useState({ type: "", msg: "" });
   const [loading, setLoading] = React.useState(false);
   
@@ -28,8 +31,23 @@ function SubAndTransfer() {
     // updateMidfielder,
     // updateForwards,
   } = useContext(CreateTeamContext);
+  
+  const {
+    getTeamToEdit,
+    loadingTeamToEdit,
+    setDataToSelectionForm
+  } = useContext(TeamContext);
 
   const history = useHistory();
+
+  React.useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const teamId = urlParams.get('teamId');
+
+    getTeamToEdit(teamId);
+
+  }, [])
   
   const handleEditTeam = async () => {
     console.log('teetete')
@@ -74,6 +92,14 @@ function SubAndTransfer() {
       setLoading(false);
     }
   };
+
+  if (loadingTeamToEdit) {
+    return (
+      <div className={'flex items-center justify-center w-screen h-screen'}>
+          <AiOutlineLoading size={40} color={'#8139e6'} className={'animate-spin'} />
+        </div>
+    )
+  }
 
   return (
     <DashboardLayout>
