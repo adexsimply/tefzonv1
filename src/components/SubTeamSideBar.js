@@ -3,14 +3,14 @@ import { Button, Input, Select, message } from "antd";
 import { AiOutlineSearch } from 'react-icons/ai';
 import { CreateTeamContext } from '../store/CreateTeamContext';
 import PlayerDisplay from "../pages/Teams/EmptyState/PlayerDisplay";
-import { getPlayers } from '../helpers/api';
+import { getLeaguePlayers, getPlayers } from '../helpers/api';
 
-function SubTeamSideBar() {
+function SubTeamSideBar({leagueId}) {
   // const [floatCard, setFloatCard] = useState("top");
   // const [loadingPlayers, setLoadingPlayers] = useState(false);
-  const [playerData, setPlayerData] = useState(null);
+  const [playerData, setPlayerData] = useState([]);
   const [searchName, setSearchName] = useState(null);
-  const [filteredPlayerData, setFilteredPlayerData] = useState(null);
+  const [filteredPlayerData, setFilteredPlayerData] = useState([]);
 
   const {
     currentSelection,
@@ -30,15 +30,20 @@ function SubTeamSideBar() {
   const { Option } = Select;
 
   React.useEffect(() => {
-    getPlayerList();
+    if(leagueId) {
+      console.log(leagueId);
+      getPlayerList();
+    }
   }, []);
 
   const getPlayerList = async () => {
     // setLoadingPlayers(true);
     try {
-      const results = await getPlayers();
-      setPlayerData(results.results);
-      setFilteredPlayerData(results.results);
+      const results = await getLeaguePlayers(leagueId);
+      console.log('results.results');
+      console.log(results);
+      // setPlayerData(results.results);
+      // setFilteredPlayerData(results.results);
     } catch (error) {
       message.error(error.message);
     } 

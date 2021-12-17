@@ -14,6 +14,7 @@ const DisplayTeam = ({ teamInfo }) => {
   const [teamId, setTeamId] = React.useState(null)
   const { changeView, view } = useContext(CreateTeamContext);
   const { displayPlayers, getTeamData, loadingTeam, teamDetails } = useContext(TeamContext);
+  const [leagueId, setLeagueId] = React.useState(null);
 
   const history = useHistory();
 
@@ -21,6 +22,8 @@ const DisplayTeam = ({ teamInfo }) => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const teamId = urlParams.get('teamId');
+    const league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id)
 
     setTeamId(teamId)
 
@@ -119,7 +122,7 @@ const DisplayTeam = ({ teamInfo }) => {
             </Col>
             <Col lg={6}>
               {/* <ViewTeamSidebar /> */}
-              <Link to={`/teams/subAndTransfer?teamId=${teamId}`}>
+              <Link to={`/teams/subAndTransfer?teamId=${teamId}&leagueId=${leagueId}`}>
                 <Button className='w-full mx-4 h-14 bg-primary-brand-darker rounded'>
                   <p className='text-white font-bold'>Make Substitution</p>
                 </Button>

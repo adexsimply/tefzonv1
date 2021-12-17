@@ -16,6 +16,7 @@ function SubAndTransfer() {
   const [loadingPage, setLoadingPage] = React.useState(true);
 	const [status, setStatus] = React.useState({ type: "", msg: "" });
   const [loading, setLoading] = React.useState(false);
+  const [leagueId, setLeagueId] = React.useState(null);
   
   const {
     // currentSelection,
@@ -44,6 +45,8 @@ function SubAndTransfer() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const teamId = urlParams.get('teamId');
+    const league_Id = urlParams.get('leagueId');
+    setLeagueId(league_Id)
 
     getTeamToEdit(teamId);
 
@@ -202,7 +205,7 @@ function SubAndTransfer() {
               </div>
             </Col>
             <Col lg={7}>
-              <SubTeamSideBar />
+              <SubTeamSideBar leagueId={leagueId} />
             </Col>
           </Row>
         </Col>
