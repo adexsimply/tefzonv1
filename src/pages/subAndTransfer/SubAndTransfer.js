@@ -36,7 +36,7 @@ function SubAndTransfer() {
   const {
     getTeamToEdit,
     loadingTeamToEdit,
-    setDataToSelectionForm
+    // setDataToSelectionForm
   } = useContext(TeamContext);
 
   const history = useHistory();
@@ -49,7 +49,9 @@ function SubAndTransfer() {
     setLeagueId(league_Id)
 
     getTeamToEdit(teamId);
+    console.log(status);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   const handleEditTeam = async () => {

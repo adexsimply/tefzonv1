@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col} from "antd";
 
-function LeagueItemList({LeagueName, leagueType, inviteCode, onClick, settings, className}) {
+function LeagueItemList({LeagueName, leagueType, inviteCode, onClick, settings, className, onClickOption}) {
 
   return (
     <div role={'button'} className={className} onClick={onClick}>
@@ -16,7 +16,9 @@ function LeagueItemList({LeagueName, leagueType, inviteCode, onClick, settings, 
           <p className={'text-xs font-medium'}>{inviteCode}</p>
         </Col>
         <Col span={5}>
-          <p className={'text-xs font-medium'}>Option</p>
+          <div role={'button'} className={className} onClick={onClickOption}>
+            <p className={'text-xs font-medium'}>Option</p>
+          </div>
         </Col>
       </Row>
     </div>

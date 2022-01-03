@@ -6,6 +6,7 @@ const ModalContextProvider = ({ children }) => {
   const [withdrawModalIsOpen, setWithdrawModalIsOpen] = useState(false);
   const [fundModalIsOpen, setFundModalIsOpen] = useState(false);
   const [loadingModalIsOpen, setLoadingModalIsOpen] = useState(false);
+  const [optionModalIsOpen, setOptionModalIsOpen] = useState(false);
 
   const openWithdrawModal = () => {
     setWithdrawModalIsOpen(true);
@@ -19,6 +20,10 @@ const ModalContextProvider = ({ children }) => {
     setLoadingModalIsOpen(true);
   }
 
+  const openOptionModal = () => {
+    setOptionModalIsOpen(true);
+  }
+
   const closeWithdrawModal = (data) => {
     setWithdrawModalIsOpen(false);
   }
@@ -29,6 +34,10 @@ const ModalContextProvider = ({ children }) => {
 
   const closeLoadingModal = () => {
     setLoadingModalIsOpen(false);
+  }
+
+  const closeOptionModal = () => {
+    setOptionModalIsOpen(false);
   }
 
 	// const getUserData = () => {
@@ -44,6 +53,9 @@ const ModalContextProvider = ({ children }) => {
     openLoadingModal,
     loadingModalIsOpen,
     closeLoadingModal,
+    optionModalIsOpen,
+    openOptionModal,
+    closeOptionModal,
   }}>
     {children}
   </ModalContext.Provider>;

@@ -4,7 +4,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import DashboardLayout from "../../../components/common/DashboardLayout";
 import DisplayPitchView from "./PitchView";
 import DisplayListView from "./ListView";
-import ViewTeamSidebar from "../../../components/ViewTeamSidebar";
+// import ViewTeamSidebar from "../../../components/ViewTeamSidebar";
 import { CreateTeamContext } from "../../../store/CreateTeamContext";
 import { TeamContext } from "../../../store/TeamContext";
 import { Link, useHistory } from "react-router-dom";
@@ -24,6 +24,8 @@ const DisplayTeam = ({ teamInfo }) => {
     const teamId = urlParams.get('teamId');
     const league_Id = urlParams.get('leagueId');
     setLeagueId(league_Id)
+
+    console.log(leagueId);
 
     setTeamId(teamId)
 
@@ -122,7 +124,7 @@ const DisplayTeam = ({ teamInfo }) => {
             </Col>
             <Col lg={6}>
               {/* <ViewTeamSidebar /> */}
-              <Link to={`/teams/subAndTransfer?teamId=${teamId}&leagueId=${leagueId}`}>
+              <Link to={`/teams/subAndTransfer?teamId=${teamId}&leagueId=25}`}>
                 <Button className='w-full mx-4 h-14 bg-primary-brand-darker rounded'>
                   <p className='text-white font-bold'>Make Substitution</p>
                 </Button>

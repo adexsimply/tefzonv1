@@ -1,9 +1,6 @@
-import React, { useContext } from "react";
-import { TeamContext } from "../../store/TeamContext";
+import React from "react";
 import TeamFlag from "../../assets/img/static/team-flag.svg";
-import { Link } from "react-router-dom";
 import { Row, Col } from "antd";
-import { CgArrowLongRight } from "react-icons/cg";
 import "./ViewTeam.scss";
 
 const ViewTeamSidebar = ({teamName, totalPlayers, rank, points}) => {

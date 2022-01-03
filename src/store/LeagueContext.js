@@ -46,7 +46,8 @@ const LeagueContextProvider = ({ children }) => {
   const getUserJoinedLeagues = () => {
     getAllUserJoinedLeagues()
     .then((response) => {
-      console.log(response);
+      console.log('response.getAllSystemRealLeagues');
+      console.log(response.getAllSystemRealLeagues);
       setUserJoinedLeaguesLoading(false);
       setUserJoinedLeagues(response.getAllSystemRealLeagues)
     })

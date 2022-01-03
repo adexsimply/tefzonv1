@@ -34,9 +34,9 @@ function JoinLeague() {
     history.push(`/leagues/league-info?leagueId=${leagueData.id}`);
   }
 
-  const handleJoinPrivateLeague = () => {
-    // {}
-  }
+  // const handleJoinPrivateLeague = () => {
+  //   // {}
+  // }
 
   return (
     <DashboardLayout>

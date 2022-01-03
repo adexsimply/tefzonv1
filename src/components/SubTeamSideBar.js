@@ -3,7 +3,7 @@ import { Button, Input, Select, message } from "antd";
 import { AiOutlineSearch } from 'react-icons/ai';
 import { CreateTeamContext } from '../store/CreateTeamContext';
 import PlayerDisplay from "../pages/Teams/EmptyState/PlayerDisplay";
-import { getLeaguePlayers, getPlayers } from '../helpers/api';
+import { getLeaguePlayers } from '../helpers/api';
 
 function SubTeamSideBar({leagueId}) {
   // const [floatCard, setFloatCard] = useState("top");
@@ -34,16 +34,17 @@ function SubTeamSideBar({leagueId}) {
       console.log(leagueId);
       getPlayerList();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getPlayerList = async () => {
     // setLoadingPlayers(true);
     try {
       const results = await getLeaguePlayers(leagueId);
-      console.log('results.results');
-      console.log(results);
-      // setPlayerData(results.results);
-      // setFilteredPlayerData(results.results);
+      console.log('results.leaguePlayers');
+      console.log(results.leaguePlayers);
+      setPlayerData(results.leaguePlayers);
+      setFilteredPlayerData(results.leaguePlayers);
     } catch (error) {
       message.error(error.message);
     } 
@@ -79,14 +80,14 @@ function SubTeamSideBar({leagueId}) {
     if (type === 'position') {
       result = playerData.filter(filterWithPosition);
       function filterWithPosition(player) {
-        return player.player.position === value
+        return player.position === value
       }
     }
 
     if (type === 'name') {
       result = playerData.filter(filterWithPosition);
       function filterWithPosition(player) {
-        return player.player.name.toLowerCase() === value
+        return player.name.toLowerCase() === value
       }
     }
     setFilteredPlayerData(result);

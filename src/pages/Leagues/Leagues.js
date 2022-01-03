@@ -52,6 +52,10 @@ function Leagues() {
     history.push(`/leagues/league-info?leagueId=${leagueId}`)
   }
 
+  const handleOptionClick = () => {
+    console.log('a league option clicked');
+  }
+
   return (
     <DashboardLayout>
       <Row justify="center" className='py-4 pb-10'>
@@ -94,7 +98,7 @@ function Leagues() {
                     {userCreatedLeagues && !userCreatedLeaguesLoading && (
                       userCreatedLeagues.map((item) => (
                         <LeagueItemList
-                          key={item.league_name}
+                          key={item.league_invite_code}
                           claassName={'mt-3'}
                           LeagueName={item.league_name}
                           leagueType={item.league_type}
@@ -122,10 +126,11 @@ function Leagues() {
                         <LeagueItemList
                           key={item.league_name}
                           claassName={'mt-3'}
-                          LeagueName={item.league_name}
-                          leagueType={item.league_type}
-                          inviteCode={item.league_invite_code}
+                          LeagueName={item.league.league_name}
+                          leagueType={item.league.league_type}
+                          inviteCode={item.league.league_invite_code}
                           onClick={() => handleLeagueClick(item.id)}
+                          onClickOption={() => handleOptionClick()}
                         />
                       ))
                     )}

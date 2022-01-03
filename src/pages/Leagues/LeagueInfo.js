@@ -1,6 +1,6 @@
 import React from 'react';
 import DashboardLayout from '../../components/common/DashboardLayout';
-import { Row, Col, Button, Comment, Tooltip, Avatar } from "antd";
+import { Row, Col, Button, Comment, Avatar } from "antd";
 // import { Link, useHistory } from 'react-router-dom';
 import { AiOutlineLoading } from "react-icons/ai";
 import { LeagueContext } from '../../store/LeagueContext';
@@ -12,7 +12,7 @@ import { TeamContext } from '../../store/TeamContext';
 import { AppContext } from '../../store/AppContext';
 import { Link } from 'react-router-dom';
 import ViewTeamSidebar from '../../components/ViewTeamSidebar';
-import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
+// import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
 
 function LeagueInfo() {
   const [loadingPage, setLoadingPage] = React.useState(true);
@@ -117,14 +117,14 @@ function LeagueInfo() {
 
   
 
-  const isUserFound = (data, key) => {
-    let value = data.find(element => element === key);
-    return value === key;
-  }
+  // const isUserFound = (data, key) => {
+  //   let value = data.find(element => element === key);
+  //   return value === key;
+  // }
 
-  const isUser = (idCompare, userId) => {
-    return idCompare === userId;
-  }
+  // const isUser = (idCompare, userId) => {
+  //   return idCompare === userId;
+  // }
 
   const isUserInLeague = React.useCallback(() => (data = leagueInfo.leagueParticipant, key = user.id) => {
     let value = data.find(element => element.user.id === key);
@@ -291,7 +291,7 @@ function LeagueInfo() {
                 </div>
                 <Comment
                   // actions={actions}
-                  author={<a>Han Solo</a>}
+                  author={<a href={"/#"}>Han Solo</a>}
                   avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
                   content={
                     <p>

@@ -19,8 +19,8 @@ const PitchPlayer = ({
     accept: dropAccept,
     drop: onDrop,
     collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
+    //   isOver: !!monitor.isOver(),
+    //   canDrop: !!monitor.canDrop(),
     }),
   });
 

@@ -23,7 +23,7 @@ const ConfirmTeam = () => {
   const [leagueId, setLeagueId] = React.useState(null);
   
   const {
-    loadingModalIsOpen,
+    // loadingModalIsOpen,
     closeLoadingModal,
     openLoadingModal,
   } = React.useContext(ModalContext);
@@ -142,10 +142,10 @@ const ConfirmTeam = () => {
     })
   }
 
-  const resetTeam = () => {
-    localStorage.removeItem("TEFZON_TEAM");
-    localStorage.removeItem("TEF_NAME");
-  };
+  // const resetTeam = () => {
+  //   localStorage.removeItem("TEFZON_TEAM");
+  //   localStorage.removeItem("TEF_NAME");
+  // };
 
   return (
     <DashboardLayout>
