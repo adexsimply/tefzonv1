@@ -100,8 +100,8 @@ const DisplayListView = ({ playerData, selectable, dark }) => {
   };
 
   const Players = ({ id, name, photo, age, position, player, league, index }) => {
-    // eslint-disable-next-line
     // console.log(position);
+    // eslint-disable-next-line
     const [{ isDragging }, dragRef] = useDrag({
       type: position,
       item: () => ({ ...player, index }),
@@ -117,7 +117,7 @@ const DisplayListView = ({ playerData, selectable, dark }) => {
       }),
     });
 
-    console.log(isDragging);
+    // console.log(isDragging);
     
     return (
       <Row

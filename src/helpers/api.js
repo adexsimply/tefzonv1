@@ -227,7 +227,7 @@ export const editTeam = (teamData) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const team = await makeApiCall({
-				url: "/editTeam",
+				url: `/editTeam/${teamData.teamId}`,
 				method: "put",
 				headers: { Authorization: `Bearer ${getToken()}` },
 				data: teamData,

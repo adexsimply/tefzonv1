@@ -44,11 +44,18 @@ function Teams() {
                 </p>
               </div>
               <div className={'my-5'}>
-                <Row gutter={10}>
+                <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+                  {userTeams.length < 1 && (
+                    <Col className={'mt-5'}>
+                      <div>
+                        <p className={'text-lg font-semibold'}>You don't have a team right now, create a league or join an existing league to create one.</p>
+                      </div>
+                    </Col>
+                  )}
                   {userTeams.map((item, index) => {
                     console.log(item)
                     return (
-                    <Col lg={8} className={'mt-5'}>
+                    <Col className={'mt-5'}>
                       <Link to={`/teams/view-team?teamId=${item.id}&leagueId=${item.league.id}`}>
                         <TeamCards key={item.team_name} teamName={item.team_name} />
                       </Link>

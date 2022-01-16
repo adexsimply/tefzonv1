@@ -223,7 +223,7 @@ const DashboardLayout = (props) => {
         </div>
         <div className="bg-white h-14 flex items-center justify-center">
           <p className="text-center">
-            All rights reserved © 2021 Tefon Fantasy.
+            Tefzon Fantasy.
           </p>
         </div>
       </footer>

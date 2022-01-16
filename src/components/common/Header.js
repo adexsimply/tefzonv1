@@ -57,7 +57,9 @@ const Header = () => {
   return (
     <header className="flex flex-col md:flex-row py-3 px-3 md:px-12 md:py-3  w-full bg-white">
       <div className="logo flex flex-1 justify-between">
-        <img src={Logo} alt="" />
+        <a href="/dashboard">
+          <img src={Logo} alt="" />
+        </a>
         <button
           onClick={() => setToggleNav(!toggleNav)}
           className="navbar-toggler inline-flex  items-center md:hidden text-primary-brand px-3 border border-primary-brand"

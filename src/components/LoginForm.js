@@ -34,6 +34,7 @@ const LoginForm = (props) => {
 					message: login.message,
 				});
         saveState(login.result.token);
+        console.log(login.result.token);
         // saveUserData(login.result);
 				getUser();
         logInSuccess(login.result);

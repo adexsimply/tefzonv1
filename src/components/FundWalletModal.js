@@ -41,7 +41,8 @@ function FundWalletModal({children}) {
   const handleFundWallet = (values) => {
     setLoading(true)
     console.log(values);
-    fundWallet(values)
+    let amount = {amount: values.amount * 100};
+    fundWallet(amount)
       .then((response) => {
         console.log(response.data);
         // setTransactionData(response.data);

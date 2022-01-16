@@ -10,6 +10,7 @@ import PitchView from '../Teams/PitchView';
 import { editTeam } from '../../helpers/api';
 import { useHistory } from 'react-router-dom';
 import { TeamContext } from '../../store/TeamContext';
+import { openNotification } from '../../helpers/notification';
 
 function SubAndTransfer() {
   // eslint-disable-next-line
@@ -17,6 +18,7 @@ function SubAndTransfer() {
 	const [status, setStatus] = React.useState({ type: "", msg: "" });
   const [loading, setLoading] = React.useState(false);
   const [leagueId, setLeagueId] = React.useState(null);
+  const [teamId, setTeamId] = React.useState(null);
   
   const {
     // currentSelection,
@@ -47,6 +49,7 @@ function SubAndTransfer() {
     const teamId = urlParams.get('teamId');
     const league_Id = urlParams.get('leagueId');
     setLeagueId(league_Id)
+    setTeamId(teamId);
 
     getTeamToEdit(teamId);
     console.log(status);
@@ -78,6 +81,7 @@ function SubAndTransfer() {
     try {
       const results = await editTeam({
         squad_selection: payload,
+        teamId: teamId,
       });
       console.log(results);
       if (results) {
@@ -86,6 +90,11 @@ function SubAndTransfer() {
           msg: results.result.msg,
         });
         setLoading(false);
+        openNotification({
+          type: "success",
+          title: "Team updated succesfully",
+          message: "You team has been updated successfully",
+        });
         history.replace("/teams");
       }
     } catch (error) {
