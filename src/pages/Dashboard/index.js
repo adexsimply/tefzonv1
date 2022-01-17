@@ -21,7 +21,7 @@ const DashboardPage = () => {
                 image={Players}
                 title={'Join League Now'}
                 description={'This is a short descrption'}
-                onClick={() => history.replace('/leagues')}/>
+                onClick={() => history.replace('/leagues/join-league')}/>
             </Col>
             <Col lg={12}>
               <ActionCard

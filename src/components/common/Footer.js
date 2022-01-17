@@ -1,6 +1,5 @@
 import React from "react";
 import { GrFacebookOption, GrTwitter, GrInstagram } from "react-icons/gr";
-import CopyIcon from "../../assets/img/icons/copy-icon.svg";
 
 const Footer = () => {
 	return (
@@ -29,7 +28,6 @@ const Footer = () => {
 			</div>
 			<div className="copyright">
 				<p className="flex items-center font-normal text-xs">
-					<img src={CopyIcon} className="w-4 h-4 mr-1" alt="copy icon" /> 2020
 					all simple right reserved
 				</p>
 			</div>

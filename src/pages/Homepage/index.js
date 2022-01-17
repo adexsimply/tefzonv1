@@ -47,7 +47,7 @@ const Homepage = () => {
 				</div>
 				<div className="w-full md:flex md:flex-col md:justify-end lg:w-1/2  order-1 lg:order-2">
 					<div
-						className="landing-bg w-full bg-no-repeat bg-contain md:bg-cover"
+						className="landing-bg w-full bg-no-repeat lg:bg-contain bg-contain md:bg-cover"
 						style={{ backgroundImage: `url(${Soccer})` }}
 					></div>
 				</div>
