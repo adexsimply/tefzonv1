@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrop } from "react-dnd";
 import { AiOutlineLoading } from "react-icons/ai";
-import PitchPlayerIcon from "../../../assets/img/pitch-jersey.svg";
+// import PitchPlayerIcon from "../../../assets/img/pitch-jersey.svg";
 
 const PitchPlayer = ({
   pitchData,
@@ -47,7 +47,7 @@ const PitchPlayer = ({
 					</div>
 				)}
 				<img
-					src={jersey ? jersey : PitchPlayerIcon}
+					src={jersey ? jersey : "/pitch-jersey.svg"}
 					className="inline-block m-0 w-12 h-14"
 					alt=""
 				/>
