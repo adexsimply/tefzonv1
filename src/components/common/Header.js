@@ -14,18 +14,18 @@ const Header = () => {
       url: "/",
       name: "Home",
     },
-    {
-      url: "/prizes",
-      name: "Prizes",
-    },
-    {
-      url: "/help",
-      name: "Help",
-    },
-    {
-      url: "/contact",
-      name: "Contact",
-    },
+    // {
+    //   url: "/prizes",
+    //   name: "Prizes",
+    // },
+    // {
+    //   url: "/help",
+    //   name: "Help",
+    // },
+    // {
+    //   url: "/contact",
+    //   name: "Contact",
+    // },
   ];
   const displayNavItems = () => {
     return Links.map(({ url, name }) => {
