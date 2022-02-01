@@ -280,7 +280,7 @@ function LeagueInfo() {
                   );
                 })}
               </div>
-              <div className={'mt-8'}>
+              {/* <div className={'mt-8'}>
                 <div>
                   <p className="text-3xl font-bold">
                     Comments
@@ -301,7 +301,7 @@ function LeagueInfo() {
                     </p>
                   }
                 />
-              </div>
+              </div> */}
             </Col>
             <Col lg={8} className={'pl-12'}>
               {loadingUserTeam && (

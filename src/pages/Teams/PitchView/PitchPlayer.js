@@ -1,5 +1,6 @@
 import React from "react";
 import { useDrop } from "react-dnd";
+import { AiOutlineLoading } from "react-icons/ai";
 import PitchPlayerIcon from "../../../assets/img/pitch-jersey.svg";
 
 const PitchPlayer = ({
@@ -19,12 +20,12 @@ const PitchPlayer = ({
     accept: dropAccept,
     drop: onDrop,
     collect: (monitor) => ({
-    //   isOver: !!monitor.isOver(),
+      isOver: !!monitor.isOver(),
     //   canDrop: !!monitor.canDrop(),
     }),
   });
 
-	console.log('dropAccept ' + dropAccept + ' isOver ' + canDrop + ' isOver ' + isOver + ' itemtype ' + itemtype);
+	// console.log('dropAccept ' + dropAccept + ' isOver ' + canDrop + ' isOver ' + isOver + ' itemtype ' + itemtype);
 
 	return (
 		<div
@@ -40,6 +41,11 @@ const PitchPlayer = ({
 			{...rest}
 		>
 			<>
+				{isOver && !jersey && (
+					<div className={'w-full h-full flex items-center justify-center py-6 absolute'}>
+						<AiOutlineLoading size={20} color={'#ffffff'} className={'animate-spin'} />
+					</div>
+				)}
 				<img
 					src={jersey ? jersey : PitchPlayerIcon}
 					className="inline-block m-0 w-12 h-14"
